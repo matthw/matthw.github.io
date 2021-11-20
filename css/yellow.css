@@ -1,8 +1,0 @@
-pre { font-family: fixedsys, monospace, courier } /* set the pre face */
-body, td { font-family: fixedsys, monospace, courier; color: #F2F201; background: #8F8F01; }
-p { text-decoration: underline; }
-a { text-decoration: none; }
-a:link { color: #494900; }
-a:visited { color: #494900; }
-a:hover { color: #3C3C00; }
-
