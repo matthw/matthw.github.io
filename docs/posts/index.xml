@@ -211,7 +211,7 @@ ROM: System Bootstrap, Version 0.5.2,hardware version:A
 <p><img src="ghidra_address.jpg" alt="ghidra_address.jpg"></p>
 <p>From there everything is smooth.</p>
 <p><img src="ghidra_disasm.jpg" alt="ghidra_disasm.jpg"></p>
-<p>even the decompiler works quiet fine:</p>
+<p>even the decompiler works quite fine:</p>
 <p><img src="ghidra_decomp.jpg" alt="ghidra_decomp.jpg"></p>
 <h1 id="5-quick-analysis-for-fun">5. Quick Analysis For Fun</h1>
 <h2 id="51-decrypting-type-7-passwords">5.1 Decrypting Type 7 Passwords</h2>

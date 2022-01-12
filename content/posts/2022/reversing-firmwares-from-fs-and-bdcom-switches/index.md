@@ -248,7 +248,7 @@ From there everything is smooth.
 
 ![ghidra_disasm.jpg](ghidra_disasm.jpg)
 
-even the decompiler works quiet fine:
+even the decompiler works quite fine:
 
 ![ghidra_decomp.jpg](ghidra_decomp.jpg)
 
