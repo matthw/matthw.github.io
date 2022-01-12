@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Mon, 08 Nov 2021 14:20:47 +0100</lastBuildDate><atom:link href="https://matth.dmz42.org/tags/reverse/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 11 Jan 2022 15:24:31 +0100</lastBuildDate><atom:link href="https://matth.dmz42.org/tags/reverse/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Reversing Firmwares from FS and BDCOM Switches</title>
+      <link>https://matth.dmz42.org/posts/2022/reversing-firmwares-from-fs-and-bdcom-switches/</link>
+      <pubDate>Tue, 11 Jan 2022 15:24:31 +0100</pubDate>
+      
+      <guid>https://matth.dmz42.org/posts/2022/reversing-firmwares-from-fs-and-bdcom-switches/</guid>
+      <description>I recently had to buy a new 24x1G fanless switch for my home network. I had a mikrotik switch for years (which i was happy with but suffered a power surge) and wanted to try something new so I ended up with a FS S3700-24T4F.
+Their CLI is close to Cisco&amp;rsquo;s IOS, it&amp;rsquo;s overall a fun device for home network and not too expensive. Found few small bugs here and there without really looking for them but in the end nothing too annoying in my context.</description>
+    </item>
+    
     <item>
       <title>The Return of the Malwarebytes Crackme</title>
       <link>https://matth.dmz42.org/posts/2021/the-return-of-the-malwarebytes-crackme/</link>
