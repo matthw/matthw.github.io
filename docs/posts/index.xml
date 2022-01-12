@@ -218,7 +218,7 @@ ROM: System Bootstrap, Version 0.5.2,hardware version:A
 <p>By default, passwords are in clear text in the config, however you can change that by using <code>service password-encryption</code>.<br>
 I made a tool to decrypt/encrypt such passwords, which is available <a href="https://github.com/matthw/fs_switch_type_7_password_decoder">here</a>.</p>
 <h2 id="52-webwrp">5.2 web.wrp</h2>
-<p>Since all strings references are correct, if we search for <code>web.wrp</code> we see it&rsquo;s only references in a single function.<br>
+<p>Since all strings references are correct, if we search for <code>web.wrp</code> we see it&rsquo;s only referenced in a single function.<br>
 Doesn&rsquo;t take much work from here to figure the password for the rar file is <code>bdcom312</code></p>
 <p><img src="rar_password.jpg" alt="rar_password.jpg"></p>
 <pre tabindex="0"><code>% unrar x -pbdcom312 ../web.wrp

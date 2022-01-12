@@ -261,7 +261,7 @@ I made a tool to decrypt/encrypt such passwords, which is available [here](https
 
 ## 5.2 web.wrp
 
-Since all strings references are correct, if we search for ``web.wrp`` we see it's only references in a single function.  
+Since all strings references are correct, if we search for ``web.wrp`` we see it's only referenced in a single function.  
 Doesn't take much work from here to figure the password for the rar file is ``bdcom312``
 
 ![rar_password.jpg](rar_password.jpg)
