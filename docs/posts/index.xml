@@ -10,13 +10,13 @@
 		<atom:link href="https://matth.dmz42.org/posts/index.xml" rel="self" type="application/rss+xml" />
 		
 		<item>
-			<title>Hackthebox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)</title>
+			<title>HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)</title>
 			<link>https://matth.dmz42.org/posts/2022/hackthebox-ctf-cyber-apocalypse-2022-intergalactic-chase-pwn/</link>
 			<pubDate>Fri, 20 May 2022 10:01:40 +0200</pubDate>
 			
 			<guid>https://matth.dmz42.org/posts/2022/hackthebox-ctf-cyber-apocalypse-2022-intergalactic-chase-pwn/</guid>
 			<description>Hack The Box was hosting a CTF event and we played together with some friends.
-Here some writeups for some of the PWN challenges i solved.
+Here are some writeups for some of the PWN challenges i solved.
 Any code you can find here is very low ctf quality :)
 0. TOC   Space pirate: Retribution
   Vault Breaker
@@ -25,7 +25,7 @@ Any code you can find here is very low ctf quality :)
   Trick Or Deal
   1. Space pirate: Retribution Original files are here.</description>
 			<content type="html"><![CDATA[<p><a href="https://www.hackthebox.com">Hack The Box</a> was hosting a CTF event and we played together with some friends.</p>
-<p>Here some writeups for some of the PWN challenges i solved.</p>
+<p>Here are some writeups for some of the PWN challenges i solved.</p>
 <p>Any code you can find here is very low ctf quality :)</p>
 <h1 id="0-toc">0. TOC</h1>
 <ol>
@@ -211,8 +211,8 @@ $
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="cm">/* includes trailing NULL byte */</span>
 </span></span><span class="line"><span class="cl">    <span class="n">strcpy</span><span class="p">(</span><span class="n">random_key</span><span class="p">,</span><span class="n">buff</span><span class="p">);</span>
-</span></span></code></pre></div><p>If we request a new key of size 8, it will replace the first 8 bytes of the random_key by new random bytes.
-The bug is that it&rsquo;s using strcpy, which will also copy the trailing NULL byte.</p>
+</span></span></code></pre></div><p>If we request a new key of size 8, it will replace the first 8 bytes of the random_key by new random bytes.</p>
+<p>The bug is that it&rsquo;s using strcpy, which will also copy the trailing NULL byte.</p>
 <pre tabindex="0"><code>before strcpy, original key:
 
 pwndbg&gt; x/32bx 0x555555606060
@@ -230,10 +230,12 @@ pwndbg&gt; x/32bx 0x555555606060
 0x555555606078 &lt;random_key+24&gt;:	0x04	0x2c	0x87	0xe8	0x3e	0xc0	0xab	0x12
 
 8 new first bytes, and a NULL byte at random_key+8
-</code></pre><p>new key of size 0: random_key[0] = 0
-new key of size 1: random_key[1] = 0
-new key of size 2: random_key[2] = 0
-etc&hellip;</p>
+</code></pre><ul>
+<li>new key of size 0: random_key[0] = 0</li>
+<li>new key of size 1: random_key[1] = 0</li>
+<li>new key of size 2: random_key[2] = 0</li>
+</ul>
+<p>etc&hellip;</p>
 <p>since the flag is xor&rsquo;d with the key and flag ^ 0 == flag, we can leak the flag byte by byte&hellip;</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
 </span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">time</span>
@@ -590,7 +592,6 @@ $ id
 uid=999(ctf) gid=999(ctf) groups=999(ctf)
 $ cat flag.txt
 HTB{tr1ck1ng_d3al3rz_f0r_fUn_4nd_pr0f1t}
-``
 </code></pre>]]></content>
 		</item>
 		

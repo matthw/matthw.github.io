@@ -7,9 +7,9 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<meta name="theme-color" content="#494f5c">
 	<meta name="msapplication-TileColor" content="#494f5c">
-<meta itemprop="name" content="Hackthebox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)">
+<meta itemprop="name" content="HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)">
 <meta itemprop="description" content="Hack The Box was hosting a CTF event and we played together with some friends.
-Here some writeups for some of the PWN challenges i solved.
+Here are some writeups for some of the PWN challenges i solved.
 Any code you can find here is very low ctf quality :)
 0. TOC   Space pirate: Retribution
   Vault Breaker
@@ -19,9 +19,9 @@ Any code you can find here is very low ctf quality :)
   1. Space pirate: Retribution Original files are here."><meta itemprop="datePublished" content="2022-05-20T10:01:40+02:00" />
 <meta itemprop="dateModified" content="2022-05-20T10:01:40+02:00" />
 <meta itemprop="wordCount" content="1872">
-<meta itemprop="keywords" content="ctf," /><meta property="og:title" content="Hackthebox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)" />
+<meta itemprop="keywords" content="ctf," /><meta property="og:title" content="HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)" />
 <meta property="og:description" content="Hack The Box was hosting a CTF event and we played together with some friends.
-Here some writeups for some of the PWN challenges i solved.
+Here are some writeups for some of the PWN challenges i solved.
 Any code you can find here is very low ctf quality :)
 0. TOC   Space pirate: Retribution
   Vault Breaker
@@ -35,9 +35,9 @@ Any code you can find here is very low ctf quality :)
 <meta property="article:modified_time" content="2022-05-20T10:01:40+02:00" />
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Hackthebox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)"/>
+<meta name="twitter:title" content="HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)"/>
 <meta name="twitter:description" content="Hack The Box was hosting a CTF event and we played together with some friends.
-Here some writeups for some of the PWN challenges i solved.
+Here are some writeups for some of the PWN challenges i solved.
 Any code you can find here is very low ctf quality :)
 0. TOC   Space pirate: Retribution
   Vault Breaker
@@ -53,7 +53,7 @@ Any code you can find here is very low ctf quality :)
 	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
 	<link rel="shortcut icon" href="/favicon.ico">
 
-	<title>Hackthebox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)</title>
+	<title>HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)</title>
 	<link rel="stylesheet" href="https://matth.dmz42.org/css/style.min.037b6ee8f8c1baab6a3d0a9da11c3ff18a7552471f16c59fd98538d5ce99208b.css" integrity="sha256-A3tu6PjBuqtqPQqdoRw/8Yp1UkcfFsWf2YU41c6ZIIs=" crossorigin="anonymous">
 	
 </head>
@@ -90,11 +90,11 @@ Any code you can find here is very low ctf quality :)
 		<article class="thin">
 			<header class="post-header">
 				<div class="post-meta"><span>May 20, 2022</span></div>
-				<h1>Hackthebox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)</h1>
+				<h1>HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)</h1>
 			</header>
 			<div class="content">
 				<p><a href="https://www.hackthebox.com">Hack The Box</a> was hosting a CTF event and we played together with some friends.</p>
-<p>Here some writeups for some of the PWN challenges i solved.</p>
+<p>Here are some writeups for some of the PWN challenges i solved.</p>
 <p>Any code you can find here is very low ctf quality :)</p>
 <h1 id="0-toc">0. TOC<a href="#0-toc" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
 <ol>
@@ -280,8 +280,8 @@ $
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="cm">/* includes trailing NULL byte */</span>
 </span></span><span class="line"><span class="cl">    <span class="n">strcpy</span><span class="p">(</span><span class="n">random_key</span><span class="p">,</span><span class="n">buff</span><span class="p">);</span>
-</span></span></code></pre></div><p>If we request a new key of size 8, it will replace the first 8 bytes of the random_key by new random bytes.
-The bug is that it&rsquo;s using strcpy, which will also copy the trailing NULL byte.</p>
+</span></span></code></pre></div><p>If we request a new key of size 8, it will replace the first 8 bytes of the random_key by new random bytes.</p>
+<p>The bug is that it&rsquo;s using strcpy, which will also copy the trailing NULL byte.</p>
 <pre tabindex="0"><code>before strcpy, original key:
 
 pwndbg&gt; x/32bx 0x555555606060
@@ -299,10 +299,12 @@ pwndbg&gt; x/32bx 0x555555606060
 0x555555606078 &lt;random_key+24&gt;:	0x04	0x2c	0x87	0xe8	0x3e	0xc0	0xab	0x12
 
 8 new first bytes, and a NULL byte at random_key+8
-</code></pre><p>new key of size 0: random_key[0] = 0
-new key of size 1: random_key[1] = 0
-new key of size 2: random_key[2] = 0
-etc&hellip;</p>
+</code></pre><ul>
+<li>new key of size 0: random_key[0] = 0</li>
+<li>new key of size 1: random_key[1] = 0</li>
+<li>new key of size 2: random_key[2] = 0</li>
+</ul>
+<p>etc&hellip;</p>
 <p>since the flag is xor&rsquo;d with the key and flag ^ 0 == flag, we can leak the flag byte by byte&hellip;</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
 </span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">time</span>
@@ -659,7 +661,6 @@ $ id
 uid=999(ctf) gid=999(ctf) groups=999(ctf)
 $ cat flag.txt
 HTB{tr1ck1ng_d3al3rz_f0r_fUn_4nd_pr0f1t}
-``
 </code></pre>
 			</div>
 			<hr class="post-end">

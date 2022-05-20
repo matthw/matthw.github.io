@@ -9,13 +9,13 @@
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
     <lastBuildDate>Fri, 20 May 2022 10:01:40 +0200</lastBuildDate><atom:link href="https://matth.dmz42.org/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Hackthebox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)</title>
+      <title>HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)</title>
       <link>https://matth.dmz42.org/posts/2022/hackthebox-ctf-cyber-apocalypse-2022-intergalactic-chase-pwn/</link>
       <pubDate>Fri, 20 May 2022 10:01:40 +0200</pubDate>
       
       <guid>https://matth.dmz42.org/posts/2022/hackthebox-ctf-cyber-apocalypse-2022-intergalactic-chase-pwn/</guid>
       <description>Hack The Box was hosting a CTF event and we played together with some friends.
-Here some writeups for some of the PWN challenges i solved.
+Here are some writeups for some of the PWN challenges i solved.
 Any code you can find here is very low ctf quality :)
 0. TOC   Space pirate: Retribution
   Vault Breaker
