@@ -121,7 +121,6 @@ Details: RAR 4
 *   I.A....      3899  2021-01-08 15:17  tabctrl.asp
 ----------- ---------  ---------- -----  ----
                148697                    12
-
 </code></pre><h1 id="3-extracting-switchbin">3. Extracting Switch.bin<a href="#3-extracting-switchbin" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
 <p>The <code>Switch.bin</code> has 2 parts.<br>
 The first part starts with the magic &ldquo;BDCO\x00&rdquo; and possibly contains some informations like base address and maybe some code responsible for loading the rest of the firmware (unconfirmed).</p>
@@ -163,19 +162,19 @@ At offset 0x2040 is a rar file.</p>
 hence my previous assumption about the first part of the bin file.</li>
 </ul>
 <p>the following will split the first part and the rar file:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="ch">#!/usr/bin/env python</span>
-
-<span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;out_1.bin&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp_out</span><span class="p">:</span>
-        <span class="n">fp_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mh">0x2030</span><span class="p">))</span>
-
-    <span class="k">assert</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;SYS</span><span class="se">\x00</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="o">*</span><span class="mi">12</span>
-
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;out_2.bin&#34;</span><span class="p">,</span> <span class="s2">&#34;wb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp_out</span><span class="p">:</span>
-        <span class="n">fp_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-</code></pre></div><pre tabindex="0"><code>% ./extract.py Switch.bin 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="ch">#!/usr/bin/env python</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;out_1.bin&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp_out</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fp_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mh">0x2030</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">assert</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;SYS</span><span class="se">\x00</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="o">*</span><span class="mi">12</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;out_2.bin&#34;</span><span class="p">,</span> <span class="s2">&#34;wb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp_out</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fp_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</span></span></code></pre></div><pre tabindex="0"><code>% ./extract.py Switch.bin 
 % unrar l out_2.bin 
 
 UNRAR 6.10 beta 2 freeware      Copyright (c) 1993-2021 Alexander Roshal
@@ -301,46 +300,46 @@ All OK
 This particular version can be found <a href="https://github.com/trenta3/goahead-versions">here</a>.</p>
 <p>There&rsquo;s an ASP style server page.</p>
 <p>All ASP functions are registered like this:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="nf">ASP_register_all_functions</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-
-<span class="p">{</span>
-  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateWebTitleInfoJS_80ce14c8</span><span class="p">,</span><span class="n">FUN_809a4bd0</span><span class="p">);</span>
-  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateAboutInfoJS_80ce14e4</span><span class="p">,</span><span class="n">FUN_809a4de0</span><span class="p">);</span>
-  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateWebParamsJS_80ce14fc</span><span class="p">,</span><span class="n">FUN_8095d068</span><span class="p">);</span>
-  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateUserPrivilegeJS_80ce1514</span><span class="p">,</span><span class="n">FUN_8096c908</span><span class="p">);</span>
-  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateRingInterfaceInfoJS_80ce1530</span><span class="p">,</span><span class="n">FUN_8097f680</span><span class="p">);</span>
-  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateInterfaceInfoJS_80ce1550</span><span class="p">,</span><span class="n">FUN_80964138</span><span class="p">);</span>
-  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateSystemStateJS_80ce156c</span><span class="p">,</span><span class="n">FUN_8095d24c</span><span class="p">);</span>
-  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateRangeOfVariableJS_80ce1588</span><span class="p">,</span><span class="n">FUN_8095d700</span><span class="p">);</span>
-  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateUMJS_80ce15a8</span><span class="p">,</span><span class="n">FUN_8095d758</span><span class="p">);</span>
-  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateFunctionGobackUrlJS_80ce15b8</span><span class="p">,</span><span class="n">FUN_8095deb0</span><span class="p">);</span>
-  <span class="c1">// [...]
-</span><span class="c1"></span>  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateDhcpdIPBindInfoJS_80ce2e1c</span><span class="p">,</span><span class="n">FUN_80980c58</span><span class="p">);</span>
-  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateAccessRestrictInfoJS_80ce2e3c</span><span class="p">,</span><span class="n">FUN_8098c904</span><span class="p">);</span>
-  <span class="k">return</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><p>The same with all forms actions:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp">
-<span class="kt">void</span> <span class="nf">http_register_all_goform_funcs</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-
-<span class="p">{</span>
-  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_formTest_80cd9c5c</span><span class="p">,</span><span class="n">http_asp_formTest</span><span class="p">);</span>
-  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_langform_80cd9c68</span><span class="p">,</span><span class="o">&amp;</span><span class="n">LAB_8092cb9c</span><span class="p">);</span>
-  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_WebAdminDelete_80cd9c74</span><span class="p">,</span><span class="o">&amp;</span><span class="n">LAB_8092d4c4</span><span class="p">);</span>
-  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_WebAdminConfig_80cd9c84</span><span class="p">,</span><span class="n">FUN_8092d790</span><span class="p">);</span>
-  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_SysClockConfig_80cd9c94</span><span class="p">,</span><span class="o">&amp;</span><span class="n">LAB_8092dca0</span><span class="p">);</span>
-  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_BackupFirmware_80cd9ca4</span><span class="p">,</span><span class="n">FUN_8092e37c</span><span class="p">);</span>
-  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_UpdateFirmware_80cd9cb4</span><span class="p">,</span><span class="n">FUN_8092e400</span><span class="p">);</span>
-  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_BackupConfigFile_80cd9cc4</span><span class="p">,</span><span class="n">FUN_8092e540</span><span class="p">);</span>
-  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_UpdateConfigFile_80cd9cd8</span><span class="p">,</span><span class="n">FUN_8092e5ac</span><span class="p">);</span>
-  <span class="c1">// [...]
-</span><span class="c1"></span>  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_RestoreConfigFile_80cd9cec</span><span class="p">,</span><span class="n">FUN_8092e898</span><span class="p">);</span>
-  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_RebootDevice_80cd9d00</span><span class="p">,</span><span class="n">FUN_8092e7cc</span><span class="p">);</span>
-  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_CustomerinfoRestoreConfig_80cdaa68</span><span class="p">,</span><span class="n">FUN_8092f858</span><span class="p">);</span>
-  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_AccessRestrictConfig_80cdaa84</span><span class="p">,</span><span class="o">&amp;</span><span class="n">LAB_8093dc90</span><span class="p">);</span>
-  <span class="k">return</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><p>The HTTP code is easy to follow, especially with the source code next to it&hellip;</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">ASP_register_all_functions</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateWebTitleInfoJS_80ce14c8</span><span class="p">,</span><span class="n">FUN_809a4bd0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateAboutInfoJS_80ce14e4</span><span class="p">,</span><span class="n">FUN_809a4de0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateWebParamsJS_80ce14fc</span><span class="p">,</span><span class="n">FUN_8095d068</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateUserPrivilegeJS_80ce1514</span><span class="p">,</span><span class="n">FUN_8096c908</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateRingInterfaceInfoJS_80ce1530</span><span class="p">,</span><span class="n">FUN_8097f680</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateInterfaceInfoJS_80ce1550</span><span class="p">,</span><span class="n">FUN_80964138</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateSystemStateJS_80ce156c</span><span class="p">,</span><span class="n">FUN_8095d24c</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateRangeOfVariableJS_80ce1588</span><span class="p">,</span><span class="n">FUN_8095d700</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateUMJS_80ce15a8</span><span class="p">,</span><span class="n">FUN_8095d758</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateFunctionGobackUrlJS_80ce15b8</span><span class="p">,</span><span class="n">FUN_8095deb0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// [...]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateDhcpdIPBindInfoJS_80ce2e1c</span><span class="p">,</span><span class="n">FUN_80980c58</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ASP_register_one_func</span><span class="p">(</span><span class="n">s_aspGenerateAccessRestrictInfoJS_80ce2e3c</span><span class="p">,</span><span class="n">FUN_8098c904</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>The same with all forms actions:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">http_register_all_goform_funcs</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_formTest_80cd9c5c</span><span class="p">,</span><span class="n">http_asp_formTest</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_langform_80cd9c68</span><span class="p">,</span><span class="o">&amp;</span><span class="n">LAB_8092cb9c</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_WebAdminDelete_80cd9c74</span><span class="p">,</span><span class="o">&amp;</span><span class="n">LAB_8092d4c4</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_WebAdminConfig_80cd9c84</span><span class="p">,</span><span class="n">FUN_8092d790</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_SysClockConfig_80cd9c94</span><span class="p">,</span><span class="o">&amp;</span><span class="n">LAB_8092dca0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_BackupFirmware_80cd9ca4</span><span class="p">,</span><span class="n">FUN_8092e37c</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_UpdateFirmware_80cd9cb4</span><span class="p">,</span><span class="n">FUN_8092e400</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_BackupConfigFile_80cd9cc4</span><span class="p">,</span><span class="n">FUN_8092e540</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_UpdateConfigFile_80cd9cd8</span><span class="p">,</span><span class="n">FUN_8092e5ac</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// [...]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_RestoreConfigFile_80cd9cec</span><span class="p">,</span><span class="n">FUN_8092e898</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_RebootDevice_80cd9d00</span><span class="p">,</span><span class="n">FUN_8092e7cc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_CustomerinfoRestoreConfig_80cdaa68</span><span class="p">,</span><span class="n">FUN_8092f858</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">http_register_one_goform_func</span><span class="p">(</span><span class="n">s_AccessRestrictConfig_80cdaa84</span><span class="p">,</span><span class="o">&amp;</span><span class="n">LAB_8093dc90</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>The HTTP code is easy to follow, especially with the source code next to it&hellip;</p>
 <h1 id="6-debugging">6. Debugging<a href="#6-debugging" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
 <p>It&rsquo;s possible to enable core dump (<code>core_dump enable</code>) and read core files with <code>show break</code> (should you crash the switch :-):</p>
 <pre tabindex="0"><code>Switch#show break
@@ -423,6 +422,9 @@ Stack:
 </nav>
 		</aside>
 		<div class="post-nav thin">
+			<a class="next-post" href="https://matth.dmz42.org/posts/2022/hackthebox-ctf-cyber-apocalypse-2022-intergalactic-chase-pwn/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>Hackthebox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)</span>
+			</a>
 			<a class="prev-post" href="https://matth.dmz42.org/posts/2021/the-return-of-the-malwarebytes-crackme/">
 				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>The Return of the Malwarebytes Crackme</span>
 			</a>
@@ -440,7 +442,7 @@ Stack:
 
 
 
-	<script src="https://matth.dmz42.org/js/bundle.min.7d8545daa55d62427355498dd8da13f98ff79a7938ce7d2a5e2ae1ec0de3beb8.js" integrity="sha256-fYVF2qVdYkJzVUmN2NoT+Y/3mnk4zn0qXirh7A3jvrg=" crossorigin="anonymous"></script>
+	<script src="https://matth.dmz42.org/js/bundle.min.8256b8724b9578bbdf6d6f04c894255bc760e78e8a2d60ec0a91ea993acd3b77.js" integrity="sha256-gla4ckuVeLvfbW8EyJQlW8dg546KLWDsCpHqmTrNO3c=" crossorigin="anonymous"></script>
 	
 
 </body>

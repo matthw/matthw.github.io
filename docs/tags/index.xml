@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Tue, 11 Jan 2022 15:24:31 +0100</lastBuildDate><atom:link href="https://matth.dmz42.org/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 20 May 2022 10:01:40 +0200</lastBuildDate><atom:link href="https://matth.dmz42.org/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ctf</title>
+      <link>https://matth.dmz42.org/tags/ctf/</link>
+      <pubDate>Fri, 20 May 2022 10:01:40 +0200</pubDate>
+      
+      <guid>https://matth.dmz42.org/tags/ctf/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>reverse</title>
       <link>https://matth.dmz42.org/tags/reverse/</link>

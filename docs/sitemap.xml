@@ -3,18 +3,24 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://matth.dmz42.org/</loc>
-    <lastmod>2022-01-11T15:24:31+01:00</lastmod>
+    <lastmod>2022-05-20T10:01:40+02:00</lastmod>
+  </url><url>
+    <loc>https://matth.dmz42.org/tags/ctf/</loc>
+    <lastmod>2022-05-20T10:01:40+02:00</lastmod>
+  </url><url>
+    <loc>https://matth.dmz42.org/posts/2022/hackthebox-ctf-cyber-apocalypse-2022-intergalactic-chase-pwn/</loc>
+    <lastmod>2022-05-20T10:01:40+02:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/posts/</loc>
-    <lastmod>2022-01-11T15:24:31+01:00</lastmod>
+    <lastmod>2022-05-20T10:01:40+02:00</lastmod>
+  </url><url>
+    <loc>https://matth.dmz42.org/tags/</loc>
+    <lastmod>2022-05-20T10:01:40+02:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/tags/reverse/</loc>
     <lastmod>2022-01-11T15:24:31+01:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/posts/2022/reversing-firmwares-from-fs-and-bdcom-switches/</loc>
-    <lastmod>2022-01-11T15:24:31+01:00</lastmod>
-  </url><url>
-    <loc>https://matth.dmz42.org/tags/</loc>
     <lastmod>2022-01-11T15:24:31+01:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/tags/crackme/</loc>
