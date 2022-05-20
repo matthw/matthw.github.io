@@ -1,5 +1,5 @@
 ---
-title: "Hackthebox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)"
+title: "HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (PWN)"
 date: 2022-05-20T10:01:40+02:00
 draft: false
 toc: true
