@@ -223,6 +223,7 @@ we have the option to generate a new random key of given size before dumping the
 ```
 
 If we request a new key of size 8, it will replace the first 8 bytes of the random_key by new random bytes.
+
 The bug is that it's using strcpy, which will also copy the trailing NULL byte.
 
 ```
@@ -245,9 +246,10 @@ pwndbg> x/32bx 0x555555606060
 8 new first bytes, and a NULL byte at random_key+8
 ```
 
-new key of size 0: random_key[0] = 0
-new key of size 1: random_key[1] = 0
-new key of size 2: random_key[2] = 0
+- new key of size 0: random_key[0] = 0
+- new key of size 1: random_key[1] = 0
+- new key of size 2: random_key[2] = 0
+
 etc...
 
 since the flag is xor'd with the key and flag ^ 0 == flag, we can leak the flag byte by byte...
@@ -701,6 +703,6 @@ $ id
 uid=999(ctf) gid=999(ctf) groups=999(ctf)
 $ cat flag.txt
 HTB{tr1ck1ng_d3al3rz_f0r_fUn_4nd_pr0f1t}
-``
+```
 
 
