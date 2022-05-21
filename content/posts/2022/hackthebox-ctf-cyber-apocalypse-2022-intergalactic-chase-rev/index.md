@@ -1315,10 +1315,10 @@ The parent process has attached the child process with ptrace and can catch the 
 
 So, when the child process will execute the UD2 instruction, the parent will *catch* it and will:
 - read 8 bytes of memory at the child RIP
-- verify the last 2 bytes are 0xb0f
-  - UD2 instruction's opcode are 0FB0 - but little endian...
-- read the next 2 bytes as the compressed data size
-- read the next 4 bytes as the decompressed data size
+    - verify the last 2 bytes are 0xb0f
+        - UD2 instruction's opcode are 0FB0 - but little endian...
+    - read the next 2 bytes as the compressed data size
+    - read the next 4 bytes as the decompressed data size
 - zlib decompress the compressed data following these 8 bytes
 - write them back to the child process using ```process_vm_writev()```, starting from the crash (UD2) address
   - it's possible because of the initial call to ```mprotect()``` to set the text segment RWX

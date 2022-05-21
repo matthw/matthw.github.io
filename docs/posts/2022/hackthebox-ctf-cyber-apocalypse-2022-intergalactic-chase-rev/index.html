@@ -1121,7 +1121,8 @@ Correct!
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span></code></pre></div><p>So, when the child process will execute the UD2 instruction, the parent will <em>catch</em> it and will:</p>
 <ul>
-<li>read 8 bytes of memory at the child RIP</li>
+<li>read 8 bytes of memory at the child RIP
+<ul>
 <li>verify the last 2 bytes are 0xb0f
 <ul>
 <li>UD2 instruction&rsquo;s opcode are 0FB0 - but little endian&hellip;</li>
@@ -1129,6 +1130,8 @@ Correct!
 </li>
 <li>read the next 2 bytes as the compressed data size</li>
 <li>read the next 4 bytes as the decompressed data size</li>
+</ul>
+</li>
 <li>zlib decompress the compressed data following these 8 bytes</li>
 <li>write them back to the child process using <code>process_vm_writev()</code>, starting from the crash (UD2) address
 <ul>
