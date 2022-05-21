@@ -21,7 +21,7 @@ Any code you can find here is very low ctf quality :)
 0. TOC   Space pirate: Retribution
   Vault Breaker
   Fleet Management
-  Hellhound
+  Hellbound
   Trick Or Deal
   1. Space pirate: Retribution Original files are here.</description>
 			<content type="html"><![CDATA[<p><a href="https://www.hackthebox.com">Hack The Box</a> was hosting a CTF event and we played together with some friends.</p>
@@ -39,7 +39,7 @@ Any code you can find here is very low ctf quality :)
 <p><a href="#3-fleet-management">Fleet Management</a></p>
 </li>
 <li>
-<p><a href="#4-hellhound">Hellhound</a></p>
+<p><a href="#4-hellbound">Hellbound</a></p>
 </li>
 <li>
 <p><a href="#5-trick-or-deal">Trick Or Deal</a></p>
@@ -357,7 +357,7 @@ from there it&rsquo;s a classic shellcode writting challenge</p>
 [+] Opening connection to 157.245.47.33 on port 31234: Done
 b&#39;HTB{backd00r_as_a_f3atur3}\n&#39;
 [*] Closed connection to 157.245.47.33 port 31234
-</code></pre><h1 id="4-hellhound">4. Hellhound</h1>
+</code></pre><h1 id="4-hellbound">4. Hellbound</h1>
 <p>Original files are <a href="pwn_hellhound.zip">here</a>.</p>
 <pre tabindex="0"><code>    Arch:     amd64-64-little
     RELRO:    Full RELRO

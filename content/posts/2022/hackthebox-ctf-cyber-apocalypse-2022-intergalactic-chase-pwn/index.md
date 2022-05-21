@@ -24,7 +24,7 @@ Any code you can find here is very low ctf quality :)
 
 3. [Fleet Management](#3-fleet-management)
 
-4. [Hellhound](#4-hellhound)
+4. [Hellbound](#4-hellbound)
 
 5. [Trick Or Deal](#5-trick-or-deal)
 
@@ -404,7 +404,7 @@ b'HTB{backd00r_as_a_f3atur3}\n'
 
 
 
-# 4. Hellhound
+# 4. Hellbound
 Original files are [here](pwn_hellhound.zip).
 
 ```
