@@ -18,21 +18,21 @@ There's often shortcuts taken and (un)educated guesses involved...
 # 0. TOC
 
 
-1. [Without A Trace](#1-without-a-trace)
+1. [Without A Trace](#1-without-a-trace) (413 solves)
 
-2. [Teleport](#2-teleport)
+2. [Teleport](#2-teleport) (307 solves)
 
-3. [Rebuilding](#3-rebuilding)
+3. [Rebuilding](#3-rebuilding) (463 solves)
 
-4. [Nuts and Bolts](#4-nuts-and-bolts)
+4. [Nuts and Bolts](#4-nuts-and-bolts) (60 solves)
 
-5. [Shuffle Me](#5-shuffle-me)
+5. [Shuffleme](#5-shuffleme) (28 solves)
 
-6. [Snake Code](#6-snake-code)
+6. [Snake Code](#6-snake-code) (281 solves)
 
-7. [Freaky Forum Interception](#7-freaky-forum-interception)
+7. [Freaky Forum Interception](#7-freaky-forum-interception) (32 solves)
 
-8. [Indefinite](#8-indefinite)
+8. [Indefinite](#8-indefinite) (58 solves)
 
 
 
@@ -428,7 +428,7 @@ b'HTB{ru5t_h45_t4gg3d_3num5_4nd_th3yr3_pr3tty_c00l}\n\x00\x00\x00\x00\x00\x00\x0
 
 
 
-# 5. Shuffle Me
+# 5. Shuffleme
 
 Original files [here](rev_shuffleme.zip).
 

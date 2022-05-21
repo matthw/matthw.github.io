@@ -18,43 +18,40 @@
 			<description>Hack The Box was hosting a CTF event and we played together with some friends.
 Here are some writeups for some of the reversing challenges i solved.
 There&amp;rsquo;s often shortcuts taken and (un)educated guesses involved&amp;hellip;
-0. TOC   Without A Trace
-  Teleport
-  Rebuilding
-  Nuts and Bolts
-  Shuffle Me
-  Snake Code
-  Freaky Forum Interception
-  Indefinite
-  1.</description>
+0. TOC   Without A Trace (413 solves)
+  Teleport (307 solves)
+  Rebuilding (463 solves)
+  Nuts and Bolts (60 solves)
+  Shuffleme (28 solves)
+  Snake Code (281 solves)</description>
 			<content type="html"><![CDATA[<p><a href="https://www.hackthebox.com">Hack The Box</a> was hosting a CTF event and we played together with some friends.</p>
 <p>Here are some writeups for some of the reversing challenges i solved.</p>
 <p>There&rsquo;s often shortcuts taken and (un)educated guesses involved&hellip;</p>
 <h1 id="0-toc">0. TOC</h1>
 <ol>
 <li>
-<p><a href="#1-without-a-trace">Without A Trace</a></p>
+<p><a href="#1-without-a-trace">Without A Trace</a> (413 solves)</p>
 </li>
 <li>
-<p><a href="#2-teleport">Teleport</a></p>
+<p><a href="#2-teleport">Teleport</a> (307 solves)</p>
 </li>
 <li>
-<p><a href="#3-rebuilding">Rebuilding</a></p>
+<p><a href="#3-rebuilding">Rebuilding</a> (463 solves)</p>
 </li>
 <li>
-<p><a href="#4-nuts-and-bolts">Nuts and Bolts</a></p>
+<p><a href="#4-nuts-and-bolts">Nuts and Bolts</a> (60 solves)</p>
 </li>
 <li>
-<p><a href="#5-shuffle-me">Shuffle Me</a></p>
+<p><a href="#5-shuffleme">Shuffleme</a> (28 solves)</p>
 </li>
 <li>
-<p><a href="#6-snake-code">Snake Code</a></p>
+<p><a href="#6-snake-code">Snake Code</a> (281 solves)</p>
 </li>
 <li>
-<p><a href="#7-freaky-forum-interception">Freaky Forum Interception</a></p>
+<p><a href="#7-freaky-forum-interception">Freaky Forum Interception</a> (32 solves)</p>
 </li>
 <li>
-<p><a href="#8-indefinite">Indefinite</a></p>
+<p><a href="#8-indefinite">Indefinite</a> (58 solves)</p>
 </li>
 </ol>
 <h1 id="1-without-a-trace">1. Without A Trace</h1>
@@ -372,7 +369,7 @@ And here&#39;s your flag: [2, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0,
 </span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
 </span></span></code></pre></div><pre tabindex="0"><code>% python nab.py | grep HTB
 b&#39;HTB{ru5t_h45_t4gg3d_3num5_4nd_th3yr3_pr3tty_c00l}\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#39;
-</code></pre><h1 id="5-shuffle-me">5. Shuffle Me</h1>
+</code></pre><h1 id="5-shuffleme">5. Shuffleme</h1>
 <p>Original files <a href="rev_shuffleme.zip">here</a>.</p>
 <p>This is one i need to get back to, because i honestly didnt take time to understand what it was doing&hellip;</p>
 <p>I either missed the obvious or there&rsquo;s some solid voodoo going on, but nevertheless got it with some solid shortcuts and a lot of luck maybe</p>
