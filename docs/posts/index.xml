@@ -56,7 +56,7 @@ There&amp;rsquo;s often shortcuts taken and (un)educated guesses involved&amp;he
 </ol>
 <h1 id="1-without-a-trace">1. Without A Trace</h1>
 <p>Original file <a href="rev_without_a_trace.zip">here</a>.</p>
-<p>The <code>check_password</code> function calls ``` ptrace(PTRACE_ME) and use the return value as part of the flag decryption loop.</p>
+<p>The <code>check_password</code> function calls <code>ptrace(PTRACE_ME)</code> and use the return value as part of the flag decryption loop.</p>
 <p>It&rsquo;s a classic antidebug trick, as if the process is being debugged already, the ptrace call will fail (a process can only be traced once) and the decrypted result will be garbage.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">ulong</span> <span class="nf">check_password</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">param_1</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
