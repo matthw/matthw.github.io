@@ -1147,7 +1147,7 @@ Correct!
 ```
 
 
-notes: there program would validate other inputs for the java part:
+*notes: the program would validate other inputs for the java part:*
 ```
 % ./ffi                                      
 HTB{g3tt1ng_fr34ky_u51Ng_gtob801m6}
@@ -1155,7 +1155,7 @@ Correct!
 
 ```
 
-and the go function is just bugged:
+*and the go function is just bugged:*
 
 ```
 % ./ffi
