@@ -125,8 +125,8 @@ There&rsquo;s often shortcuts taken and (un)educated guesses involved&hellip;
 </ol>
 <h1 id="1-without-a-trace">1. Without A Trace<a href="#1-without-a-trace" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
 <p>Original file <a href="rev_without_a_trace.zip">here</a>.</p>
-<p>The <code>check_password</code> function calls <code>ptrace(PTRACE_ME)</code> and use the return value as part of the flag decryption loop.</p>
-<p>It&rsquo;s a classic antidebug trick, as if the process is being debugged already, the ptrace call will fail (a process can only be traced once) and the decrypted result will be garbage.</p>
+<p>The <code>check_password</code> function calls <code>ptrace(PTRACE_ME)</code> and uses the return value as part of the flag decryption loop.</p>
+<p>It&rsquo;s a classic antidebug trick, as if the process is already being debugged, the ptrace call will fail (a process can only be traced once) and the decrypted result will be garbage.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">ulong</span> <span class="nf">check_password</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">param_1</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">{</span>

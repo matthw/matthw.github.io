@@ -40,9 +40,9 @@ There's often shortcuts taken and (un)educated guesses involved...
 
 Original file [here](rev_without_a_trace.zip).
 
-The ```check_password``` function calls ```ptrace(PTRACE_ME)``` and use the return value as part of the flag decryption loop.
+The ```check_password``` function calls ```ptrace(PTRACE_ME)``` and uses the return value as part of the flag decryption loop.
 
-It's a classic antidebug trick, as if the process is being debugged already, the ptrace call will fail (a process can only be traced once) and the decrypted result will be garbage.
+It's a classic antidebug trick, as if the process is already being debugged, the ptrace call will fail (a process can only be traced once) and the decrypted result will be garbage.
 
 ```C
 ulong check_password(char *param_1)
