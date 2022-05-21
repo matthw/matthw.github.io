@@ -1168,7 +1168,7 @@ Correct!
 
 Original files [here](rev_indefinite.zip).
 
-I really liked this one because it implements nanomites.
+I really liked this one because it implements nanomites, dont ask me why i like them... :)
 
 It starts by forking:
 - the child process will do the work
@@ -1199,9 +1199,7 @@ undefined8 main(int argc,char **argv)
 }
 ```
 
-let's first have a look at the ```child``` function
-
-it will read 8 bytes from /dev/urandom and encrypt the file passed as argv[1]
+The ```child``` function will read 8 bytes from /dev/urandom and encrypt the file passed as argv[1]
 
 ```
     fd = fopen("/dev/urandom","r");
@@ -1210,7 +1208,7 @@ it will read 8 bytes from /dev/urandom and encrypt the file passed as argv[1]
     do_encrypt_file(filename,0,buffer);
 ```
 
-now let's look at the ```do_encrypt``` function:
+The ```do_encrypt``` function... will crash:
 
 ```
                          *******************************************************
@@ -1241,10 +1239,11 @@ now let's look at the ```do_encrypt``` function:
 ....
 ```
 
-the first instruction is a ```UD2``` which will trigger an invalid instruction and crash the process
-the rest doesnt make sense... and this is where the parent "driver" process comes into play
+The first instruction is a ```UD2``` which will trigger an invalid instruction and crash the process.
 
-The parent process as attach the child process with ptrace
+The rest doesnt make sense... and this is where the parent "driver" process comes into play.
+
+The parent process has attached the child process with ptrace and can catch the crash (that's just how debugger work by the way).
 
 ```C
     while( true ) {
@@ -1317,14 +1316,16 @@ The parent process as attach the child process with ptrace
 So, when the child process will execute the UD2 instruction, the parent will *catch* it and will:
 - read 8 bytes of memory at the child RIP
 - verify the last 2 bytes are 0xb0f
-  - UD2 instruction is 0FB0 - but little endian...
+  - UD2 instruction's opcode are 0FB0 - but little endian...
 - read the next 2 bytes as the compressed data size
 - read the next 4 bytes as the decompressed data size
 - zlib decompress the compressed data following these 8 bytes
-- write them back to the child process, starting from the crash (UD2) address
+- write them back to the child process using ```process_vm_writev()```, starting from the crash (UD2) address
+  - it's possible because of the initial call to ```mprotect()``` to set the text segment RWX
+  - note that using ```ptrace(PTRACE_POKEDATA)``` instead ```process_vm_writev()``` doesnt require the destination address to be writable.
 - resume child execution
 
-so basically
+so basically, this is the layout:
 
 ```
                          *******************************************************
@@ -1335,8 +1336,8 @@ so basically
            undefined       AL:1           <RETURN>
                          do_encrypt_file  
       001010ad 0f 0b                    UD2
-      001010af c5 00                    dw                   C5h                ; = 195
-      001010b1 0b 01 00 00              ddw                  10Bh               ; = 267
+      001010af c5 00                    dw                   C5h                ; = 195 / compressed size
+      001010b1 0b 01 00 00              ddw                  10Bh               ; = 267 / decompressed size
                                     ; compressed data
       001010b5 78                       ??                   78h    x
       001010b6 9c                       ??                   9Ch
@@ -1523,9 +1524,9 @@ ulong advance(byte *param_1)
 }
 ```
 
-but we do not need to reverse the whole thing.
+but we do not need to reverse the whole thing:
 
-We know that the first 8 bytes of the file are the initial key, we can just patch the file to read the key from a user controller file instead of /dev/urandom...
+we know that the first 8 bytes of the file are the initial key, we can just patch the file to read the key from a user controller file instead of /dev/urandom...
 
 ```python
 # poor man's patch ....

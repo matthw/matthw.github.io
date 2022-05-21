@@ -924,7 +924,7 @@ HTB{sxxxxxx_fr34ky_u51Ng_hspa9/2l7}
 Correct!
 </code></pre><h1 id="8-indefinite">8. Indefinite</h1>
 <p>Original files <a href="rev_indefinite.zip">here</a>.</p>
-<p>I really liked this one because it implements nanomites.</p>
+<p>I really liked this one because it implements nanomites, dont ask me why i like them&hellip; :)</p>
 <p>It starts by forking:</p>
 <ul>
 <li>the child process will do the work</li>
@@ -952,13 +952,12 @@ Correct!
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>let&rsquo;s first have a look at the <code>child</code> function</p>
-<p>it will read 8 bytes from /dev/urandom and encrypt the file passed as argv[1]</p>
+</span></span></code></pre></div><p>The <code>child</code> function will read 8 bytes from /dev/urandom and encrypt the file passed as argv[1]</p>
 <pre tabindex="0"><code>    fd = fopen(&#34;/dev/urandom&#34;,&#34;r&#34;);
     fread(&amp;buffer,8,1,fd);
     fclose(fd);
     do_encrypt_file(filename,0,buffer);
-</code></pre><p>now let&rsquo;s look at the <code>do_encrypt</code> function:</p>
+</code></pre><p>The <code>do_encrypt</code> function&hellip; will crash:</p>
 <pre tabindex="0"><code>                         *******************************************************
                          *                                                     *
                          *  FUNCTION                                           *
@@ -985,9 +984,9 @@ Correct!
       001010be c6                       ??                   C6h
       001010bf c0                       ??                   C0h
 ....
-</code></pre><p>the first instruction is a <code>UD2</code> which will trigger an invalid instruction and crash the process
-the rest doesnt make sense&hellip; and this is where the parent &ldquo;driver&rdquo; process comes into play</p>
-<p>The parent process as attach the child process with ptrace</p>
+</code></pre><p>The first instruction is a <code>UD2</code> which will trigger an invalid instruction and crash the process.</p>
+<p>The rest doesnt make sense&hellip; and this is where the parent &ldquo;driver&rdquo; process comes into play.</p>
+<p>The parent process has attached the child process with ptrace and can catch the crash (that&rsquo;s just how debugger work by the way).</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">    <span class="k">while</span><span class="p">(</span> <span class="nb">true</span> <span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="cm">/* wait for child pid */</span>
 </span></span><span class="line"><span class="cl">        <span class="n">wait</span><span class="p">(</span><span class="o">&amp;</span><span class="n">wstatus</span><span class="p">);</span>
@@ -1056,16 +1055,21 @@ the rest doesnt make sense&hellip; and this is where the parent &ldquo;driver&rd
 <li>read 8 bytes of memory at the child RIP</li>
 <li>verify the last 2 bytes are 0xb0f
 <ul>
-<li>UD2 instruction is 0FB0 - but little endian&hellip;</li>
+<li>UD2 instruction&rsquo;s opcode are 0FB0 - but little endian&hellip;</li>
 </ul>
 </li>
 <li>read the next 2 bytes as the compressed data size</li>
 <li>read the next 4 bytes as the decompressed data size</li>
 <li>zlib decompress the compressed data following these 8 bytes</li>
-<li>write them back to the child process, starting from the crash (UD2) address</li>
+<li>write them back to the child process using <code>process_vm_writev()</code>, starting from the crash (UD2) address
+<ul>
+<li>it&rsquo;s possible because of the initial call to <code>mprotect()</code> to set the text segment RWX</li>
+<li>note that using <code>ptrace(PTRACE_POKEDATA)</code> instead <code>process_vm_writev()</code> doesnt require the destination address to be writable.</li>
+</ul>
+</li>
 <li>resume child execution</li>
 </ul>
-<p>so basically</p>
+<p>so basically, this is the layout:</p>
 <pre tabindex="0"><code>                         *******************************************************
                          *                                                     *
                          *  FUNCTION                                           *
@@ -1074,8 +1078,8 @@ the rest doesnt make sense&hellip; and this is where the parent &ldquo;driver&rd
            undefined       AL:1           &lt;RETURN&gt;
                          do_encrypt_file  
       001010ad 0f 0b                    UD2
-      001010af c5 00                    dw                   C5h                ; = 195
-      001010b1 0b 01 00 00              ddw                  10Bh               ; = 267
+      001010af c5 00                    dw                   C5h                ; = 195 / compressed size
+      001010b1 0b 01 00 00              ddw                  10Bh               ; = 267 / decompressed size
                                     ; compressed data
       001010b5 78                       ??                   78h    x
       001010b6 9c                       ??                   9Ch
@@ -1235,8 +1239,8 @@ the rest doesnt make sense&hellip; and this is where the parent &ldquo;driver&rd
 </span></span><span class="line"><span class="cl">    <span class="n">uVar1</span> <span class="o">=</span> <span class="n">swap_bytes</span><span class="p">((</span><span class="n">ulong</span><span class="p">)</span><span class="o">~</span><span class="n">local_28</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">uVar1</span> <span class="o">|</span> <span class="o">~</span><span class="n">local_28</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>but we do not need to reverse the whole thing.</p>
-<p>We know that the first 8 bytes of the file are the initial key, we can just patch the file to read the key from a user controller file instead of /dev/urandom&hellip;</p>
+</span></span></code></pre></div><p>but we do not need to reverse the whole thing:</p>
+<p>we know that the first 8 bytes of the file are the initial key, we can just patch the file to read the key from a user controller file instead of /dev/urandom&hellip;</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># poor man&#39;s patch ....</span>
 </span></span><span class="line"><span class="cl"><span class="nb">open</span><span class="p">(</span><span class="s2">&#34;indefinite.patch&#34;</span><span class="p">,</span> <span class="s2">&#34;wb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&#34;indefinite&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;/dev/urandom&#34;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&#34;keyfile_1111&#34;</span><span class="p">))</span>
 </span></span></code></pre></div><p>and then</p>
