@@ -10,25 +10,23 @@
 <meta itemprop="name" content="HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (Reverse)">
 <meta itemprop="description" content="Hack The Box was hosting a CTF event and we played together with some friends.
 Here are some writeups for some of the reversing challenges i solved.
-There&rsquo;s often shortcuts taken and (un)educated guesses involved&hellip;
+There&rsquo;s often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun&hellip;
 0. TOC   Without A Trace (413 solves)
   Teleport (307 solves)
   Rebuilding (463 solves)
   Nuts and Bolts (60 solves)
-  Shuffleme (28 solves)
-  Snake Code (281 solves)"><meta itemprop="datePublished" content="2022-05-21T21:15:40+02:00" />
+  Shuffleme (28 solves)"><meta itemprop="datePublished" content="2022-05-21T21:15:40+02:00" />
 <meta itemprop="dateModified" content="2022-05-21T21:15:40+02:00" />
-<meta itemprop="wordCount" content="5511">
+<meta itemprop="wordCount" content="5782">
 <meta itemprop="keywords" content="ctf," /><meta property="og:title" content="HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (Reverse)" />
 <meta property="og:description" content="Hack The Box was hosting a CTF event and we played together with some friends.
 Here are some writeups for some of the reversing challenges i solved.
-There&rsquo;s often shortcuts taken and (un)educated guesses involved&hellip;
+There&rsquo;s often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun&hellip;
 0. TOC   Without A Trace (413 solves)
   Teleport (307 solves)
   Rebuilding (463 solves)
   Nuts and Bolts (60 solves)
-  Shuffleme (28 solves)
-  Snake Code (281 solves)" />
+  Shuffleme (28 solves)" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://matth.dmz42.org/posts/2022/hackthebox-ctf-cyber-apocalypse-2022-intergalactic-chase-rev/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-05-21T21:15:40+02:00" />
@@ -38,13 +36,12 @@ There&rsquo;s often shortcuts taken and (un)educated guesses involved&hellip;
 <meta name="twitter:title" content="HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (Reverse)"/>
 <meta name="twitter:description" content="Hack The Box was hosting a CTF event and we played together with some friends.
 Here are some writeups for some of the reversing challenges i solved.
-There&rsquo;s often shortcuts taken and (un)educated guesses involved&hellip;
+There&rsquo;s often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun&hellip;
 0. TOC   Without A Trace (413 solves)
   Teleport (307 solves)
   Rebuilding (463 solves)
   Nuts and Bolts (60 solves)
-  Shuffleme (28 solves)
-  Snake Code (281 solves)"/>
+  Shuffleme (28 solves)"/>
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -95,7 +92,7 @@ There&rsquo;s often shortcuts taken and (un)educated guesses involved&hellip;
 			<div class="content">
 				<p><a href="https://www.hackthebox.com">Hack The Box</a> was hosting a CTF event and we played together with some friends.</p>
 <p>Here are some writeups for some of the reversing challenges i solved.</p>
-<p>There&rsquo;s often shortcuts taken and (un)educated guesses involved&hellip;</p>
+<p>There&rsquo;s often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun&hellip;</p>
 <h1 id="0-toc">0. TOC<a href="#0-toc" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
 <ol>
 <li>
@@ -224,8 +221,8 @@ pwndbg&gt; x/s $rsi
 </span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">logging</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># by default, angr will set PIE binary base at 0x400000</span>
 </span></span><span class="line"><span class="cl"><span class="n">BASE_ADDR</span> <span class="o">=</span> <span class="mh">0x400000</span>
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">rebase</span><span class="p">(</span><span class="n">addr</span><span class="p">):</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">BASE_ADDR</span> <span class="o">+</span> <span class="n">addr</span>
@@ -396,8 +393,7 @@ And here&#39;s your flag: [2, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0,
 </span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>and then <code>nuts_and_bolts::StorageMethod&lt;_&gt;::xor_inner::{{closure}}</code></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">nuts_and_bolts</span><span class="o">::</span><span class="n">StorageMethod</span><span class="o">&lt;</span><span class="n">_</span><span class="o">&gt;::</span><span class="n">xor_inner</span><span class="o">::</span><span class="p">{{</span><span class="n">closure</span><span class="p">}}({</span><span class="n">closure_env</span><span class="err">#</span><span class="mi">0</span><span class="p">}</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">param_1</span><span class="p">,</span><span class="n">u8</span> <span class="o">*</span><span class="n">v</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">nuts_and_bolts</span><span class="o">::</span><span class="n">StorageMethod</span><span class="o">&lt;</span><span class="n">_</span><span class="o">&gt;::</span><span class="n">xor_inner</span><span class="o">::</span><span class="p">{{</span><span class="n">closure</span><span class="p">}}({</span><span class="n">closure_env</span><span class="err">#</span><span class="mi">0</span><span class="p">}</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">param_1</span><span class="p">,</span><span class="n">u8</span> <span class="o">*</span><span class="n">v</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="o">*</span><span class="n">v</span> <span class="o">=</span> <span class="o">*</span><span class="n">v</span> <span class="o">^</span> <span class="mh">0xd</span><span class="p">;</span>
@@ -634,7 +630,7 @@ out$ python
 <li>part4 will be validated by the <code>java_check</code>function.</li>
 </ul>
 <h2 id="71-gocheck">7.1 GoCheck<a href="#71-gocheck" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
-<p>If you deal with Go with Ghidra, you might want to check the <code>Decompiler Parameter ID</code>in the analysis option (by pressing &lsquo;A&rsquo;) - otherwise most function calls will look like they have no parameters.</p>
+<p>When dealing with a Go binary in Ghidra, you might want to check the <code>Decompiler Parameter ID</code>in the analysis option (by pressing &lsquo;A&rsquo;) - otherwise most function calls will look like they have no parameters.</p>
 <p>Basically there&rsquo;s a channel between <code>main.Waiter</code> and <code>main.Oracle</code>.</p>
 <p>The <code>main.Oracle</code> is feeding expected characters and positions read from the data pointed by <code>main.g</code></p>
 <pre tabindex="0"><code>                         main.g                                                       XREF[1]:   main.Oracle:001b6c92(R)  
@@ -656,8 +652,8 @@ pwndbg&gt; x/16gx $rcx
 <pre tabindex="0"><code>&gt;&gt;&gt; chr(0x0000000000000067) + chr(0x0000000000000033) + chr(0x0000000000000074) + chr(0x0000000000000074) + chr(0x0000000000000031) + chr(0x000000000000006e) + chr(0x0000000000000067)
 &#39;g3tt1ng&#39;
 </code></pre><h2 id="72-rust_check">7.2 rust_check<a href="#72-rust_check" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
-<p>It starts by checking the length of the flag part which must be 6 characters</p>
-<p>then checks that the sum of all input chars is 0x223</p>
+<p>It starts by checking the length of the flag part which must be 6 characters,</p>
+<p>then checks that the sum of all input chars is 0x223:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">param_2</span> <span class="o">==</span> <span class="mi">6</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">bVar2</span> <span class="o">=</span> <span class="o">*</span><span class="n">input_flag</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">((</span><span class="n">byte</span><span class="p">)(</span><span class="o">~</span><span class="n">bVar2</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">byte</span><span class="p">)(</span><span class="n">bVar2</span> <span class="o">+</span> <span class="mh">0xbf</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mh">0x1a</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
@@ -672,7 +668,7 @@ pwndbg&gt; x/16gx $rcx
 </span></span><span class="line"><span class="cl">                            <span class="n">bVar7</span> <span class="o">=</span> <span class="n">input_flag</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">                            <span class="k">if</span> <span class="p">(((</span><span class="n">byte</span><span class="p">)(</span><span class="o">~</span><span class="n">bVar7</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">byte</span><span class="p">)(</span><span class="n">bVar7</span> <span class="o">+</span> <span class="mh">0xbf</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mh">0x1a</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
 </span></span><span class="line"><span class="cl">                               <span class="p">((</span><span class="n">uint</span><span class="p">)</span><span class="n">bVar7</span> <span class="o">+</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="n">bVar6</span> <span class="o">+</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="n">bVar5</span> <span class="o">+</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="n">bVar4</span> <span class="o">+</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="n">bVar2</span> <span class="o">+</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="n">bVar3</span> <span class="o">==</span> <span class="mh">0x223</span><span class="p">))</span> <span class="p">{</span>
-</span></span></code></pre></div><p>later on it checks that:</p>
+</span></span></code></pre></div><p>afterwards it checks that:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"> <span class="p">((((((</span><span class="n">ulong</span><span class="p">)</span><span class="o">*</span><span class="n">input_flag</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">(</span><span class="n">ulong</span><span class="p">)</span><span class="n">input_flag</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">(</span><span class="n">ulong</span><span class="p">)</span><span class="n">input_flag</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span>
 </span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="n">ulong</span><span class="p">)</span><span class="n">input_flag</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">(</span><span class="n">ulong</span><span class="p">)</span><span class="n">input_flag</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">(</span><span class="n">ulong</span><span class="p">)</span><span class="n">input_flag</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x8dd3</span><span class="p">))</span>
 </span></span></code></pre></div><p>then it calls this from_iter() and build and compare the resulting array to some hardcoded table.</p>
@@ -707,73 +703,72 @@ pwndbg&gt; x/16gx $rcx
 <pre tabindex="0"><code>flag[0] + flag[5] == 0xdf
 flag[1] + flag[4] == 0xdd
 flag[2] + flag[3] == 0x67
-</code></pre><p>we can use the following script to bruteforce a bit and make us stop reversing rust, or we can keep reversing.</p>
-<p>I chose the lazy way, sorry</p>
-<pre tabindex="0"><code>from z3 import *
-from pwn import *
-import sys
-
-FLAG = &#34;HTB{g3tt1ng_%s_part3_part4}&#34;
-
-s = Solver()
-flag = []
-for x in range(6):
-    c = BitVec(&#39;f%d&#39;%x, 8)
-    flag.append(c)
-    s.add(
-            Or(
-                And(c &gt;= 48, c &lt; 65),
-                And(c &gt; 90, c &lt;= 122)
-            )
-            )
-
-s.add(flag[0] + flag[1] + flag[2] + flag[3] + flag[4] + flag[5] == 0x223)
-s.add(((((flag[0] * 3 + flag[1]) * 3 + flag[2]) * 3 + flag[3]) * 3 + flag[4]) * 3 + flag[5] == 0x8dd3)
-
-s.add(flag[0] + flag[5] == 0xdf)
-s.add(flag[1] + flag[4] == 0xdd)
-s.add(flag[2] + flag[3] == 0x67)
-
-
-
-context.log_level = &#39;error&#39;
-
-def check(password):
-    io = process(&#34;./ffi&#34;)
-    io.sendline(bytes(FLAG%password, &#39;ascii&#39;))
-    if b&#39;Rust says no!&#39; not in io.recv(1024):
-        print(FLAG%password)
-        sys.exit(0)
-
-    io.close()
-
-
-
-while s.check() == sat:
-    m = s.model()
-    condition = []
-
-    out = &#34;&#34;
-    for x in range(len(flag)):
-        c = m[flag[x]].as_long()
-        out += chr(c)
-
-        condition.append(flag[x] != int(m[flag[x]].as_long()))
-    s.add(Or(condition))
-
-    check(out)
-</code></pre><pre tabindex="0"><code>% python rust_gen2.py
+</code></pre><p>People who like to suffer can keep reversing rust for more hints, at this point I just bruteforced it:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">z3</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">FLAG</span> <span class="o">=</span> <span class="s2">&#34;HTB{g3tt1ng_</span><span class="si">%s</span><span class="s2">_part3_part4}&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">s</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">flag</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">c</span> <span class="o">=</span> <span class="n">BitVec</span><span class="p">(</span><span class="s1">&#39;f</span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">x</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">flag</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Or</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="n">And</span><span class="p">(</span><span class="n">c</span> <span class="o">&gt;=</span> <span class="mi">48</span><span class="p">,</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="mi">65</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                <span class="n">And</span><span class="p">(</span><span class="n">c</span> <span class="o">&gt;</span> <span class="mi">90</span><span class="p">,</span> <span class="n">c</span> <span class="o">&lt;=</span> <span class="mi">122</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">flag</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">flag</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">flag</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">flag</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x223</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(((((</span><span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">flag</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">flag</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">flag</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">flag</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x8dd3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">flag</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0xdf</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">flag</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0xdd</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">flag</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x67</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="o">.</span><span class="n">log_level</span> <span class="o">=</span> <span class="s1">&#39;error&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">password</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">io</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s2">&#34;./ffi&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">io</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">FLAG</span><span class="o">%</span><span class="n">password</span><span class="p">,</span> <span class="s1">&#39;ascii&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="sa">b</span><span class="s1">&#39;Rust says no!&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">io</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="n">FLAG</span><span class="o">%</span><span class="n">password</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">io</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="n">s</span><span class="o">.</span><span class="n">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">sat</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">condition</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">out</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">flag</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">c</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="n">flag</span><span class="p">[</span><span class="n">x</span><span class="p">]]</span><span class="o">.</span><span class="n">as_long</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">out</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">condition</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="n">flag</span><span class="p">[</span><span class="n">x</span><span class="p">]]</span><span class="o">.</span><span class="n">as_long</span><span class="p">()))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Or</span><span class="p">(</span><span class="n">condition</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">check</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>% python rust_gen2.py
 HTB{g3tt1ng_fr34ky_part3_part4}
 </code></pre><h2 id="73-python_check">7.3 python_check<a href="#73-python_check" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <p>the python check expects a 5 chrs flag</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="o">==</span> <span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">Py_Initialize</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">        <span class="n">seed</span><span class="p">(</span><span class="mh">0x7a69</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">py_method</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span> <span class="o">*</span><span class="p">)</span><span class="n">PyCMethod_New</span><span class="p">(</span><span class="n">GenDef</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">GetNum</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span> <span class="o">*</span><span class="p">)</span><span class="n">PyCMethod_New</span><span class="p">(</span><span class="o">&amp;</span><span class="n">GenDef</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">uVar1</span> <span class="o">=</span> <span class="n">PyObject_CallNoArgs</span><span class="p">(</span><span class="n">py_method</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="n">key_char</span> <span class="o">=</span> <span class="n">PyLong_AsLong</span><span class="p">(</span><span class="n">uVar1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="n">Py_DecRef</span><span class="p">(</span><span class="n">uVar1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">num</span> <span class="o">=</span> <span class="n">PyObject_CallNoArgs</span><span class="p">(</span><span class="n">GetNum</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">key_char</span> <span class="o">=</span> <span class="n">PyLong_AsLong</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Py_DecRef</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">((</span><span class="n">local_1e</span> <span class="o">==</span> <span class="sc">&#39;\0&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="p">((</span><span class="n">uint</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">byte</span> <span class="o">*</span><span class="p">)((</span><span class="kt">long</span><span class="p">)</span><span class="o">&amp;</span><span class="n">secret</span> <span class="o">+</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">i</span><span class="p">)</span> <span class="o">!=</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">flag</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="n">key_char</span><span class="p">)))</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">                <span class="n">local_1e</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="p">}</span>
@@ -781,24 +776,9 @@ HTB{g3tt1ng_fr34ky_part3_part4}
 </span></span><span class="line"><span class="cl">                <span class="n">local_1e</span> <span class="o">=</span> <span class="sc">&#39;\x01&#39;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span></code></pre></div><p>the <code>seed</code> function  sets the seed:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">seed</span><span class="p">(</span><span class="kt">int</span> <span class="n">param_1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="o">*</span><span class="n">plVar1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">undefined8</span> <span class="n">uVar2</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="o">*</span><span class="n">plVar3</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    <span class="n">randomMod</span> <span class="o">=</span> <span class="n">PyImport_ImportModule</span><span class="p">(</span><span class="s">&#34;random&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">plVar1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span> <span class="o">*</span><span class="p">)</span><span class="n">PyObject_GetAttrString</span><span class="p">(</span><span class="n">randomMod</span><span class="p">,</span><span class="s">&#34;seed&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">uVar2</span> <span class="o">=</span> <span class="n">PyLong_FromLong</span><span class="p">((</span><span class="kt">long</span><span class="p">)</span><span class="n">param_1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">plVar3</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span> <span class="o">*</span><span class="p">)</span><span class="n">PyTuple_New</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">PyTuple_SetItem</span><span class="p">(</span><span class="n">plVar3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">uVar2</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">PyObject_CallObject</span><span class="p">(</span><span class="n">plVar1</span><span class="p">,</span><span class="n">plVar3</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">_Py_DECREF</span><span class="p">(</span><span class="n">plVar3</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">_Py_DECREF</span><span class="p">(</span><span class="n">plVar1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">_Py_DECREF</span><span class="p">(</span><span class="n">GetNum</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Py_Finalize</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span></code></pre></div><ul>
 <li>it initializes the seed with 0x7a69</li>
 <li>then for every chrs
@@ -809,10 +789,29 @@ HTB{g3tt1ng_fr34ky_part3_part4}
 </ul>
 </li>
 </ul>
-<p>The value of <code>secret</code> is no secret:</p>
+<p>the <code>seed</code> function calls the python <code>random.seed()</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">seed</span><span class="p">(</span><span class="kt">int</span> <span class="n">seed_value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="o">*</span><span class="n">method_seed</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">undefined8</span> <span class="n">seed</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="o">*</span><span class="n">seed_tuple</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">randomMod</span> <span class="o">=</span> <span class="n">PyImport_ImportModule</span><span class="p">(</span><span class="s">&#34;random&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">method_seed</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span> <span class="o">*</span><span class="p">)</span><span class="n">PyObject_GetAttrString</span><span class="p">(</span><span class="n">randomMod</span><span class="p">,</span><span class="s">&#34;seed&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">seed</span> <span class="o">=</span> <span class="n">PyLong_FromLong</span><span class="p">((</span><span class="kt">long</span><span class="p">)</span><span class="n">seed_value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">seed_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span> <span class="o">*</span><span class="p">)</span><span class="n">PyTuple_New</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">PyTuple_SetItem</span><span class="p">(</span><span class="n">seed_tuple</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">seed</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">PyObject_CallObject</span><span class="p">(</span><span class="n">method_seed</span><span class="p">,</span><span class="n">seed_tuple</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_Py_DECREF</span><span class="p">(</span><span class="n">seed_tuple</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_Py_DECREF</span><span class="p">(</span><span class="n">method_seed</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>The value of <code>secret</code> is no secret:</p>
 <pre tabindex="0"><code>                         secret                                                       XREF[2]:   python_check:00267dd3(*), python_check:00267dda(R)
       0034b8b0 22 af 2d 26 3b           undefined5           002DAF223Bh
-</code></pre><p>The <code>PyCMethod_New</code>first argument must be a <a href="https://docs.python.org/3/c-api/structures.html#c.PyMethodDef">PyMethodDef</a>. (<em>see methodobject.h</em>)</p>
+</code></pre><p>To know which python method is called in the main loop, we need to look at the <code>GenDef</code> address.</p>
+<p>The <code>PyCMethod_New</code> first argument must be a <a href="https://docs.python.org/3/c-api/structures.html#c.PyMethodDef">PyMethodDef</a>. (<em>see methodobject.h</em>)</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">PyMethodDef</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">char</span>  <span class="o">*</span><span class="n">ml_name</span><span class="p">;</span>   <span class="cm">/* The name of the built-in function/method */</span>
 </span></span><span class="line"><span class="cl">    <span class="n">PyCFunction</span> <span class="n">ml_meth</span><span class="p">;</span>    <span class="cm">/* The C function that implements it */</span>
@@ -831,23 +830,24 @@ HTB{g3tt1ng_fr34ky_part3_part4}
                00
       0034b8d8 00 00 00 00 00 00 00     addr                 00000000
                00
-</code></pre><p>and the <code>GetNum</code> function</p>
+</code></pre><p>and the <code>GetNum</code> function, which calls the python <code>random.randrange(0x100)</code></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">long</span> <span class="o">*</span> <span class="nf">GetNum</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="o">*</span><span class="n">plVar1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="o">*</span><span class="n">plVar2</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="o">*</span><span class="n">plVar3</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    
-</span></span><span class="line"><span class="cl">    <span class="n">plVar1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span> <span class="o">*</span><span class="p">)</span><span class="n">PyObject_GetAttrString</span><span class="p">(</span><span class="n">randomMod</span><span class="p">,</span><span class="s">&#34;randrange&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">plVar2</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span> <span class="o">*</span><span class="p">)</span><span class="n">PyLong_FromLong</span><span class="p">(</span><span class="mh">0x100</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">plVar3</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span> <span class="o">*</span><span class="p">)</span><span class="n">PyObject_CallOneArg</span><span class="p">((</span><span class="kt">long</span><span class="p">)</span><span class="n">plVar1</span><span class="p">,(</span><span class="kt">long</span><span class="p">)</span><span class="n">plVar2</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">_Py_DECREF</span><span class="p">(</span><span class="n">plVar1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">_Py_DECREF</span><span class="p">(</span><span class="n">plVar2</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">_Py_INCREF</span><span class="p">(</span><span class="n">plVar3</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">plVar3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="o">*</span><span class="n">randrange</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="o">*</span><span class="n">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="o">*</span><span class="n">not_so_random_value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">randrange</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span> <span class="o">*</span><span class="p">)</span><span class="n">PyObject_GetAttrString</span><span class="p">(</span><span class="n">randomMod</span><span class="p">,</span><span class="s">&#34;randrange&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span> <span class="o">*</span><span class="p">)</span><span class="n">PyLong_FromLong</span><span class="p">(</span><span class="mh">0x100</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">not_so_random_value</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span> <span class="o">*</span><span class="p">)</span><span class="n">PyObject_CallOneArg</span><span class="p">((</span><span class="kt">long</span><span class="p">)</span><span class="n">randrange</span><span class="p">,(</span><span class="kt">long</span><span class="p">)</span><span class="n">value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_Py_DECREF</span><span class="p">(</span><span class="n">randrange</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_Py_DECREF</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_Py_INCREF</span><span class="p">(</span><span class="n">not_so_random_value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">not_so_random_value</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>we can easily reimplement it in python:</p>
+</span></span></code></pre></div><p>The seed sets the initial state of the RNG, so same seed means same output.</p>
+<p>We can easily reimplement it in python:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">random</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mh">0x7a69</span><span class="p">)</span>
@@ -865,34 +865,39 @@ u51Ng
 </code></pre><h2 id="74-java_check">7.4 java_check<a href="#74-java_check" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <p>Whenever you have to deal with JNI, start by loading the proper jni.h header (you can get one which works for ghidra: <a href="https://github.com/extremecoders-re/ghidra-jni">https://github.com/extremecoders-re/ghidra-jni</a>).</p>
 <p>then you can cast the JNIEnv and JavaVM, and everything becomes clear :)</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">    <span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">JavaVM</span> <span class="n">jvm</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">iVar2</span> <span class="o">=</span> <span class="n">JNI_CreateJavaVM</span><span class="p">(</span><span class="o">&amp;</span><span class="n">jvm</span><span class="p">,</span><span class="o">&amp;</span><span class="n">env</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_28</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">iVar2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">local_40</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">DefineClass</span><span class="p">)(</span><span class="n">env</span><span class="p">,</span><span class="s">&#34;Checker&#34;</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,(</span><span class="n">jbyte</span> <span class="o">*</span><span class="p">)</span><span class="n">Class</span><span class="p">,</span><span class="mh">0x752</span><span class="p">);</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">    <span class="n">java_vm</span> <span class="o">=</span> <span class="n">JNI_CreateJavaVM</span><span class="p">(</span><span class="o">&amp;</span><span class="n">jvm</span><span class="p">,</span><span class="o">&amp;</span><span class="n">env</span><span class="p">,</span><span class="o">&amp;</span><span class="n">vm_args</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">java_vm</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">class_Checker</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">DefineClass</span><span class="p">)(</span><span class="n">env</span><span class="p">,</span><span class="s">&#34;Checker&#34;</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,(</span><span class="n">jbyte</span> <span class="o">*</span><span class="p">)</span><span class="n">Class</span><span class="p">,</span><span class="mh">0x752</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">ExceptionDescribe</span><span class="p">)(</span><span class="n">env</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">local_40</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">class_Checker</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="n">puts</span><span class="p">(</span><span class="s">&#34;Failed to find Checker class&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">            <span class="n">bVar3</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="k">else</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">local_38</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">GetStaticMethodID</span><span class="p">)(</span><span class="n">env</span><span class="p">,</span><span class="n">local_40</span><span class="p">,</span><span class="s">&#34;hello_java&#34;</span><span class="p">,</span><span class="s">&#34;(Ljava/lang/String;)Z&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">local_38</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">met_hello_java</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">GetStaticMethodID</span><span class="p">)(</span><span class="n">env</span><span class="p">,</span><span class="n">class_Checker</span><span class="p">,</span><span class="s">&#34;hello_java&#34;</span><span class="p">,</span><span class="s">&#34;(Ljava/lang/String;)Z&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">met_hello_java</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">                <span class="n">puts</span><span class="p">(</span><span class="s">&#34;Failed to find main function&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">                <span class="n">bVar3</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="p">}</span>
 </span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">local_30</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">)(</span><span class="n">env</span><span class="p">,</span><span class="n">utf</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">jVar1</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">CallStaticBooleanMethod</span><span class="p">)(</span><span class="n">env</span><span class="p">,</span><span class="n">local_40</span><span class="p">,</span><span class="n">local_38</span><span class="p">,</span><span class="n">local_30</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">str_flag</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">)(</span><span class="n">env</span><span class="p">,</span><span class="n">flag_part</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">jVar1</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">CallStaticBooleanMethod</span><span class="p">)(</span><span class="n">env</span><span class="p">,</span><span class="n">class_Checker</span><span class="p">,</span><span class="n">met_hello_java</span><span class="p">,</span><span class="n">str_flag</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">                <span class="n">bVar3</span> <span class="o">=</span> <span class="n">jVar1</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="n">free</span><span class="p">(</span><span class="n">utf</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">free</span><span class="p">(</span><span class="n">flag_part</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">            <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span></code></pre></div><p>so it starts by loading a <code>Checker</code>class from 0x752 bytes binary blob <code>Class</code></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">local_40</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">DefineClass</span><span class="p">)(</span><span class="n">env</span><span class="p">,</span><span class="s">&#34;Checker&#34;</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,(</span><span class="n">jbyte</span> <span class="o">*</span><span class="p">)</span><span class="n">Class</span><span class="p">,</span><span class="mh">0x752</span><span class="p">);</span>
-</span></span></code></pre></div><p>notice the java magic string cafebabe, it&rsquo;s a class file.</p>
+</span></span></code></pre></div><ul>
+<li>it starts by loading a <code>Checker</code>class from a 0x752 bytes binary blob <code>Class</code></li>
+<li>finds the <code>Class.hello_java</code> method which takes a single String argument</li>
+<li>creates a java String object from the flag</li>
+<li>calls Checker.hello_java(flag)</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">class_Checker</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">DefineClass</span><span class="p">)(</span><span class="n">env</span><span class="p">,</span><span class="s">&#34;Checker&#34;</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,(</span><span class="n">jbyte</span> <span class="o">*</span><span class="p">)</span><span class="n">Class</span><span class="p">,</span><span class="mh">0x752</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">met_hello_java</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">GetStaticMethodID</span><span class="p">)(</span><span class="n">env</span><span class="p">,</span><span class="n">class_Checker</span><span class="p">,</span><span class="s">&#34;hello_java&#34;</span><span class="p">,</span><span class="s">&#34;(Ljava/lang/String;)Z&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">str_flag</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">)(</span><span class="n">env</span><span class="p">,</span><span class="n">flag_part</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">CallStaticBooleanMethod</span><span class="p">)(</span><span class="n">env</span><span class="p">,</span><span class="n">class_Checker</span><span class="p">,</span><span class="n">met_hello_java</span><span class="p">,</span><span class="n">str_flag</span><span class="p">);</span>
+</span></span></code></pre></div><p>Notice the java magic string <code>cafebabe</code>, it&rsquo;s a class file.</p>
 <pre tabindex="0"><code>                         Class                                                        XREF[2]:   Entry Point(*), java_check:00267f6f(*)
       0029f722 ca fe ba be 00 00 00     db[1874]
                37 00 61 0a 00 0b 00
@@ -901,7 +906,7 @@ u51Ng
          0029f726 [4]            0h,  0h,  0h, 37h
          0029f72a [8]            0h, 61h,  Ah,  0h
          0029f72e [12]           Bh,  0h, 1Dh,  Ah
-</code></pre><p>export the class file, use <a href="https://github.com/skylot/jadx">jadx</a> or so to decompile it:</p>
+</code></pre><p>export the <code>Class</code> binary blob and safe it to a file, then use <a href="https://github.com/skylot/jadx">jadx</a> or so to decompile it:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.util.stream.IntStream</span><span class="o">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cm">/* renamed from: Checker */</span>
@@ -923,9 +928,9 @@ u51Ng
  [1, 0x43 /* C */, 0x44 /* D */]
 ]
 </code></pre><p>and then check that:</p>
-<pre tabindex="0"><code> 0x41 + 0x42 = iArr[0]
- 0x42 + 0x43 = iArr[1]
- 0x43 + 0x43 = iArr[2]
+<pre tabindex="0"><code> 0x41 + 0x42 == iArr[0]
+ 0x42 + 0x43 == iArr[1]
+ 0x43 + 0x43 == iArr[2]
 </code></pre><p>we can quickly reverse it:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">z3</span> <span class="kn">import</span> <span class="o">*</span>
@@ -994,6 +999,7 @@ Correct!
 </code></pre><h1 id="8-indefinite">8. Indefinite<a href="#8-indefinite" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
 <p>Original files <a href="rev_indefinite.zip">here</a>.</p>
 <p>I really liked this one because it implements nanomites, dont ask me why i like them&hellip; :)</p>
+<p>We have a binary and an encrypted file that we need to decrypt.</p>
 <p>It starts by forking:</p>
 <ul>
 <li>the child process will do the work</li>
@@ -1007,7 +1013,8 @@ Correct!
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">                    <span class="cm">/* make text segment PROT_READ|PROT_WRITE|PROT_EXEC */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* make text segment PROT_READ|PROT_WRITE|PROT_EXEC */</span>
 </span></span><span class="line"><span class="cl">    <span class="n">mprotect</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x101000</span><span class="p">,</span><span class="mh">0x1000</span><span class="p">,</span><span class="mi">7</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="n">pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
@@ -1022,11 +1029,11 @@ Correct!
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>The <code>child</code> function will read 8 bytes from /dev/urandom and encrypt the file passed as argv[1]</p>
-<pre tabindex="0"><code>    fd = fopen(&#34;/dev/urandom&#34;,&#34;r&#34;);
-    fread(&amp;buffer,8,1,fd);
-    fclose(fd);
-    do_encrypt_file(filename,0,buffer);
-</code></pre><p>The <code>do_encrypt</code> function&hellip; will crash:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">    <span class="n">fd</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">&#34;/dev/urandom&#34;</span><span class="p">,</span><span class="s">&#34;r&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">fd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fclose</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">do_encrypt_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">buffer</span><span class="p">);</span>
+</span></span></code></pre></div><p>The <code>do_encrypt</code> function&hellip; will crash:</p>
 <pre tabindex="0"><code>                         *******************************************************
                          *                                                     *
                          *  FUNCTION                                           *
@@ -1141,7 +1148,7 @@ Correct!
 </li>
 <li>resume child execution</li>
 </ul>
-<p>so basically, this is the layout:</p>
+<p>so basically, this is the layout of a packed function:</p>
 <pre tabindex="0"><code>                         *******************************************************
                          *                                                     *
                          *  FUNCTION                                           *
@@ -1157,8 +1164,9 @@ Correct!
       001010b6 9c                       ??                   9Ch
       001010b7 0b                       ??                   0Bh
       001010b8 f5                       ??                   F5h
-</code></pre><p>the deflate is a simple zlib and if we look at the end of the <code>do_encrypt_file</code> function there&rsquo;s a bunch of NULL bytes, just enough to hold the deflated bytes.</p>
-<p>with a simple ghidra script we can do the deflate in place and analyze the code.</p>
+</code></pre><p>The deflate is a simple zlib and if we look at the end of the <code>do_encrypt_file</code> function there&rsquo;s a bunch of NULL bytes and we can see <code>compressed size + number of null bytes + 8 == decompressed size</code>.
+These 8 bytes are the size of the UD2 instructions + 2 bytes for the compressed size + 4 bytes for the uncompressed size, so we we can just overwrite the whole function code with the decompressed code (starting from 0x1010ad is this specific case.)</p>
+<p>A simple ghidra script can do the deflate in place:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1">#HTB inflate indefinite</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#@author Matthieu Walter</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#@category matth.ctf.htb</span>
@@ -1208,7 +1216,7 @@ Correct!
 </span></span><span class="line"><span class="cl"><span class="n">addr</span> <span class="o">=</span> <span class="n">currentAddress</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">decompress</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
-</span></span></code></pre></div><p>just put the cursor on the UD2 instruction and run the script, it will do in-place decompression.</p>
+</span></span></code></pre></div><p>Just put the cursor on the UD2 instruction and run the script, it will do in-place decompression.</p>
 <p>Then press D to decompile and  <code>do_file_encryption</code> will change from:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">do_encrypt_file</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
@@ -1276,7 +1284,7 @@ Correct!
 </span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>rinse and repeat with the other compressed functions.</p>
-<p>the <code>do_encryption</code> is XORing input with the advance(key)</p>
+<p>The <code>do_encryption</code> is XORing each 8 bytes input block with the round key returned by <code>advance(key)</code></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">do_encryption</span><span class="p">(</span><span class="n">ulong</span> <span class="n">size</span><span class="p">,</span><span class="n">ulong</span> <span class="o">*</span><span class="n">dest</span><span class="p">,</span><span class="n">ulong</span> <span class="n">key</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
@@ -1290,7 +1298,8 @@ Correct!
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>and <code>advance</code> is based on CRC32.</p>
+</span></span></code></pre></div><p>and <code>advance</code> is based on CRC32: given an input, it computes crc32(input) and returns crc32(input) concat reverse(crc32(input)).</p>
+<p>ex: if crc32(n) == ABCD, it return ABCDDCBA</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">ulong</span> <span class="nf">advance</span><span class="p">(</span><span class="n">byte</span> <span class="o">*</span><span class="n">param_1</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
@@ -1311,8 +1320,8 @@ Correct!
 </span></span><span class="line"><span class="cl">    <span class="n">uVar1</span> <span class="o">=</span> <span class="n">swap_bytes</span><span class="p">((</span><span class="n">ulong</span><span class="p">)</span><span class="o">~</span><span class="n">local_28</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">uVar1</span> <span class="o">|</span> <span class="o">~</span><span class="n">local_28</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>but we do not need to reverse the whole thing:</p>
-<p>we know that the first 8 bytes of the file are the initial key, we can just patch the file to read the key from a user controller file instead of /dev/urandom&hellip;</p>
+</span></span></code></pre></div><p>During the CTF, I did not reverse the whole thing:</p>
+<p>we know that the first 8 bytes of the file are the initial key, we can just patch the file to read the key from a user controlled file instead of /dev/urandom&hellip;</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># poor man&#39;s patch ....</span>
 </span></span><span class="line"><span class="cl"><span class="nb">open</span><span class="p">(</span><span class="s2">&#34;indefinite.patch&#34;</span><span class="p">,</span> <span class="s2">&#34;wb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&#34;indefinite&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;/dev/urandom&#34;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&#34;keyfile_1111&#34;</span><span class="p">))</span>
 </span></span></code></pre></div><p>and then</p>
@@ -1336,6 +1345,31 @@ Correct!
 % cat flag.enc                
 ^�($����At 3730 Galactic Time, we will convene at our outpost the Phey forest, 4 miles from the Annara defense systems. Remember, the password for the bunker door is HTB{unr4v3ll1ng_th3_c0d3,unp4ck1ng_th3_s3cr3t}.
 �35+��U%                                                                    
+</code></pre><p>For the sake of completeness here&rsquo;s a python decoder:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">xor</span><span class="p">,</span> <span class="n">p32</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">zlib</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">BLOCK_SIZE</span> <span class="o">=</span> <span class="mi">8</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">blocks</span><span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">BLOCK_SIZE</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">BLOCK_SIZE</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">advance</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">crc</span> <span class="o">=</span> <span class="n">p32</span><span class="p">(</span><span class="n">zlib</span><span class="o">.</span><span class="n">crc32</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">crc</span> <span class="o">+</span> <span class="n">crc</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">key</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">output</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key</span> <span class="o">=</span> <span class="n">advance</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">output</span> <span class="o">+=</span> <span class="n">xor</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+</span></span></code></pre></div><pre tabindex="0"><code>% python dec.py flag.txt.enc
+b&#39;At 3730 Galactic Time, we will convene at our outpost the Phey forest, 4 miles from the Annara defense systems. Remember, the password for the bunker door is HTB{unr4v3ll1ng_th3_c0d3,unp4ck1ng_th3_s3cr3t}.\n\xcb\x1335+\x8d\xa6tj\x18&#39;
 </code></pre>
 			</div>
 			<hr class="post-end">
@@ -1343,7 +1377,7 @@ Correct!
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://matth.dmz42.org/tags/ctf">ctf</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>5511 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>5782 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2022-05-21 21:15 &#43;0200</p>
 			</footer>
 		</article>

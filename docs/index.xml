@@ -16,13 +16,12 @@
       <guid>https://matth.dmz42.org/posts/2022/hackthebox-ctf-cyber-apocalypse-2022-intergalactic-chase-rev/</guid>
       <description>Hack The Box was hosting a CTF event and we played together with some friends.
 Here are some writeups for some of the reversing challenges i solved.
-There&amp;rsquo;s often shortcuts taken and (un)educated guesses involved&amp;hellip;
+There&amp;rsquo;s often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun&amp;hellip;
 0. TOC   Without A Trace (413 solves)
   Teleport (307 solves)
   Rebuilding (463 solves)
   Nuts and Bolts (60 solves)
-  Shuffleme (28 solves)
-  Snake Code (281 solves)</description>
+  Shuffleme (28 solves)</description>
     </item>
     
     <item>

@@ -12,7 +12,7 @@ tags:
 
 Here are some writeups for some of the reversing challenges i solved.
 
-There's often shortcuts taken and (un)educated guesses involved...
+There's often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun...
 
 
 # 0. TOC
@@ -161,8 +161,8 @@ import claripy
 import logging
 
 
+# by default, angr will set PIE binary base at 0x400000
 BASE_ADDR = 0x400000
-
 
 def rebase(addr):
     return BASE_ADDR + addr
@@ -376,7 +376,6 @@ void __thiscall
 and then ```nuts_and_bolts::StorageMethod<_>::xor_inner::{{closure}}```
 
 ```C
-
 void nuts_and_bolts::StorageMethod<_>::xor_inner::{{closure}}({closure_env#0}<64> *param_1,u8 *v)
 
 {
@@ -682,7 +681,7 @@ If we start with the ```main``` function, we understand that the flag will need 
 
 ## 7.1 GoCheck
 
-If you deal with Go with Ghidra, you might want to check the ```Decompiler Parameter ID```in the analysis option (by pressing 'A') - otherwise most function calls will look like they have no parameters.
+When dealing with a Go binary in Ghidra, you might want to check the ```Decompiler Parameter ID```in the analysis option (by pressing 'A') - otherwise most function calls will look like they have no parameters.
 
 Basically there's a channel between ```main.Waiter``` and ```main.Oracle```.
 
@@ -720,9 +719,9 @@ first "column" is the position, 2nd one is the character
 
 ## 7.2 rust_check
 
-It starts by checking the length of the flag part which must be 6 characters
+It starts by checking the length of the flag part which must be 6 characters,
 
-then checks that the sum of all input chars is 0x223
+then checks that the sum of all input chars is 0x223:
 
 ```C
     if (param_2 == 6) {
@@ -742,7 +741,7 @@ then checks that the sum of all input chars is 0x223
 ```
 
 
-later on it checks that:
+afterwards it checks that:
 ```C
  ((((((ulong)*input_flag * 3 + (ulong)input_flag[1]) * 3 + (ulong)input_flag[2]) * 3 +
   (ulong)input_flag[3]) * 3 + (ulong)input_flag[4]) * 3 + (ulong)input_flag[5] == 0x8dd3))
@@ -794,11 +793,8 @@ flag[1] + flag[4] == 0xdd
 flag[2] + flag[3] == 0x67
 ```
 
-we can use the following script to bruteforce a bit and make us stop reversing rust, or we can keep reversing.
-
-I chose the lazy way, sorry
-
-```
+People who like to suffer can keep reversing rust for more hints, at this point I just bruteforced it:
+```python
 from z3 import *
 from pwn import *
 import sys
@@ -869,11 +865,11 @@ the python check expects a 5 chrs flag
     if (len == 5) {
         Py_Initialize();
         seed(0x7a69);
-        py_method = (long *)PyCMethod_New(GenDef,0,0);
+        GetNum = (long *)PyCMethod_New(&GenDef,0,0);
         for (i = 0; i < 5; i = i + 1) {
-            uVar1 = PyObject_CallNoArgs(py_method);
-            key_char = PyLong_AsLong(uVar1);
-            Py_DecRef(uVar1);
+            num = PyObject_CallNoArgs(GetNum);
+            key_char = PyLong_AsLong(num);
+            Py_DecRef(num);
             if ((local_1e == '\0') || ((uint)*(byte *)((long)&secret + (long)i) != ((int)flag[i] ^ (uint)key_char))) {
                 local_1e = '\0';
             }
@@ -881,29 +877,9 @@ the python check expects a 5 chrs flag
                 local_1e = '\x01';
             }
         }
-```
-
-
-the ```seed``` function  sets the seed:
-
-```C
-void seed(int param_1)
-
-{
-    long *plVar1;
-    undefined8 uVar2;
-    long *plVar3;
-    
-    randomMod = PyImport_ImportModule("random");
-    plVar1 = (long *)PyObject_GetAttrString(randomMod,"seed");
-    uVar2 = PyLong_FromLong((long)param_1);
-    plVar3 = (long *)PyTuple_New(1);
-    PyTuple_SetItem(plVar3,0,uVar2);
-    PyObject_CallObject(plVar1,plVar3);
-    _Py_DECREF(plVar3);
-    _Py_DECREF(plVar1);
-    return;
-}
+        _Py_DECREF(GetNum);
+        Py_Finalize();
+    }
 ```
 
 - it initializes the seed with 0x7a69
@@ -912,6 +888,29 @@ void seed(int param_1)
   - cast the result to long
   - check that flag[i] ^ result == secret[i]
 
+the ```seed``` function calls the python ```random.seed()```:
+
+```C
+void seed(int seed_value)
+
+{
+    long *method_seed;
+    undefined8 seed;
+    long *seed_tuple;
+
+    randomMod = PyImport_ImportModule("random");
+    method_seed = (long *)PyObject_GetAttrString(randomMod,"seed");
+    seed = PyLong_FromLong((long)seed_value);
+    seed_tuple = (long *)PyTuple_New(1);
+    PyTuple_SetItem(seed_tuple,0,seed);
+    PyObject_CallObject(method_seed,seed_tuple);
+    _Py_DECREF(seed_tuple);
+    _Py_DECREF(method_seed);
+    return;
+}
+```
+
+
 The value of ```secret``` is no secret:
 ```
                          secret                                                       XREF[2]:   python_check:00267dd3(*), python_check:00267dda(R)
@@ -919,7 +918,9 @@ The value of ```secret``` is no secret:
 ```
 
 
-The ```PyCMethod_New```first argument must be a [PyMethodDef](https://docs.python.org/3/c-api/structures.html#c.PyMethodDef). (*see methodobject.h*)
+To know which python method is called in the main loop, we need to look at the ```GenDef``` address.
+
+The ```PyCMethod_New``` first argument must be a [PyMethodDef](https://docs.python.org/3/c-api/structures.html#c.PyMethodDef). (*see methodobject.h*)
 
 ```C
 struct PyMethodDef {
@@ -946,28 +947,29 @@ so if we quickly cast 4 pointers in place of "GenDef" we get:
                00
 ```
 
-and the ```GetNum``` function
+and the ```GetNum``` function, which calls the python ```random.randrange(0x100)```
 
 ```C
 long * GetNum(void)
 
 {
-    long *plVar1;
-    long *plVar2;
-    long *plVar3;
-    
-    plVar1 = (long *)PyObject_GetAttrString(randomMod,"randrange");
-    plVar2 = (long *)PyLong_FromLong(0x100);
-    plVar3 = (long *)PyObject_CallOneArg((long)plVar1,(long)plVar2);
-    _Py_DECREF(plVar1);
-    _Py_DECREF(plVar2);
-    _Py_INCREF(plVar3);
-    return plVar3;
+    long *randrange;
+    long *value;
+    long *not_so_random_value;
+
+    randrange = (long *)PyObject_GetAttrString(randomMod,"randrange");
+    value = (long *)PyLong_FromLong(0x100);
+    not_so_random_value = (long *)PyObject_CallOneArg((long)randrange,(long)value);
+    _Py_DECREF(randrange);
+    _Py_DECREF(value);
+    _Py_INCREF(not_so_random_value);
+    return not_so_random_value;
 }
 ```
 
+The seed sets the initial state of the RNG, so same seed means same output.
 
-we can easily reimplement it in python:
+We can easily reimplement it in python:
 
 ```python
 import random
@@ -998,40 +1000,44 @@ then you can cast the JNIEnv and JavaVM, and everything becomes clear :)
 
 
 ```C
-    JNIEnv *env;
-    JavaVM jvm;
-
-    iVar2 = JNI_CreateJavaVM(&jvm,&env,&local_28);
-    if (iVar2 == 0) {
-        local_40 = (*(*env)->DefineClass)(env,"Checker",NULL,(jbyte *)Class,0x752);
+    java_vm = JNI_CreateJavaVM(&jvm,&env,&vm_args);
+    if (java_vm == 0) {
+        class_Checker = (*(*env)->DefineClass)(env,"Checker",NULL,(jbyte *)Class,0x752);
         (*(*env)->ExceptionDescribe)(env);
-        if (local_40 == NULL) {
+        if (class_Checker == NULL) {
             puts("Failed to find Checker class");
             bVar3 = true;
         }
         else {
-            local_38 = (*(*env)->GetStaticMethodID)(env,local_40,"hello_java","(Ljava/lang/String;)Z");
-            if (local_38 == NULL) {
+            met_hello_java = (*(*env)->GetStaticMethodID)(env,class_Checker,"hello_java","(Ljava/lang/String;)Z");
+            if (met_hello_java == NULL) {
                 puts("Failed to find main function");
                 bVar3 = true;
             }
             else {
-                local_30 = (*(*env)->NewStringUTF)(env,utf);
-                jVar1 = (*(*env)->CallStaticBooleanMethod)(env,local_40,local_38,local_30);
+                str_flag = (*(*env)->NewStringUTF)(env,flag_part);
+                jVar1 = (*(*env)->CallStaticBooleanMethod)(env,class_Checker,met_hello_java,str_flag);
                 bVar3 = jVar1 != '\0';
-                free(utf);
+                free(flag_part);
             }
         }
     }
 ```
 
+- it starts by loading a ```Checker```class from a 0x752 bytes binary blob ```Class```
+- finds the ```Class.hello_java``` method which takes a single String argument
+- creates a java String object from the flag
+- calls Checker.hello_java(flag)
 
-so it starts by loading a ```Checker```class from 0x752 bytes binary blob ```Class```
+
 ```C
-local_40 = (*(*env)->DefineClass)(env,"Checker",NULL,(jbyte *)Class,0x752);
+class_Checker = (*(*env)->DefineClass)(env,"Checker",NULL,(jbyte *)Class,0x752);
+met_hello_java = (*(*env)->GetStaticMethodID)(env,class_Checker,"hello_java","(Ljava/lang/String;)Z");
+str_flag = (*(*env)->NewStringUTF)(env,flag_part);
+(*(*env)->CallStaticBooleanMethod)(env,class_Checker,met_hello_java,str_flag);
 ```
 
-notice the java magic string cafebabe, it's a class file.
+Notice the java magic string ```cafebabe```, it's a class file.
 ```
                          Class                                                        XREF[2]:   Entry Point(*), java_check:00267f6f(*)
       0029f722 ca fe ba be 00 00 00     db[1874]
@@ -1043,7 +1049,7 @@ notice the java magic string cafebabe, it's a class file.
          0029f72e [12]           Bh,  0h, 1Dh,  Ah
 ```
 
-export the class file, use [jadx](https://github.com/skylot/jadx) or so to decompile it:
+export the ```Class``` binary blob and safe it to a file, then use [jadx](https://github.com/skylot/jadx) or so to decompile it:
 
 ```java
 import java.util.stream.IntStream;
@@ -1073,9 +1079,9 @@ what it does is, if you input the string ```ABC```, it build an array like
 ```
 and then check that:
 ```
- 0x41 + 0x42 = iArr[0]
- 0x42 + 0x43 = iArr[1]
- 0x43 + 0x43 = iArr[2]
+ 0x41 + 0x42 == iArr[0]
+ 0x42 + 0x43 == iArr[1]
+ 0x43 + 0x43 == iArr[2]
 ```
 
 we can quickly reverse it:
@@ -1170,6 +1176,8 @@ Original files [here](rev_indefinite.zip).
 
 I really liked this one because it implements nanomites, dont ask me why i like them... :)
 
+We have a binary and an encrypted file that we need to decrypt.
+
 It starts by forking:
 - the child process will do the work
 - the parent process will attach to the child process and "drive" it
@@ -1183,7 +1191,8 @@ undefined8 main(int argc,char **argv)
     if (argc != 2) {
         exit(-1);
     }
-                    /* make text segment PROT_READ|PROT_WRITE|PROT_EXEC */
+
+    /* make text segment PROT_READ|PROT_WRITE|PROT_EXEC */
     mprotect((void *)0x101000,0x1000,7);
     pid = fork();
     if (pid == 0) {
@@ -1201,7 +1210,7 @@ undefined8 main(int argc,char **argv)
 
 The ```child``` function will read 8 bytes from /dev/urandom and encrypt the file passed as argv[1]
 
-```
+```C
     fd = fopen("/dev/urandom","r");
     fread(&buffer,8,1,fd);
     fclose(fd);
@@ -1325,7 +1334,7 @@ So, when the child process will execute the UD2 instruction, the parent will *ca
   - note that using ```ptrace(PTRACE_POKEDATA)``` instead ```process_vm_writev()``` doesnt require the destination address to be writable.
 - resume child execution
 
-so basically, this is the layout:
+so basically, this is the layout of a packed function:
 
 ```
                          *******************************************************
@@ -1345,9 +1354,10 @@ so basically, this is the layout:
       001010b8 f5                       ??                   F5h
 ```
 
-the deflate is a simple zlib and if we look at the end of the ```do_encrypt_file``` function there's a bunch of NULL bytes, just enough to hold the deflated bytes.
+The deflate is a simple zlib and if we look at the end of the ```do_encrypt_file``` function there's a bunch of NULL bytes and we can see ```compressed size + number of null bytes + 8 == decompressed size```.
+These 8 bytes are the size of the UD2 instructions + 2 bytes for the compressed size + 4 bytes for the uncompressed size, so we we can just overwrite the whole function code with the decompressed code (starting from 0x1010ad is this specific case.)
 
-with a simple ghidra script we can do the deflate in place and analyze the code.
+A simple ghidra script can do the deflate in place:
 
 ```python
 #HTB inflate indefinite
@@ -1401,7 +1411,7 @@ addr = currentAddress
 decompress(addr)
 ```
 
-just put the cursor on the UD2 instruction and run the script, it will do in-place decompression.
+Just put the cursor on the UD2 instruction and run the script, it will do in-place decompression.
 
 Then press D to decompile and  ```do_file_encryption``` will change from:
 
@@ -1480,7 +1490,7 @@ void do_encrypt_file(char *filename,char *param_2,undefined8 random_8_bytes)
 rinse and repeat with the other compressed functions.
 
 
-the ```do_encryption``` is XORing input with the advance(key)
+The ```do_encryption``` is XORing each 8 bytes input block with the round key returned by ```advance(key)```
 
 ```C
 void do_encryption(ulong size,ulong *dest,ulong key)
@@ -1499,7 +1509,9 @@ void do_encryption(ulong size,ulong *dest,ulong key)
 ```
 
 
-and ```advance``` is based on CRC32.
+and ```advance``` is based on CRC32: given an input, it computes crc32(input) and returns crc32(input) concat reverse(crc32(input)).
+
+ex: if crc32(n) == ABCD, it return ABCDDCBA
 
 ```C
 
@@ -1524,9 +1536,9 @@ ulong advance(byte *param_1)
 }
 ```
 
-but we do not need to reverse the whole thing:
+During the CTF, I did not reverse the whole thing:
 
-we know that the first 8 bytes of the file are the initial key, we can just patch the file to read the key from a user controller file instead of /dev/urandom...
+we know that the first 8 bytes of the file are the initial key, we can just patch the file to read the key from a user controlled file instead of /dev/urandom...
 
 ```python
 # poor man's patch ....
@@ -1557,4 +1569,38 @@ and then
 % cat flag.enc                
 ^�($����At 3730 Galactic Time, we will convene at our outpost the Phey forest, 4 miles from the Annara defense systems. Remember, the password for the bunker door is HTB{unr4v3ll1ng_th3_c0d3,unp4ck1ng_th3_s3cr3t}.
 �35+��U%                                                                    
+```
+
+
+For the sake of completeness here's a python decoder:
+
+```python
+from pwn import xor, p32
+import zlib
+import sys
+
+BLOCK_SIZE = 8
+
+data = open(sys.argv[1], "rb").read()
+
+blocks= [data[i:i+BLOCK_SIZE] for i in range(0, len(data), BLOCK_SIZE)]
+
+def advance(key):
+    crc = p32(zlib.crc32(key))
+    return crc + crc[::-1]
+
+key = blocks[0]
+output = b''
+
+for chunk in blocks[1:]:
+    key = advance(key)
+    output += xor(chunk, key)
+
+print(output)
+```
+
+
+```
+% python dec.py flag.txt.enc
+b'At 3730 Galactic Time, we will convene at our outpost the Phey forest, 4 miles from the Annara defense systems. Remember, the password for the bunker door is HTB{unr4v3ll1ng_th3_c0d3,unp4ck1ng_th3_s3cr3t}.\n\xcb\x1335+\x8d\xa6tj\x18'
 ```
