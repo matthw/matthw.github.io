@@ -1509,9 +1509,9 @@ void do_encryption(ulong size,ulong *dest,ulong key)
 ```
 
 
-and ```advance``` is based on CRC32: given an input, it computes crc32(input) and returns crc32(input) concat reverse(crc32(input)).
+and ```advance``` is based on CRC32: given an input, it returns crc32(input) concat reverse(crc32(input)).
 
-ex: if crc32(n) == ABCD, it return ABCDDCBA
+ex: if crc32(n) == ABCD, it returns ABCDDCBA
 
 ```C
 

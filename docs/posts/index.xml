@@ -1231,8 +1231,8 @@ These 8 bytes are the size of the UD2 instructions + 2 bytes for the compressed 
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>and <code>advance</code> is based on CRC32: given an input, it computes crc32(input) and returns crc32(input) concat reverse(crc32(input)).</p>
-<p>ex: if crc32(n) == ABCD, it return ABCDDCBA</p>
+</span></span></code></pre></div><p>and <code>advance</code> is based on CRC32: given an input, it returns crc32(input) concat reverse(crc32(input)).</p>
+<p>ex: if crc32(n) == ABCD, it returns ABCDDCBA</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">ulong</span> <span class="nf">advance</span><span class="p">(</span><span class="n">byte</span> <span class="o">*</span><span class="n">param_1</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
