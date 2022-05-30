@@ -52,8 +52,8 @@ The unpacking process is as follow:
        │           │
 ┌──────▼─────┐     │
 │            │     │
-│    XOR     │     │
-│ (optonnal) │     │
+│     XOR    │     │
+│ (optionnal)│     │
 │            │     │
 └─────┬──────┘     │
       │            │
