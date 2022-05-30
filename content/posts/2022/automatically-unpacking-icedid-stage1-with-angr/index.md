@@ -20,6 +20,8 @@ I'll skip over some details of the stager (like API hashing and injection) to fo
 
 *TL;DR: full code is available here: [https://github.com/matthw/icedid_stage1_unpack](https://github.com/matthw/icedid_stage1_unpack).*
 
+**EDIT:** it unpacks samples packed with SPLCrypt.
+
 # 1. Structure and Flow
 
 The packed data are really easy to identify: there's a huge hex string in the data section, and by hex string i a mean littleral string of [0-9a-f] characters.
@@ -544,10 +546,10 @@ Using these offsets, we can find the start of the function they live in:
             print("found potential rc4 code: 0x%x"%func.addr)
 ```
 
-We discard the offsets if:
-- they do not belong to a function
-- they belong to a function with no predecessors (meaning it's not called)
-- they belong to a function with more than 2 predecessors (called from more than 2 different places)
+We discard an offset if:
+- it does not belong to a function
+- it belongs to a function with no predecessors (meaning it's not called)
+- it belongs to a function with more than 2 predecessors (called from more than 2 different places)
   - *the RC4 function should only be called from one place - 2 is being conservative*
 
 
