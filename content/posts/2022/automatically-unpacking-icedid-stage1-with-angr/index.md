@@ -1,7 +1,7 @@
 ---
 title: "Automatically Unpacking IcedID Stage 1 with Angr"
 date: 2022-05-30T09:15:00+02:00
-draft: true
+draft: false
 toc: false
 images:
 tags: 
@@ -912,6 +912,21 @@ found 5 elements
     looks like a PE... {'campaign_id': 3068011852, 'c2': b'yolneanz.com'}
 - dumped samples/12a692718d21b8dc3a8d5a2715688f533f1a978ee825163d41de11847039393d.bin.extracted.3
 - dumped samples/12a692718d21b8dc3a8d5a2715688f533f1a978ee825163d41de11847039393d.bin.extracted.4
+```
+
+
+The extracted data blobs are:
+- 2 shellcodes
+- 1 DLL
+- 1 or 2 images:
+
+```
+% file 0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7.bin.extracted.*
+0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7.bin.extracted.0: data
+0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7.bin.extracted.1: data
+0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7.bin.extracted.2: PE32+ executable (DLL) (GUI) x86-64, for MS Windows
+0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7.bin.extracted.3: JPEG image data, JFIF standard 1.01, resolution (DPI), density 72x72, segment length 16, baseline, precision 8, 800x600, components 3
+0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7.bin.extracted.4: JPEG image data, Exif Standard: [TIFF image data, big-endian, direntries=7, software=Adobe Photoshop 21.2 (Windows), datetime=2021-03-25T08:49:36+07:00], baseline, precision 8, 800x800, components 3
 ```
 
 # 5. Conclusion

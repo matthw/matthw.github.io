@@ -744,6 +744,18 @@ found 5 elements
     looks like a PE... {&#39;campaign_id&#39;: 3068011852, &#39;c2&#39;: b&#39;yolneanz.com&#39;}
 - dumped samples/12a692718d21b8dc3a8d5a2715688f533f1a978ee825163d41de11847039393d.bin.extracted.3
 - dumped samples/12a692718d21b8dc3a8d5a2715688f533f1a978ee825163d41de11847039393d.bin.extracted.4
+</code></pre><p>The extracted data blobs are:</p>
+<ul>
+<li>2 shellcodes</li>
+<li>1 DLL</li>
+<li>1 or 2 images:</li>
+</ul>
+<pre tabindex="0"><code>% file 0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7.bin.extracted.*
+0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7.bin.extracted.0: data
+0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7.bin.extracted.1: data
+0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7.bin.extracted.2: PE32+ executable (DLL) (GUI) x86-64, for MS Windows
+0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7.bin.extracted.3: JPEG image data, JFIF standard 1.01, resolution (DPI), density 72x72, segment length 16, baseline, precision 8, 800x600, components 3
+0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7.bin.extracted.4: JPEG image data, Exif Standard: [TIFF image data, big-endian, direntries=7, software=Adobe Photoshop 21.2 (Windows), datetime=2021-03-25T08:49:36+07:00], baseline, precision 8, 800x800, components 3
 </code></pre><h1 id="5-conclusion">5. Conclusion</h1>
 <p>While it is certainly not the most optimal method to unpack the samples, it was a fun exercise to do.</p>
 <p>The full code is available here: <a href="https://github.com/matthw/icedid_stage1_unpack">https://github.com/matthw/icedid_stage1_unpack</a>.</p>
