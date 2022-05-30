@@ -18,6 +18,8 @@ to do.
 
 I'll skip over some details of stagers (like API hashing and injection) to focus only on the unpacking.
 
+*TL;DR: full code is available here: [https://github.com/matthw/icedid_stage1_unpack](https://github.com/matthw/icedid_stage1_unpack).*
+
 # 1. Structure and Flow
 
 The packed data are really easy to identify: there's a huge hex string in the data section, and by hex string i a mean littleral string of [0-9a-f] characters.
