@@ -15,14 +15,14 @@
 			<pubDate>Mon, 30 May 2022 09:15:00 +0200</pubDate>
 			
 			<guid>https://matth.dmz42.org/posts/2022/automatically-unpacking-icedid-stage1-with-angr/</guid>
-			<description>0verfl0w posted a small challenge on the Zero 2 Automated discord server asking to automatically extract the configuration of an unpacked IcedID sample (0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7).
-Unpacking the sample was part of the exercise but could be done manually as a one shot, however the more I looked into the stager, the more i though an automated unpacker would be a fun thing to do.
-I&amp;rsquo;ll skip over some details of stagers (like API hashing and injection) to focus only on the unpacking.</description>
-			<content type="html"><![CDATA[<p><a href="https://twitter.com/0verfl0w_">0verfl0w</a> posted a small challenge on the <a href="https://courses.zero2auto.com/">Zero 2 Automated</a> discord server asking to automatically extract the
+			<description>It started with 0verfl0w posting a small challenge on the Zero 2 Automated discord server asking to automatically extract the configuration of an unpacked IcedID sample (0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7).
+Unpacking the sample was part of the exercise but could be done manually as a one shot, however the more I looked into the stager, the more i thought an automated unpacker would be a fun thing to do.
+I&amp;rsquo;ll skip over some details of the stager (like API hashing and injection) to focus only on the unpacking part.</description>
+			<content type="html"><![CDATA[<p>It started with <a href="https://twitter.com/0verfl0w_">0verfl0w</a> posting a small challenge on the <a href="https://courses.zero2auto.com/">Zero 2 Automated</a> discord server asking to automatically extract the
 configuration of an unpacked IcedID sample (<a href="https://bazaar.abuse.ch/sample/0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7/">0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7</a>).</p>
-<p>Unpacking the sample was part of the exercise but could be done manually as a one shot, however the more I looked into the stager, the more i though an automated unpacker would be a fun thing
+<p>Unpacking the sample was part of the exercise but could be done manually as a one shot, however the more I looked into the stager, the more i thought an automated unpacker would be a fun thing
 to do.</p>
-<p>I&rsquo;ll skip over some details of stagers (like API hashing and injection) to focus only on the unpacking.</p>
+<p>I&rsquo;ll skip over some details of the stager (like API hashing and injection) to focus only on the unpacking part.</p>
 <p><em>TL;DR: full code is available here: <a href="https://github.com/matthw/icedid_stage1_unpack">https://github.com/matthw/icedid_stage1_unpack</a>.</em></p>
 <h1 id="1-structure-and-flow">1. Structure and Flow</h1>
 <p>The packed data are really easy to identify: there&rsquo;s a huge hex string in the data section, and by hex string i a mean littleral string of [0-9a-f] characters.</p>

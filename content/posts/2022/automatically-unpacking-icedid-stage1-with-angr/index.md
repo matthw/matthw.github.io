@@ -10,13 +10,13 @@ tags:
   - icedid
 ---
 
-[0verfl0w](https://twitter.com/0verfl0w_) posted a small challenge on the [Zero 2 Automated](https://courses.zero2auto.com/) discord server asking to automatically extract the
+It started with [0verfl0w](https://twitter.com/0verfl0w_) posting a small challenge on the [Zero 2 Automated](https://courses.zero2auto.com/) discord server asking to automatically extract the
 configuration of an unpacked IcedID sample ([0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7](https://bazaar.abuse.ch/sample/0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7/)).
 
-Unpacking the sample was part of the exercise but could be done manually as a one shot, however the more I looked into the stager, the more i though an automated unpacker would be a fun thing
+Unpacking the sample was part of the exercise but could be done manually as a one shot, however the more I looked into the stager, the more i thought an automated unpacker would be a fun thing
 to do.
 
-I'll skip over some details of stagers (like API hashing and injection) to focus only on the unpacking.
+I'll skip over some details of the stager (like API hashing and injection) to focus only on the unpacking part.
 
 *TL;DR: full code is available here: [https://github.com/matthw/icedid_stage1_unpack](https://github.com/matthw/icedid_stage1_unpack).*
 
