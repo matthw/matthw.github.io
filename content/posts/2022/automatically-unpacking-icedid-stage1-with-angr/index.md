@@ -511,7 +511,7 @@ I used some loosy heuristic to find the RC4 but it seems to work well:
         finds = rule.match(data=data)
 ```
 
-Then we just need to fix the offsets - which are relative to the start of ```.text```, so they match the RVA:
+Then we just need to fix the offsets - which are relative to the start of ```.text```, so they match the virtual address:
 
 ```python
         offsets = []

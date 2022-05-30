@@ -423,7 +423,7 @@ step2: find function │        │     etc...                                 �
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="c1"># get matching offsets</span>
 </span></span><span class="line"><span class="cl">        <span class="n">finds</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
-</span></span></code></pre></div><p>Then we just need to fix the offsets - which are relative to the start of <code>.text</code>, so they match the RVA:</p>
+</span></span></code></pre></div><p>Then we just need to fix the offsets - which are relative to the start of <code>.text</code>, so they match the virtual address:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl">        <span class="n">offsets</span> <span class="o">=</span> <span class="p">[]</span>
 </span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">find</span> <span class="ow">in</span> <span class="n">finds</span><span class="p">[</span><span class="s1">&#39;main&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;strings&#39;</span><span class="p">]:</span>
 </span></span><span class="line"><span class="cl">            <span class="c1"># offset are relative to .text, rebase them</span>
