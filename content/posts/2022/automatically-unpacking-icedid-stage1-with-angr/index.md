@@ -652,8 +652,8 @@ I assume the key is always 4 bytes long, however should it not be the case, its 
 
 ```python
     def check_state(self, state, stop_addr):
-        """ check if a state reached the expected address)
-            hook potential call with unconstrained destinatinations
+        """ check if a state reached the expected address
+            hook potential calls with unconstrained destinations
 
             returns the key if arrived at destination
         """

@@ -597,8 +597,8 @@ step2: find function │        │     etc...                                 �
 and read a DWORD in there.</p>
 <p>I assume the key is always 4 bytes long, however should it not be the case, its length can be read from the stack (5th function parameter).</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">check_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">stop_addr</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="s2">&#34;&#34;&#34; check if a state reached the expected address)
-</span></span></span><span class="line"><span class="cl"><span class="s2">            hook potential call with unconstrained destinatinations
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;&#34;&#34; check if a state reached the expected address
+</span></span></span><span class="line"><span class="cl"><span class="s2">            hook potential calls with unconstrained destinations
 </span></span></span><span class="line"><span class="cl"><span class="s2">
 </span></span></span><span class="line"><span class="cl"><span class="s2">            returns the key if arrived at destination
 </span></span></span><span class="line"><span class="cl"><span class="s2">        &#34;&#34;&#34;</span>
