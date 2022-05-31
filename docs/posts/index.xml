@@ -24,7 +24,7 @@ configuration of an unpacked IcedID sample (<a href="https://bazaar.abuse.ch/sam
 to do.</p>
 <p>I&rsquo;ll skip over some details of the stager (like API hashing and injection) to focus only on the unpacking part.</p>
 <p><em>TL;DR: full code is available here: <a href="https://github.com/matthw/icedid_stage1_unpack">https://github.com/matthw/icedid_stage1_unpack</a>.</em></p>
-<p><strong>EDIT:</strong> it unpacks samples packed with SPLCrypt.</p>
+<p><strong>EDIT:</strong> it unpacks samples packed with <a href="https://bazaar.abuse.ch/browse.php?search=yara%3ASPLCrypt">SPLCrypt</a>, including BazarLoader.</p>
 <h1 id="1-structure-and-flow">1. Structure and Flow</h1>
 <p>The packed data are really easy to identify: there&rsquo;s a huge hex string in the data section, and by hex string i a mean littleral string of [0-9a-f] characters.</p>
 <pre tabindex="0"><code>[...]

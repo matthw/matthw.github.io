@@ -20,7 +20,7 @@ I'll skip over some details of the stager (like API hashing and injection) to fo
 
 *TL;DR: full code is available here: [https://github.com/matthw/icedid_stage1_unpack](https://github.com/matthw/icedid_stage1_unpack).*
 
-**EDIT:** it unpacks samples packed with SPLCrypt.
+**EDIT:** it unpacks samples packed with [SPLCrypt](https://bazaar.abuse.ch/browse.php?search=yara%3ASPLCrypt), including BazarLoader.
 
 # 1. Structure and Flow
 
