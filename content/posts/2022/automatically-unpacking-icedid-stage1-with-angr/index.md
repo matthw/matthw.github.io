@@ -298,12 +298,14 @@ def find_keys(pe):
                     $instr
             }""")
 
-    finds = rule.match(data=data)
+    yara_matches = rule.match(data=data)
+
+    if not len(yara_matches):
+        return []
 
     # potential code snippet setting the key
     key_code = []
-    for find in finds['main'][0]['strings']:
-        offset = find['offset']
+    for offset, _, _ in yara_matches[0].strings:
         string = data[offset:offset+16]
         if string[3] == string[11]:
             #print(string)

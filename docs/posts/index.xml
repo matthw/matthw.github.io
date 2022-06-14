@@ -3641,12 +3641,14 @@ having issues with some samples where the embedded PE file seemed corrupt:</p>
 </span></span></span><span class="line"><span class="cl"><span class="s2">                    $instr
 </span></span></span><span class="line"><span class="cl"><span class="s2">            }&#34;&#34;&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">finds</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">yara_matches</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">yara_matches</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">[]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1"># potential code snippet setting the key</span>
 </span></span><span class="line"><span class="cl">    <span class="n">key_code</span> <span class="o">=</span> <span class="p">[]</span>
-</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">find</span> <span class="ow">in</span> <span class="n">finds</span><span class="p">[</span><span class="s1">&#39;main&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;strings&#39;</span><span class="p">]:</span>
-</span></span><span class="line"><span class="cl">        <span class="n">offset</span> <span class="o">=</span> <span class="n">find</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">offset</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">yara_matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strings</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">        <span class="n">string</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">offset</span><span class="p">:</span><span class="n">offset</span><span class="o">+</span><span class="mi">16</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">string</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="n">string</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span>
 </span></span><span class="line"><span class="cl">            <span class="c1">#print(string)</span>

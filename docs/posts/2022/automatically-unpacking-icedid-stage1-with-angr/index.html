@@ -12,7 +12,7 @@
  reverse malware icedid   It started with 0verfl0w posting a small challenge on the Zero 2 Automated discord server asking to automatically extract the configuration of an unpacked IcedID sample (0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7).
 Unpacking the sample was part of the exercise but could be done manually as a one shot, however the more I looked into the stager, the more i thought an automated unpacker would be a fun thing to do.">
 
-<meta itemprop="wordCount" content="4026">
+<meta itemprop="wordCount" content="4030">
 <meta itemprop="keywords" content="" /><meta property="og:title" content="" />
 <meta property="og:description" content="are relative to .text, rebase th&mdash; title: &ldquo;Automatically Unpacking IcedID Stage 1 with Angr&rdquo; date: 2022-05-30T09:15:00&#43;02:00 draft: false toc: false images: tags:
  reverse malware icedid   It started with 0verfl0w posting a small challenge on the Zero 2 Automated discord server asking to automatically extract the configuration of an unpacked IcedID sample (0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7).
@@ -310,12 +310,14 @@ having issues with some samples where the embedded PE file seemed corrupt:</p>
 </span></span></span><span class="line"><span class="cl"><span class="s2">                    $instr
 </span></span></span><span class="line"><span class="cl"><span class="s2">            }&#34;&#34;&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">finds</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">yara_matches</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">yara_matches</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">[]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1"># potential code snippet setting the key</span>
 </span></span><span class="line"><span class="cl">    <span class="n">key_code</span> <span class="o">=</span> <span class="p">[]</span>
-</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">find</span> <span class="ow">in</span> <span class="n">finds</span><span class="p">[</span><span class="s1">&#39;main&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;strings&#39;</span><span class="p">]:</span>
-</span></span><span class="line"><span class="cl">        <span class="n">offset</span> <span class="o">=</span> <span class="n">find</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">offset</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">yara_matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strings</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">        <span class="n">string</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">offset</span><span class="p">:</span><span class="n">offset</span><span class="o">+</span><span class="mi">16</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">string</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="n">string</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span>
 </span></span><span class="line"><span class="cl">            <span class="c1">#print(string)</span>
@@ -835,7 +837,7 @@ found 5 elements
 			</div>
 			<hr class="post-end">
 			<footer class="post-info">
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>4026 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>4030 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>0001-01-01 00:17 &#43;0017</p>
 			</footer>
 		</article>
