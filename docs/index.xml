@@ -7,18 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Mon, 30 May 2022 09:15:00 +0200</lastBuildDate><atom:link href="https://matth.dmz42.org/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Automatically Unpacking IcedID Stage 1 with Angr</title>
-      <link>https://matth.dmz42.org/posts/2022/automatically-unpacking-icedid-stage1-with-angr/</link>
-      <pubDate>Mon, 30 May 2022 09:15:00 +0200</pubDate>
-      
-      <guid>https://matth.dmz42.org/posts/2022/automatically-unpacking-icedid-stage1-with-angr/</guid>
-      <description>It started with 0verfl0w posting a small challenge on the Zero 2 Automated discord server asking to automatically extract the configuration of an unpacked IcedID sample (0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7).
-Unpacking the sample was part of the exercise but could be done manually as a one shot, however the more I looked into the stager, the more i thought an automated unpacker would be a fun thing to do.
-I&amp;rsquo;ll skip over some details of the stager (like API hashing and injection) to focus only on the unpacking part.</description>
-    </item>
-    
+    <lastBuildDate>Sat, 21 May 2022 21:15:40 +0200</lastBuildDate><atom:link href="https://matth.dmz42.org/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (Reverse)</title>
       <link>https://matth.dmz42.org/posts/2022/hackthebox-ctf-cyber-apocalypse-2022-intergalactic-chase-rev/</link>
@@ -73,6 +62,17 @@ You can find the original announcement here and the contest summary here.
 0. First Look Running the crackme, we understand we&amp;rsquo;ll be asked to find 3 passwords. Only the first button is enabled, so they will most likely need to be found in order
 Loading the binary into PE-bear reveals it&amp;rsquo;s a Dot Net binary
 so let&amp;rsquo;s open it in dnSpy</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://matth.dmz42.org/posts/2022/automatically-unpacking-icedid-stage1-with-angr/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://matth.dmz42.org/posts/2022/automatically-unpacking-icedid-stage1-with-angr/</guid>
+      <description>are relative to .text, rebase th&amp;mdash; title: &amp;ldquo;Automatically Unpacking IcedID Stage 1 with Angr&amp;rdquo; date: 2022-05-30T09:15:00+02:00 draft: false toc: false images: tags:
+ reverse malware icedid   It started with 0verfl0w posting a small challenge on the Zero 2 Automated discord server asking to automatically extract the configuration of an unpacked IcedID sample (0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7).
+Unpacking the sample was part of the exercise but could be done manually as a one shot, however the more I looked into the stager, the more i thought an automated unpacker would be a fun thing to do.</description>
     </item>
     
   </channel>

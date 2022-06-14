@@ -1,4 +1,4 @@
----
+are relative to .text, rebase th---
 title: "Automatically Unpacking IcedID Stage 1 with Angr"
 date: 2022-05-30T09:15:00+02:00
 draft: false
@@ -510,16 +510,16 @@ I used some loosy heuristic to find the RC4 but it seems to work well:
 
 
         # get matching offsets
-        finds = rule.match(data=data)
+        yara_matches = rule.match(data=data)
 ```
 
 Then we just need to fix the offsets - which are relative to the start of ```.text```, so they match the virtual address:
 
 ```python
         offsets = []
-        for find in finds['main'][0]['strings']:
+        for offset, _, _ in yara_matches[0].strings:
             # offset are relative to .text, rebase them
-            off = self.pe.OPTIONAL_HEADER.ImageBase + section.VirtualAddress + find['offset']
+            off = self.pe.OPTIONAL_HEADER.ImageBase + section.VirtualAddress + offset
             offsets.append(off)
 ```
 
@@ -678,14 +678,14 @@ The effect of the CALLLESS flag is that the return value of all function calls w
 
 So what should have been:
 ```
-address = get_proc_address(0x12345678) // return 0x18032323
-(*0x12345678)(arg1, arg2)
+address = get_proc_address(0x12345678) // returns 0x18032323
+(*0x18032323)(arg1, arg2)
 ```
 
 becomes:
 
 ```
-address = get_proc_address(0x12345678) // return some symbolic constant
+address = get_proc_address(0x12345678) // returns some symbolic constant
 (*????????)(arg1, arg2)
 ```
 
