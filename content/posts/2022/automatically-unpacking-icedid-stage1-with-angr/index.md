@@ -1,5 +1,5 @@
 ---
-title: "Automatically Unpacking IcedID Stage 1 with Angr"
+title: "Automatically Unpacking IcedID Stage 1 with angr"
 date: 2022-05-30T09:15:00+02:00
 draft: false
 toc: false
@@ -411,7 +411,7 @@ until the flow obfuscation of some samples brought even more fun to the party by
 rendering my initial and pretty naive approach useless.
 
 
-## 2.2. Angr
+## 2.2. angr
 
 I only played with [angr](https://angr.io/) before to solve crackmes and CTF challenges, and I wanted to do something else with it to practice (because let's face it, i'm pretty bad with angr).
 
@@ -610,7 +610,7 @@ while True:
             return key
 ```
 
-with a few extra conditions to avoid looping when there's no active path left or when the paths gets too complex (arbitrary pick), it looks like this:
+with a few extra conditions to avoid looping when there's no active path left or when the path gets too complex (arbitrary pick), it looks like this:
 
 
 ```python
@@ -710,7 +710,7 @@ if block.vex.jumpkind == 'Ijk_Call':
 if block.vex.next.tag == 'Iex_RdTmp':
 ```
 
-- looping over the block instruction to find the actuall call and hooking it with something of ours:
+- looping over the block instructions to find the actual call and hook it with something of ours:
 ```python
                 for insn in self.prj.factory.block(block.addr).capstone.insns:
                     if insn.mnemonic == 'call':

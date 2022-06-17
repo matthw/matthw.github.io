@@ -10,7 +10,7 @@
 		<atom:link href="https://matth.dmz42.org/posts/index.xml" rel="self" type="application/rss+xml" />
 		
 		<item>
-			<title>Automatically Unpacking IcedID Stage 1 with Angr</title>
+			<title>Automatically Unpacking IcedID Stage 1 with angr</title>
 			<link>https://matth.dmz42.org/posts/2022/automatically-unpacking-icedid-stage1-with-angr/</link>
 			<pubDate>Mon, 30 May 2022 09:15:00 +0200</pubDate>
 			
@@ -343,7 +343,7 @@ found 5 elements
 <img src="rc4_key_obf1.png" alt="RC4 key 1"></p>
 <p><img src="rc4_key_obf2.png" alt="RC4 key 2"></p>
 <p>rendering my initial and pretty naive approach useless.</p>
-<h2 id="22-angr">2.2. Angr</h2>
+<h2 id="22-angr">2.2. angr</h2>
 <p>I only played with <a href="https://angr.io/">angr</a> before to solve crackmes and CTF challenges, and I wanted to do something else with it to practice (because let&rsquo;s face it, i&rsquo;m pretty bad with angr).</p>
 <p>To quote their website:</p>
 <pre tabindex="0"><code>angr is an open-source binary analysis platform for Python.
@@ -507,7 +507,7 @@ step2: find function │        │     etc...                                 �
 </span></span><span class="line"><span class="cl">        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_state</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">stop_addr</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">key</span>
-</span></span></code></pre></div><p>with a few extra conditions to avoid looping when there&rsquo;s no active path left or when the paths gets too complex (arbitrary pick), it looks like this:</p>
+</span></span></code></pre></div><p>with a few extra conditions to avoid looping when there&rsquo;s no active path left or when the path gets too complex (arbitrary pick), it looks like this:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">emulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_addr</span><span class="p">,</span> <span class="n">stop_addr</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">3000</span><span class="p">):</span>
 </span></span><span class="line"><span class="cl">        <span class="s2">&#34;&#34;&#34; symbolic execution from start_addr to stop_addr.
 </span></span></span><span class="line"><span class="cl"><span class="s2">        max_iter is the maximum number of instructions
@@ -578,7 +578,7 @@ The effect of the CALLLESS flag is that the return value of all function calls w
 </ul>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">vex</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;Iex_RdTmp&#39;</span><span class="p">:</span>
 </span></span></code></pre></div><ul>
-<li>looping over the block instruction to find the actuall call and hooking it with something of ours:</li>
+<li>looping over the block instructions to find the actual call and hook it with something of ours:</li>
 </ul>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl">                <span class="k">for</span> <span class="n">insn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">prj</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">block</span><span class="o">.</span><span class="n">addr</span><span class="p">)</span><span class="o">.</span><span class="n">capstone</span><span class="o">.</span><span class="n">insns</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="n">insn</span><span class="o">.</span><span class="n">mnemonic</span> <span class="o">==</span> <span class="s1">&#39;call&#39;</span><span class="p">:</span>
