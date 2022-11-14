@@ -7,7 +7,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Sat, 21 May 2022 21:15:40 +0200</lastBuildDate><atom:link href="https://matth.dmz42.org/tags/ctf/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 14 Nov 2022 13:15:00 +0100</lastBuildDate><atom:link href="https://matth.dmz42.org/tags/ctf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Flare-On 9 Writeups</title>
+      <link>https://matth.dmz42.org/posts/2022/flare-on-9-writeups/</link>
+      <pubDate>Mon, 14 Nov 2022 13:15:00 +0100</pubDate>
+      
+      <guid>https://matth.dmz42.org/posts/2022/flare-on-9-writeups/</guid>
+      <description>Here are (some ?) writeups for this year Flare-On challenge. I&amp;rsquo;ll add more in the coming days.
+For reference here is my timing:
+0. TOC Flaredle
+PixelPoker
+Magic 8 Ball
+darn_mice
+T8
+a la mode
+anode
+backdoor
+encryptor
+Nur getraumt
+The challenge that shall not be named
+1. Flaredle Small javascript webapp where we need to guess a word.
+Open script.js, starts with:
+import { WORDS } from &amp;#34;./words.js&amp;#34;; const NUMBER_OF_GUESSES = 6; const WORD_LENGTH = 21; const CORRECT_GUESS = 57; let guessesRemaining = NUMBER_OF_GUESSES; let currentGuess = []; let nextLetter = 0; let rightGuessString = WORDS[CORRECT_GUESS]; find correct flag condition:</description>
+    </item>
+    
     <item>
       <title>HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (Reverse)</title>
       <link>https://matth.dmz42.org/posts/2022/hackthebox-ctf-cyber-apocalypse-2022-intergalactic-chase-rev/</link>
@@ -17,11 +41,13 @@
       <description>Hack The Box was hosting a CTF event and we played together with some friends.
 Here are some writeups for some of the reversing challenges i solved.
 There&amp;rsquo;s often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun&amp;hellip;
-0. TOC   Without A Trace (413 solves)
-  Teleport (307 solves)
-  Rebuilding (463 solves)
-  Nuts and Bolts (60 solves)
-  Shuffleme (28 solves)</description>
+0. TOC Without A Trace (413 solves)
+Teleport (307 solves)
+Rebuilding (463 solves)
+Nuts and Bolts (60 solves)
+Shuffleme (28 solves)
+Snake Code (281 solves)
+Freaky Forum Interception (32 solves)</description>
     </item>
     
     <item>
@@ -33,12 +59,13 @@ There&amp;rsquo;s often shortcuts taken and (un)educated guesses involved, some 
       <description>Hack The Box was hosting a CTF event and we played together with some friends.
 Here are some writeups for some of the PWN challenges i solved.
 Any code you can find here is very low ctf quality :)
-0. TOC   Space pirate: Retribution
-  Vault Breaker
-  Fleet Management
-  Hellbound
-  Trick Or Deal
-  1. Space pirate: Retribution Original files are here.</description>
+0. TOC Space pirate: Retribution
+Vault Breaker
+Fleet Management
+Hellbound
+Trick Or Deal
+1. Space pirate: Retribution Original files are here.
+Arch: amd64-64-little RELRO: Full RELRO Stack: No canary found NX: NX enabled PIE: PIE enabled RUNPATH: b&amp;#39;.</description>
     </item>
     
   </channel>

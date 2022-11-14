@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="Flare-On 9 Writeups">
+<meta itemprop="description" content="Here are (some ?) writeups for this year Flare-On challenge. I&rsquo;ll add more in the coming days.
+For reference here is my timing:
+0. TOC Flaredle
+PixelPoker
+Magic 8 Ball
+darn_mice
+T8
+a la mode
+anode
+backdoor
+encryptor
+Nur getraumt
+The challenge that shall not be named
+1. Flaredle Small javascript webapp where we need to guess a word.
+Open script.js, starts with:
+import { WORDS } from &#34;./words.js&#34;; const NUMBER_OF_GUESSES = 6; const WORD_LENGTH = 21; const CORRECT_GUESS = 57; let guessesRemaining = NUMBER_OF_GUESSES; let currentGuess = []; let nextLetter = 0; let rightGuessString = WORDS[CORRECT_GUESS]; find correct flag condition:"><meta itemprop="datePublished" content="2022-11-14T13:15:00+01:00" />
+<meta itemprop="dateModified" content="2022-11-14T13:15:00+01:00" />
+<meta itemprop="wordCount" content="1799">
+<meta itemprop="keywords" content="reverse,ctf," /><meta property="og:title" content="Flare-On 9 Writeups" />
+<meta property="og:description" content="Here are (some ?) writeups for this year Flare-On challenge. I&rsquo;ll add more in the coming days.
+For reference here is my timing:
+0. TOC Flaredle
+PixelPoker
+Magic 8 Ball
+darn_mice
+T8
+a la mode
+anode
+backdoor
+encryptor
+Nur getraumt
+The challenge that shall not be named
+1. Flaredle Small javascript webapp where we need to guess a word.
+Open script.js, starts with:
+import { WORDS } from &#34;./words.js&#34;; const NUMBER_OF_GUESSES = 6; const WORD_LENGTH = 21; const CORRECT_GUESS = 57; let guessesRemaining = NUMBER_OF_GUESSES; let currentGuess = []; let nextLetter = 0; let rightGuessString = WORDS[CORRECT_GUESS]; find correct flag condition:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://matth.dmz42.org/posts/2022/flare-on-9-writeups/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-11-14T13:15:00+01:00" />
+<meta property="article:modified_time" content="2022-11-14T13:15:00+01:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Flare-On 9 Writeups"/>
+<meta name="twitter:description" content="Here are (some ?) writeups for this year Flare-On challenge. I&rsquo;ll add more in the coming days.
+For reference here is my timing:
+0. TOC Flaredle
+PixelPoker
+Magic 8 Ball
+darn_mice
+T8
+a la mode
+anode
+backdoor
+encryptor
+Nur getraumt
+The challenge that shall not be named
+1. Flaredle Small javascript webapp where we need to guess a word.
+Open script.js, starts with:
+import { WORDS } from &#34;./words.js&#34;; const NUMBER_OF_GUESSES = 6; const WORD_LENGTH = 21; const CORRECT_GUESS = 57; let guessesRemaining = NUMBER_OF_GUESSES; let currentGuess = []; let nextLetter = 0; let rightGuessString = WORDS[CORRECT_GUESS]; find correct flag condition:"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Flare-On 9 Writeups</title>
+	<link rel="stylesheet" href="https://matth.dmz42.org/css/style.min.037b6ee8f8c1baab6a3d0a9da11c3ff18a7552471f16c59fd98538d5ce99208b.css" integrity="sha256-A3tu6PjBuqtqPQqdoRw/8Yp1UkcfFsWf2YU41c6ZIIs=" crossorigin="anonymous">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://matth.dmz42.org"># matth.dmz42.org</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://matth.dmz42.org/posts/">Posts</a>
+				<a href="https://matth.dmz42.org/tags/">Tags</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<button id="toc-btn" class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://twitter.com/matth_walter" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/matthw" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://www.linkedin.com/in/mwalter/" target="_blank" rel="noopener me" title="Linkedin"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://matth.dmz42.org/posts/">Posts</a></li>
+			<li><a href="https://matth.dmz42.org/tags/">Tags</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Nov 14, 2022</span></div>
+				<h1>Flare-On 9 Writeups</h1>
+			</header>
+			<div class="content">
+				<p>Here are (some ?) writeups for this year Flare-On challenge.
+I&rsquo;ll add more in the coming days.</p>
+<p>For reference here is my timing:</p>
+<p><img src="00-timing.jpeg" alt="timing"></p>
+<h1 id="0-toc">0. TOC<a href="#0-toc" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<ol>
+<li>
+<p><a href="#1-flaredle">Flaredle</a></p>
+</li>
+<li>
+<p><a href="#2-pixelpoker">PixelPoker</a></p>
+</li>
+<li>
+<p><a href="#3-magic-8-ball">Magic 8 Ball</a></p>
+</li>
+<li>
+<p><a href="#4-darn_mice">darn_mice</a></p>
+</li>
+<li>
+<p><a href="#5-t8">T8</a></p>
+</li>
+<li>
+<p><a href="#6-a-la-mode">a la mode</a></p>
+</li>
+<li>
+<p><a href="#7-anode">anode</a></p>
+</li>
+<li>
+<p><a href="#8-backdoor">backdoor</a></p>
+</li>
+<li>
+<p><a href="#9-encryptor">encryptor</a></p>
+</li>
+<li>
+<p><a href="#10-nur-getraumt">Nur getraumt</a></p>
+</li>
+<li>
+<p><a href="#11-the-challenge-that-shall-not-be-named">The challenge that shall not be named</a></p>
+</li>
+</ol>
+<h1 id="1-flaredle">1. Flaredle<a href="#1-flaredle" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>Small javascript webapp where we need to guess a word.</p>
+<p>Open <code>script.js</code>, starts with:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">WORDS</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&#34;./words.js&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">NUMBER_OF_GUESSES</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">WORD_LENGTH</span> <span class="o">=</span> <span class="mi">21</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">CORRECT_GUESS</span> <span class="o">=</span> <span class="mi">57</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">guessesRemaining</span> <span class="o">=</span> <span class="nx">NUMBER_OF_GUESSES</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">currentGuess</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">nextLetter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">rightGuessString</span> <span class="o">=</span> <span class="nx">WORDS</span><span class="p">[</span><span class="nx">CORRECT_GUESS</span><span class="p">];</span>
+</span></span></code></pre></div><p>find correct flag condition:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">guessString</span> <span class="o">===</span> <span class="nx">rightGuessString</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">let</span> <span class="nx">flag</span> <span class="o">=</span> <span class="nx">rightGuessString</span> <span class="o">+</span> <span class="s1">&#39;@flare-on.com&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">toastr</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">timeOut</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">toastr</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="nx">alert</span><span class="p">(</span><span class="nx">flag</span><span class="p">);}</span> 
+</span></span><span class="line"><span class="cl">        <span class="nx">toastr</span><span class="p">.</span><span class="nx">success</span><span class="p">(</span><span class="s1">&#39;You guessed right! The flag is &#39;</span> <span class="o">+</span> <span class="nx">flag</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="nx">guessesRemaining</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> 
+</span></span></code></pre></div><p>we know that <code>rightGuessString = WORDS[CORRECT_GUESS]</code> and that <code>CORRECT_GUESS = 57</code>, so we can just pick it up in the array from <code>words.js</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">% cat -n words.js <span class="p">|</span> grep <span class="s2">&#34; </span><span class="k">$((</span><span class="m">57</span><span class="o">+</span><span class="m">1</span><span class="k">))</span><span class="s2">&#34;</span>       <span class="c1"># because array starts at 0</span>
+</span></span><span class="line"><span class="cl">    58		<span class="s1">&#39;flareonisallaboutcats&#39;</span>,
+</span></span></code></pre></div><p>flag: <code>flareonisallaboutcats@flare-on.com</code></p>
+<h1 id="2-pixelpoker">2. PixelPoker<a href="#2-pixelpoker" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>(who knows when ?)</p>
+<h1 id="3-magic-8-ball">3. Magic 8 Ball<a href="#3-magic-8-ball" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>(coming soon ?)</p>
+<h1 id="4-darn_mice">4. darn_mice<a href="#4-darn_mice" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>(probably anytime soon ?)</p>
+<h1 id="5-t8">5. T8<a href="#5-t8" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>(maybe some day ?)</p>
+<h1 id="6-a-la-mode">6. a la mode<a href="#6-a-la-mode" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>(coming soon ?)</p>
+<h1 id="7-anode">7. anode<a href="#7-anode" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>We&rsquo;re getting a big fat 55MB binary.
+After poking it a bit with a stick, it turns out it&rsquo;s a javascript script, packed with <a href="https://github.com/nexe/nexe">nexe</a>.</p>
+<p>if we run <code>strings</code> on it we can actually see the script at the end along with the <code>&lt;nexe~~sentinel&gt;</code> marker.</p>
+<p>Unpacking (such big word&hellip;) the script using some random nexe unpacker or even with <code>strings</code>, we&rsquo;re left with something like that:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="nx">readline</span><span class="p">.</span><span class="nx">question</span><span class="p">(</span><span class="sb">`Enter flag: `</span><span class="p">,</span> <span class="nx">flag</span> <span class="p">=&gt;</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">  <span class="nx">readline</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nx">flag</span><span class="p">.</span><span class="nx">length</span> <span class="o">!==</span> <span class="mi">44</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;Try again.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">flag</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">b</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">flag</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// something strange is happening...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">if</span> <span class="p">(</span><span class="mi">1</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;uh-oh, math is too correct...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">state</span> <span class="o">=</span> <span class="mi">1337</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">state</span> <span class="o">^=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">30</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">switch</span> <span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">case</span> <span class="mi">306211</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nx">b</span><span class="p">[</span><span class="mi">30</span><span class="p">]</span> <span class="o">-=</span> <span class="nx">b</span><span class="p">[</span><span class="mi">34</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">37</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">33</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">256</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">          <span class="nx">b</span><span class="p">[</span><span class="mi">30</span><span class="p">]</span> <span class="o">&amp;=</span> <span class="mh">0xFF</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nx">b</span><span class="p">[</span><span class="mi">26</span><span class="p">]</span> <span class="o">-=</span> <span class="nx">b</span><span class="p">[</span><span class="mi">24</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">41</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">43</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">30</span><span class="p">]</span> <span class="o">+</span> <span class="mi">225</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">          <span class="nx">b</span><span class="p">[</span><span class="mi">26</span><span class="p">]</span> <span class="o">&amp;=</span> <span class="mh">0xFF</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">state</span> <span class="o">=</span> <span class="mi">868071080</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">case</span> <span class="mi">311489</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nx">b</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">-=</span> <span class="nx">b</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">30</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">+</span> <span class="mi">115</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="nx">b</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">&amp;=</span> <span class="mh">0xFF</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nx">b</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">^=</span> <span class="p">(</span><span class="nx">b</span><span class="p">[</span><span class="mi">18</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">25</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">31</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">21</span><span class="p">]</span> <span class="o">+</span> <span class="mi">19</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">state</span> <span class="o">=</span> <span class="mi">22167546</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// snipp... there&#39;s 1025 case statement
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">      <span class="k">default</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;uh-oh, math.random() is too random...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>   
+</span></span><span class="line"><span class="cl">    <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>     
+</span></span><span class="line"><span class="cl">      
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="p">[</span><span class="mi">106</span><span class="p">,</span> <span class="mi">196</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="mi">178</span><span class="p">,</span> <span class="mi">174</span><span class="p">,</span> <span class="mi">102</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">66</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">196</span><span class="p">,</span> <span class="mi">74</span><span class="p">,</span> <span class="mi">139</span><span class="p">,</span> <span class="mi">219</span><span class="p">,</span> <span class="mi">166</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">211</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">227</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">156</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">239</span><span class="p">,</span> <span class="mi">153</span><span class="p">,</span> <span class="mi">223</span><span class="p">,</span> <span class="mi">225</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">171</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">234</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">207</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">212</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">189</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">76</span><span class="p">];</span>     
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">every</span><span class="p">((</span><span class="nx">x</span><span class="p">,</span><span class="nx">i</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">x</span> <span class="o">===</span> <span class="nx">target</span><span class="p">[</span><span class="nx">i</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Congrats!&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Try again.&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>     
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></div><p>We&rsquo;re just asked to enter a string of 44 characters, which is then processed by the state machine and finally compared byte by byte with the target array.</p>
+<p>When i saw that state machine loop i initially thought it would be some sort of control flow flattening to break, but noticed none of the next state calculation actually depends on any condition, so
+easy game: run with nodejs, dump state to get correct order and profit (or something like that).</p>
+<p>However:</p>
+<pre tabindex="0"><code>% node anode.js
+Enter flag: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+uh-oh, math is too correct...
+</code></pre><p>2 things here are complicating my initial statement:</p>
+<ul>
+<li>the state machine is not going to work properly when the state is &ldquo;random&rdquo;:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="nx">state</span> <span class="o">^=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">30</span><span class="p">));</span>
+</span></span></code></pre></div><ul>
+<li>there&rsquo;s some funky things happening with BigInt (comment is not lying):</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl">  <span class="c1">// something strange is happening...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">if</span> <span class="p">(</span><span class="mi">1</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;uh-oh, math is too correct...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span></code></pre></div><p>soooo&hellip; that nexe bundle must be packed with a modified node.exe, like with a not so random random().</p>
+<p>Looking at it in ghidra, finding <code>v8::base::RandomNumberGenerator::SetSeed</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">thiscall</span> <span class="n">v8</span><span class="o">::</span><span class="n">base</span><span class="o">::</span><span class="n">RandomNumberGenerator</span><span class="o">::</span><span class="n">SetSeed</span><span class="p">(</span><span class="n">RandomNumberGenerator</span> <span class="o">*</span><span class="n">this</span><span class="p">,</span><span class="n">int64</span> <span class="n">param_1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* 0xd8dc60  11842  ?SetSeed@RandomNumberGenerator@base@v8@@QEAAX_J@Z */</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="kr">__int64</span><span class="p">)</span><span class="n">this</span> <span class="o">=</span> <span class="n">param_1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="n">undefined8</span><span class="p">)(</span><span class="n">this</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x60c43c4809ad2d74</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="n">undefined8</span><span class="p">)(</span><span class="n">this</span> <span class="o">+</span> <span class="mh">0x10</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0xce6a1a53db4c5403</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>We can see that it has indeed be patched to set the PRNG initial state to a fixed value, instead of anyting supplied to the SetSeed function.</p>
+<p>As compared to the original: <a href="https://chromium.googlesource.com/v8/v8/+/6d706ae3a0153cf0272760132b775ae06ef13b1a/src/base/utils/random-number-generator.cc#207">https://chromium.googlesource.com/v8/v8/+/6d706ae3a0153cf0272760132b775ae06ef13b1a/src/base/utils/random-number-generator.cc#207</a></p>
+<p>Lot of crazy ideas going into my head at this time, like reimplementing the PRNG and/or dumping all its (firsts) values, etc&hellip;</p>
+<p>But all of these would also require me to dig more into the patched node.exe to find out what has been done to BigInt as well, nothing i wanted to do at the moment&hellip;</p>
+<p>Since the script&rsquo;s logic is only valid when ran with the patched node.exe, if i wanted to debug the js, i needed a way to have a modified script executed by this binary.</p>
+<p>Turned out, you can edit the script straight inside the binary and you dont have to change anything else as long as its size doesn&rsquo;t change.</p>
+<p>Handy and time for cringe&hellip;</p>
+<p>In the extracted script, let&rsquo;s change this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl">  <span class="c1">// something strange is happening...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">if</span> <span class="p">(</span><span class="mi">1</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;uh-oh, math is too correct...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span></code></pre></div><p>by</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl">  <span class="c1">// happening.....
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">l</span> <span class="o">=</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="mi">1</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;uh-oh, math is too correct...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span></code></pre></div><p>so we can use <code>l</code> instead of <code>console.log</code>: that should fit fine in all the useless whitespaces (aka indentations).</p>
+<p>Then use a stupid script make the JS print all operation:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">re</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">fix_line</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ori_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">expr</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&#34;^ +(.*?);$&#34;</span><span class="p">,</span> <span class="n">line</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">new_line</span> <span class="o">=</span> <span class="s1">&#39;l(&#34;</span><span class="si">%s</span><span class="s1">&#34;);&#39;</span><span class="o">%</span><span class="n">expr</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">new_line</span> <span class="o">=</span> <span class="n">new_line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Math.floor(Math.random() * 256)&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                <span class="s1">&#39;&#34;+Math.floor(Math.random() * 256)+&#34;&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">n_space</span> <span class="o">=</span> <span class="n">ori_len</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_line</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">    <span class="n">new_line</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">*</span><span class="n">n_space</span> <span class="o">+</span> <span class="n">new_line</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">new_line</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;patched_anode.tmpl&#34;</span><span class="p">,</span> <span class="s2">&#34;r&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fp</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&#34;^ +b\[&#34;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="n">fix_line</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">pass</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span></span></code></pre></div><p>the result looks like:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">state</span> <span class="o">^=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">30</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">switch</span> <span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">case</span> <span class="mi">306211</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"> <span class="nx">l</span><span class="p">(</span><span class="s2">&#34;b[30] -= b[34] + b[23] + b[5] + b[37] + b[33] + b[12] + &#34;</span><span class="o">+</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">256</span><span class="p">)</span><span class="o">+</span><span class="s2">&#34;&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">     <span class="nx">l</span><span class="p">(</span><span class="s2">&#34;b[30] &amp;= 0xFF&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">     <span class="nx">l</span><span class="p">(</span><span class="s2">&#34;b[26] -= b[24] + b[41] + b[13] + b[43] + b[6] + b[30] + 225&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">     <span class="nx">l</span><span class="p">(</span><span class="s2">&#34;b[26] &amp;= 0xFF&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">state</span> <span class="o">=</span> <span class="mi">868071080</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">case</span> <span class="mi">311489</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">     <span class="nx">l</span><span class="p">(</span><span class="s2">&#34;b[10] -= b[32] + b[1] + b[20] + b[30] + b[23] + b[9] + 115&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">     <span class="nx">l</span><span class="p">(</span><span class="s2">&#34;b[10] &amp;= 0xFF&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">     <span class="nx">l</span><span class="p">(</span><span class="s2">&#34;b[7] ^= (b[18] + b[14] + b[11] + b[25] + b[31] + b[21] + 19) &amp; 0xFF&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">state</span> <span class="o">=</span> <span class="mi">22167546</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">continue</span><span class="p">;</span>
+</span></span></code></pre></div><p>and should have the same size than the original script:</p>
+<pre tabindex="0"><code>% ls -l inj.js patched_anode.tmpl
+316 -rw-r--r-- 1 matth matth 321847 Oct  3 09:19 inj.js
+316 -rw-r--r-- 1 matth matth 321847 Oct  3 09:09 patched_anode.tmpl
+</code></pre><p>we can then push it back into the binary using advanced parasite code injection (sic):</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;anode.exe&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">header</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mh">0x35e3806</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mh">0x363213d</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">footer</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">patch</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;ppp_anode.exe&#34;</span><span class="p">,</span> <span class="s2">&#34;wb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">footer</span><span class="p">)</span>
+</span></span></code></pre></div><p>we then a new binary <code>ppp_anode.exe</code>, which when executed produces a trace like:</p>
+<pre tabindex="0"><code>% head -20 conds.txt
+b[29] -= b[37] + b[23] + b[22] + b[24] + b[26] + b[10] + 7
+b[29] &amp;= 0xFF
+b[39] += b[34] + b[2] + b[1] + b[43] + b[20] + b[9] + 79
+b[39] &amp;= 0xFF
+b[19] ^= (b[26] + b[0] + b[40] + b[37] + b[23] + b[32] + 255) &amp; 0xFF
+b[28] ^= (b[1] + b[23] + b[37] + b[31] + b[43] + b[42] + 245) &amp; 0xFF
+b[39] += b[42] + b[10] + b[3] + b[41] + b[14] + b[26] + 177
+b[39] &amp;= 0xFF
+b[9] -= b[20] + b[19] + b[22] + b[5] + b[32] + b[35] + 151
+b[9] &amp;= 0xFF
+b[14] -= b[4] + b[5] + b[31] + b[15] + b[36] + b[40] + 67
+b[14] &amp;= 0xFF
+b[33] += b[25] + b[12] + b[14] + b[34] + b[4] + b[36] + 185
+b[33] &amp;= 0xFF
+b[12] -= b[21] + b[23] + b[0] + b[32] + b[28] + b[17] + 252
+b[12] &amp;= 0xFF
+b[43] += b[10] + b[15] + b[28] + b[29] + b[27] + b[26] + 168
+b[43] &amp;= 0xFF
+b[18] ^= (b[32] + b[30] + b[26] + b[22] + b[9] + b[33] + 19) &amp; 0xFF
+b[8] += b[18] + b[41] + b[1] + b[3] + b[16] + b[43] + 139
+</code></pre><p>so we know what have to solve, the issue is there&rsquo;s a lot of operations:</p>
+<pre tabindex="0"><code>% wc -l conds.txt
+1704 conds.txt
+</code></pre><p>Despites hearing several people claiming z3 wont work on this, i convinced myself i was smarter (spoiler alert, i&rsquo;m not) and squeezed everything into z3 and went for lunch or something.</p>
+<p>It kept running and running until i got bored and convinced myself to change the approach and try something which was too dumb to be true: just execute from the bottom up, switching + and - operations&hellip;</p>
+<p>warning: what follows can hurt the eyes :)</p>
+<ul>
+<li>reverse all lines and switch additions and substractions:</li>
+</ul>
+<pre tabindex="0"><code>%  cat conds.txt | tac | sed -e &#39;s/+=/@=/&#39; -e &#39;s/-=/+=/&#39; -e &#39;s/@=/-=/&#39; &gt; rev.txt
+</code></pre><ul>
+<li>execute with a small wrapper:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">claripy</span> <span class="kn">import</span> <span class="n">BVV</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># from js</span>
+</span></span><span class="line"><span class="cl"><span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="mi">106</span><span class="p">,</span> <span class="mi">196</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="mi">178</span><span class="p">,</span> <span class="mi">174</span><span class="p">,</span> <span class="mi">102</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">66</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">196</span><span class="p">,</span> <span class="mi">74</span><span class="p">,</span> <span class="mi">139</span><span class="p">,</span> <span class="mi">219</span><span class="p">,</span> <span class="mi">166</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">211</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">227</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">156</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">239</span><span class="p">,</span> <span class="mi">153</span><span class="p">,</span> <span class="mi">223</span><span class="p">,</span> <span class="mi">225</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">171</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">234</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">207</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">212</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">189</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">76</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># keep it on 8 bits the lazy way...</span>
+</span></span><span class="line"><span class="cl"><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="n">BVV</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">target</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># more advanced stuff... :)</span>
+</span></span><span class="line"><span class="cl"><span class="n">exec</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&#34;rev.txt&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># result of heavy calculations</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</span></span></code></pre></div><ul>
+<li>get byte values (too lazy to find out how to convert claripy BVV to actual int):</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">% python exe.py <span class="p">|</span> sed -e <span class="s1">&#39;s/&lt;BV8//g&#39;</span> -e <span class="s1">&#39;s/&gt;//g&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span> 110,  48,  116,  95,  106,  117,  53,  116,  95,  65,  95,  106,  52,  118,  97,  83,  67,  114,  105,  80,  55,  95,  99,  104,  52,  108,  49,  101,  110,  103,  51,  64,  102,  108,  97,  114,  101,  45,  111,  110,  46,  99,  111,  109<span class="o">]</span>
+</span></span></code></pre></div><ul>
+<li>profit:</li>
+</ul>
+<pre tabindex="0"><code>% python
+Python 3.10.8 (main, Nov  4 2022, 09:21:25) [GCC 12.2.0] on linux
+Type &#34;help&#34;, &#34;copyright&#34;, &#34;credits&#34; or &#34;license&#34; for more information.
+&gt;&gt;&gt; lolz = [ 110,  48,  116,  95,  106,  117,  53,  116,  95,  65,  95,  106,  52,  118,  97,  83,  67,  114,  105,  80,  55,  95,  99,  104,  52,  108,  49,  101,  110,  103,  51,  64,  102,  108,  97,  114,  101,  45,  111,  110,  46,  99,  111,  109]
+&gt;&gt;&gt; &#39;&#39;.join([chr(_) for _ in lolz])
+&#39;n0t_ju5t_A_j4vaSCriP7_ch4l1eng3@flare-on.com&#39;
+</code></pre><h1 id="8-backdoor">8. backdoor<a href="#8-backdoor" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>(might open soon ?)</p>
+<h1 id="9-encryptor">9. encryptor<a href="#9-encryptor" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>(am i losing my time ?)</p>
+<h1 id="10-nur-getraumt">10. Nur getraumt<a href="#10-nur-getraumt" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>(99 luftballon)</p>
+<h1 id="11-the-challenge-that-shall-not-be-named">11. The challenge that shall not be named<a href="#11-the-challenge-that-shall-not-be-named" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>(do i need a shrubbery ?)</p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://matth.dmz42.org/tags/reverse">reverse</a></span><span class="tag"><a href="https://matth.dmz42.org/tags/ctf">ctf</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1799 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2022-11-14 13:15 &#43;0100</p>
+			</footer>
+		</article>
+		<aside id="toc">
+			<div class="toc-title">Table of Contents</div>
+			<nav id="TableOfContents"></nav>
+		</aside>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://matth.dmz42.org/posts/2022/automatically-unpacking-icedid-stage1-with-angr/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Automatically Unpacking IcedID Stage 1 with angr</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2022 <a href="https://matth.dmz42.org">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://matth.dmz42.org/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+
+	<script src="https://matth.dmz42.org/js/bundle.min.580988ed2982bcbb74a1773c7abea97b43e4c43b9324e10cda0813ec6ec4bb67.js" integrity="sha256-WAmI7SmCvLt0oXc8er6pe0PkxDuTJOEM2ggT7G7Eu2c=" crossorigin="anonymous"></script>
+	
+
+</body>
+
+</html>

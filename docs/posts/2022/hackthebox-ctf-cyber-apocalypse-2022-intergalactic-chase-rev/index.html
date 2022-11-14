@@ -11,22 +11,26 @@
 <meta itemprop="description" content="Hack The Box was hosting a CTF event and we played together with some friends.
 Here are some writeups for some of the reversing challenges i solved.
 There&rsquo;s often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun&hellip;
-0. TOC   Without A Trace (413 solves)
-  Teleport (307 solves)
-  Rebuilding (463 solves)
-  Nuts and Bolts (60 solves)
-  Shuffleme (28 solves)"><meta itemprop="datePublished" content="2022-05-21T21:15:40+02:00" />
+0. TOC Without A Trace (413 solves)
+Teleport (307 solves)
+Rebuilding (463 solves)
+Nuts and Bolts (60 solves)
+Shuffleme (28 solves)
+Snake Code (281 solves)
+Freaky Forum Interception (32 solves)"><meta itemprop="datePublished" content="2022-05-21T21:15:40+02:00" />
 <meta itemprop="dateModified" content="2022-05-21T21:15:40+02:00" />
-<meta itemprop="wordCount" content="5779">
+<meta itemprop="wordCount" content="5876">
 <meta itemprop="keywords" content="ctf," /><meta property="og:title" content="HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (Reverse)" />
 <meta property="og:description" content="Hack The Box was hosting a CTF event and we played together with some friends.
 Here are some writeups for some of the reversing challenges i solved.
 There&rsquo;s often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun&hellip;
-0. TOC   Without A Trace (413 solves)
-  Teleport (307 solves)
-  Rebuilding (463 solves)
-  Nuts and Bolts (60 solves)
-  Shuffleme (28 solves)" />
+0. TOC Without A Trace (413 solves)
+Teleport (307 solves)
+Rebuilding (463 solves)
+Nuts and Bolts (60 solves)
+Shuffleme (28 solves)
+Snake Code (281 solves)
+Freaky Forum Interception (32 solves)" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://matth.dmz42.org/posts/2022/hackthebox-ctf-cyber-apocalypse-2022-intergalactic-chase-rev/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-05-21T21:15:40+02:00" />
@@ -37,11 +41,13 @@ There&rsquo;s often shortcuts taken and (un)educated guesses involved, some ugly
 <meta name="twitter:description" content="Hack The Box was hosting a CTF event and we played together with some friends.
 Here are some writeups for some of the reversing challenges i solved.
 There&rsquo;s often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun&hellip;
-0. TOC   Without A Trace (413 solves)
-  Teleport (307 solves)
-  Rebuilding (463 solves)
-  Nuts and Bolts (60 solves)
-  Shuffleme (28 solves)"/>
+0. TOC Without A Trace (413 solves)
+Teleport (307 solves)
+Rebuilding (463 solves)
+Nuts and Bolts (60 solves)
+Shuffleme (28 solves)
+Snake Code (281 solves)
+Freaky Forum Interception (32 solves)"/>
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -1377,7 +1383,7 @@ b&#39;At 3730 Galactic Time, we will convene at our outpost the Phey forest, 4 m
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://matth.dmz42.org/tags/ctf">ctf</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>5779 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>5876 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2022-05-21 21:15 &#43;0200</p>
 			</footer>
 		</article>
@@ -1413,7 +1419,7 @@ b&#39;At 3730 Galactic Time, we will convene at our outpost the Phey forest, 4 m
 
 
 
-	<script src="https://matth.dmz42.org/js/bundle.min.8256b8724b9578bbdf6d6f04c894255bc760e78e8a2d60ec0a91ea993acd3b77.js" integrity="sha256-gla4ckuVeLvfbW8EyJQlW8dg546KLWDsCpHqmTrNO3c=" crossorigin="anonymous"></script>
+	<script src="https://matth.dmz42.org/js/bundle.min.580988ed2982bcbb74a1773c7abea97b43e4c43b9324e10cda0813ec6ec4bb67.js" integrity="sha256-WAmI7SmCvLt0oXc8er6pe0PkxDuTJOEM2ggT7G7Eu2c=" crossorigin="anonymous"></script>
 	
 
 </body>

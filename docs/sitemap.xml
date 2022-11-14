@@ -3,7 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://matth.dmz42.org/</loc>
-    <lastmod>2022-05-30T09:15:00+02:00</lastmod>
+    <lastmod>2022-11-14T13:15:00+01:00</lastmod>
+  </url><url>
+    <loc>https://matth.dmz42.org/tags/ctf/</loc>
+    <lastmod>2022-11-14T13:15:00+01:00</lastmod>
+  </url><url>
+    <loc>https://matth.dmz42.org/posts/2022/flare-on-9-writeups/</loc>
+    <lastmod>2022-11-14T13:15:00+01:00</lastmod>
+  </url><url>
+    <loc>https://matth.dmz42.org/posts/</loc>
+    <lastmod>2022-11-14T13:15:00+01:00</lastmod>
+  </url><url>
+    <loc>https://matth.dmz42.org/tags/reverse/</loc>
+    <lastmod>2022-11-14T13:15:00+01:00</lastmod>
+  </url><url>
+    <loc>https://matth.dmz42.org/tags/</loc>
+    <lastmod>2022-11-14T13:15:00+01:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/posts/2022/automatically-unpacking-icedid-stage1-with-angr/</loc>
     <lastmod>2022-05-30T09:15:00+02:00</lastmod>
@@ -13,18 +28,6 @@
   </url><url>
     <loc>https://matth.dmz42.org/tags/malware/</loc>
     <lastmod>2022-05-30T09:15:00+02:00</lastmod>
-  </url><url>
-    <loc>https://matth.dmz42.org/posts/</loc>
-    <lastmod>2022-05-30T09:15:00+02:00</lastmod>
-  </url><url>
-    <loc>https://matth.dmz42.org/tags/reverse/</loc>
-    <lastmod>2022-05-30T09:15:00+02:00</lastmod>
-  </url><url>
-    <loc>https://matth.dmz42.org/tags/</loc>
-    <lastmod>2022-05-30T09:15:00+02:00</lastmod>
-  </url><url>
-    <loc>https://matth.dmz42.org/tags/ctf/</loc>
-    <lastmod>2022-05-21T21:15:40+02:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/posts/2022/hackthebox-ctf-cyber-apocalypse-2022-intergalactic-chase-rev/</loc>
     <lastmod>2022-05-21T21:15:40+02:00</lastmod>
