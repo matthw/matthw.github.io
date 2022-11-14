@@ -117,10 +117,9 @@ flag: ```flareonisallaboutcats@flare-on.com```
 
 # 7. anode
 
-We're getting a big fat 55MB binary.
-After poking it a bit with a stick, it turns out it's a javascript script, packed with [nexe](https://github.com/nexe/nexe).
+We're getting a big fat 55MB binary which after poking a bit with a stick, turns out to be a javascript script, packed with [nexe](https://github.com/nexe/nexe).
 
-if we run ```strings``` on it we can actually see the script at the end along with the ```<nexe~~sentinel>``` marker.
+If we run ```strings``` on it we can actually see the script at the end along with the ```<nexe~~sentinel>``` marker.
 
 Unpacking (such big word...) the script using some random nexe unpacker or even with ```strings```, we're left with something like that:
 
@@ -230,20 +229,20 @@ void thiscall v8::base::RandomNumberGenerator::SetSeed(RandomNumberGenerator *th
 }
 ```
 
-We can see that it has indeed be patched to set the PRNG initial state to a fixed value, instead of anyting supplied to the SetSeed function.
+We can see that it has indeed be patched to set the PRNG initial state to a fixed value, instead of anyting supplied to the SetSeed() function.
 
 As compared to the original: [https://chromium.googlesource.com/v8/v8/+/6d706ae3a0153cf0272760132b775ae06ef13b1a/src/base/utils/random-number-generator.cc#207](https://chromium.googlesource.com/v8/v8/+/6d706ae3a0153cf0272760132b775ae06ef13b1a/src/base/utils/random-number-generator.cc#207)
 
 
 Lot of crazy ideas going into my head at this time, like reimplementing the PRNG and/or dumping all its (firsts) values, etc... 
 
-But all of these would also require me to dig more into the patched node.exe to find out what has been done to BigInt as well, nothing i wanted to do at the moment...
+But all of these would also require to dig more into the patched node.exe and also find out what has been done to BigInt as well, nothing i wanted to do at the moment...
 
 Since the script's logic is only valid when ran with the patched node.exe, if i wanted to debug the js, i needed a way to have a modified script executed by this binary.
 
-Turned out, you can edit the script straight inside the binary and you dont have to change anything else as long as its size doesn't change.
+Turned out, you can edit the script straight inside the binary and you don't have to change anything else as long as its size doesn't change.
 
-Handy and time for cringe...
+Handy, and now, time to cringe...
 
 
 In the extracted script, let's change this:
@@ -267,7 +266,7 @@ by
 
 ```
 
-so we can use ```l``` instead of ```console.log```: that should fit fine in all the useless whitespaces (aka indentations).
+so we can use ```l()``` instead of ```console.log()```: that should fit fine in all the useless whitespaces (aka indentations).
 
 Then use a stupid script make the JS print all operation:
 
@@ -347,7 +346,7 @@ with open("ppp_anode.exe", "wb") as fp:
 ```
 
 
-we then a new binary ```ppp_anode.exe```, which when executed produces a trace like:
+We get a new binary ```ppp_anode.exe```, which when executed produces a trace like:
 
 ```
 % head -20 conds.txt

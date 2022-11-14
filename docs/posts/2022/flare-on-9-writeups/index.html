@@ -25,7 +25,7 @@ The challenge that shall not be named
 Open script.js, starts with:
 import { WORDS } from &#34;./words.js&#34;; const NUMBER_OF_GUESSES = 6; const WORD_LENGTH = 21; const CORRECT_GUESS = 57; let guessesRemaining = NUMBER_OF_GUESSES; let currentGuess = []; let nextLetter = 0; let rightGuessString = WORDS[CORRECT_GUESS]; find correct flag condition:"><meta itemprop="datePublished" content="2022-11-14T13:15:00+01:00" />
 <meta itemprop="dateModified" content="2022-11-14T13:15:00+01:00" />
-<meta itemprop="wordCount" content="1799">
+<meta itemprop="wordCount" content="1800">
 <meta itemprop="keywords" content="reverse,ctf," /><meta property="og:title" content="Flare-On 9 Writeups" />
 <meta property="og:description" content="Here are (some ?) writeups for this year Flare-On challenge. I&rsquo;ll add more in the coming days.
 For reference here is my timing:
@@ -191,9 +191,8 @@ I&rsquo;ll add more in the coming days.</p>
 <h1 id="6-a-la-mode">6. a la mode<a href="#6-a-la-mode" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
 <p>(coming soon ?)</p>
 <h1 id="7-anode">7. anode<a href="#7-anode" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
-<p>We&rsquo;re getting a big fat 55MB binary.
-After poking it a bit with a stick, it turns out it&rsquo;s a javascript script, packed with <a href="https://github.com/nexe/nexe">nexe</a>.</p>
-<p>if we run <code>strings</code> on it we can actually see the script at the end along with the <code>&lt;nexe~~sentinel&gt;</code> marker.</p>
+<p>We&rsquo;re getting a big fat 55MB binary which after poking a bit with a stick, turns out to be a javascript script, packed with <a href="https://github.com/nexe/nexe">nexe</a>.</p>
+<p>If we run <code>strings</code> on it we can actually see the script at the end along with the <code>&lt;nexe~~sentinel&gt;</code> marker.</p>
 <p>Unpacking (such big word&hellip;) the script using some random nexe unpacker or even with <code>strings</code>, we&rsquo;re left with something like that:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="nx">readline</span><span class="p">.</span><span class="nx">question</span><span class="p">(</span><span class="sb">`Enter flag: `</span><span class="p">,</span> <span class="nx">flag</span> <span class="p">=&gt;</span> <span class="p">{</span> 
 </span></span><span class="line"><span class="cl">  <span class="nx">readline</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
@@ -283,13 +282,13 @@ uh-oh, math is too correct...
 </span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="n">undefined8</span><span class="p">)(</span><span class="n">this</span> <span class="o">+</span> <span class="mh">0x10</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0xce6a1a53db4c5403</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>We can see that it has indeed be patched to set the PRNG initial state to a fixed value, instead of anyting supplied to the SetSeed function.</p>
+</span></span></code></pre></div><p>We can see that it has indeed be patched to set the PRNG initial state to a fixed value, instead of anyting supplied to the SetSeed() function.</p>
 <p>As compared to the original: <a href="https://chromium.googlesource.com/v8/v8/+/6d706ae3a0153cf0272760132b775ae06ef13b1a/src/base/utils/random-number-generator.cc#207">https://chromium.googlesource.com/v8/v8/+/6d706ae3a0153cf0272760132b775ae06ef13b1a/src/base/utils/random-number-generator.cc#207</a></p>
 <p>Lot of crazy ideas going into my head at this time, like reimplementing the PRNG and/or dumping all its (firsts) values, etc&hellip;</p>
-<p>But all of these would also require me to dig more into the patched node.exe to find out what has been done to BigInt as well, nothing i wanted to do at the moment&hellip;</p>
+<p>But all of these would also require to dig more into the patched node.exe and also find out what has been done to BigInt as well, nothing i wanted to do at the moment&hellip;</p>
 <p>Since the script&rsquo;s logic is only valid when ran with the patched node.exe, if i wanted to debug the js, i needed a way to have a modified script executed by this binary.</p>
-<p>Turned out, you can edit the script straight inside the binary and you dont have to change anything else as long as its size doesn&rsquo;t change.</p>
-<p>Handy and time for cringe&hellip;</p>
+<p>Turned out, you can edit the script straight inside the binary and you don&rsquo;t have to change anything else as long as its size doesn&rsquo;t change.</p>
+<p>Handy, and now, time to cringe&hellip;</p>
 <p>In the extracted script, let&rsquo;s change this:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl">  <span class="c1">// something strange is happening...
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">if</span> <span class="p">(</span><span class="mi">1</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
@@ -303,7 +302,7 @@ uh-oh, math is too correct...
 </span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;uh-oh, math is too correct...&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span></code></pre></div><p>so we can use <code>l</code> instead of <code>console.log</code>: that should fit fine in all the useless whitespaces (aka indentations).</p>
+</span></span></code></pre></div><p>so we can use <code>l()</code> instead of <code>console.log()</code>: that should fit fine in all the useless whitespaces (aka indentations).</p>
 <p>Then use a stupid script make the JS print all operation:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">re</span>
 </span></span><span class="line"><span class="cl">
@@ -367,7 +366,7 @@ uh-oh, math is too correct...
 </span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">footer</span><span class="p">)</span>
-</span></span></code></pre></div><p>we then a new binary <code>ppp_anode.exe</code>, which when executed produces a trace like:</p>
+</span></span></code></pre></div><p>We get a new binary <code>ppp_anode.exe</code>, which when executed produces a trace like:</p>
 <pre tabindex="0"><code>% head -20 conds.txt
 b[29] -= b[37] + b[23] + b[22] + b[24] + b[26] + b[10] + 7
 b[29] &amp;= 0xFF
@@ -444,7 +443,7 @@ Type &#34;help&#34;, &#34;copyright&#34;, &#34;credits&#34; or &#34;license&#34;
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://matth.dmz42.org/tags/reverse">reverse</a></span><span class="tag"><a href="https://matth.dmz42.org/tags/ctf">ctf</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1799 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1800 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2022-11-14 13:15 &#43;0100</p>
 			</footer>
 		</article>
