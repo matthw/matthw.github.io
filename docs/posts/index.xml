@@ -109,7 +109,7 @@ we play another game?</p>
 <p>launching the executable, we get this fancy looking window.
 We need to click the right pixel, and we have 10 attempts.</p>
 <p><img src="2-pixel.png" alt="pixelpoker"></p>
-<p>Following the entry point, we find the main function, which in turn calls</p>
+<p>Following the entry point, we find the main function, which in turn calls the following function:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">FUN_00401120</span><span class="p">(</span><span class="n">HINSTANCE</span> <span class="n">param_1</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
@@ -117,7 +117,7 @@ We need to click the right pixel, and we have 10 attempts.</p>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">cbSize</span> <span class="o">=</span> <span class="mh">0x30</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">style</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">lpfnWndProc</span> <span class="o">=</span> <span class="n">WindowProc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">lpfnWndProc</span> <span class="o">=</span> <span class="n">WindowProc</span><span class="p">;</span>    <span class="cm">/* Window Procedure */</span>
 </span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">cbClsExtra</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">cbWndExtra</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">hInstance</span> <span class="o">=</span> <span class="n">param_1</span><span class="p">;</span>
@@ -127,10 +127,11 @@ We need to click the right pixel, and we have 10 attempts.</p>
 </span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">lpszMenuName</span> <span class="o">=</span> <span class="p">(</span><span class="n">LPCWSTR</span><span class="p">)</span><span class="mh">0x6d</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">lpszClassName</span> <span class="o">=</span> <span class="p">(</span><span class="n">LPCWSTR</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_004131b0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">hIconSm</span> <span class="o">=</span> <span class="n">LoadIconW</span><span class="p">(</span><span class="n">wc</span><span class="p">.</span><span class="n">hInstance</span><span class="p">,(</span><span class="n">LPCWSTR</span><span class="p">)</span><span class="mh">0x6c</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="n">RegisterClassExW</span><span class="p">(</span><span class="o">&amp;</span><span class="n">wc</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>which registers a window class, which lpfnWndProc pointing the Window Procedure, which will handle our window events.</p>
+</span></span></code></pre></div><p>which registers a window class, with <code>lpfnWndProc</code> pointing the Window Procedure that will handle our window events.</p>
 <p>References from MSDN:</p>
 <ul>
 <li><a href="https://learn.microsoft.com/en-us/windows/win32/learnwin32/writing-the-window-procedure">Writing the Window Procedure</a></li>
@@ -189,11 +190,11 @@ We need to click the right pixel, and we have 10 attempts.</p>
 </span></span><span class="line"><span class="cl">            <span class="n">ReleaseDC</span><span class="p">(</span><span class="n">hwnd</span><span class="p">,</span><span class="n">pHVar2</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span></code></pre></div><p>We can see than we the mouse is moved around the window (```WM_MOUSEMOVE``), the window title is updated with x/y coordinates.</p>
-<p>On the click event (``WM_LBUTTONDOWN```), there&rsquo;s a conditionnal check</p>
+</span></span></code></pre></div><p>We can see than we the mouse is moved around the window (<code>WM_MOUSEMOVE</code>), the window title is updated with x/y coordinates.</p>
+<p>On the click event (<code>WM_LBUTTONDOWN</code>), there&rsquo;s a conditionnal check:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">((</span><span class="n">px_x</span> <span class="o">==</span> <span class="n">s_FLARE</span><span class="o">-</span><span class="n">On_00412004</span><span class="p">.</span><span class="n">_0_4_</span> <span class="o">%</span> <span class="n">DAT_00413280</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">px_y</span> <span class="o">==</span> <span class="n">s_FLARE</span><span class="o">-</span><span class="n">On_00412004</span><span class="p">.</span><span class="n">_4_4_</span> <span class="o">%</span> <span class="n">DAT_00413284</span><span class="p">))</span> <span class="p">{</span>
 </span></span></code></pre></div><p>which leads further down to some RC4 routine.</p>
-<p>Let&rsquo;s run it in a debugger and patch the condition.</p>
+<p>Let&rsquo;s run it in a debugger and patch the 2 following conditionnal jumps.</p>
 <p><img src="2-patch1.png" alt="jumps"></p>
 <p>Fire x32dbg, set 2 breakpoints:</p>
 <pre tabindex="0"><code>bp 00401486
@@ -208,11 +209,11 @@ On the 2 breakpoints, modify the Zero Flag (ZF) and then watch the flag:</p>
 <p>&ldquo;If it crashes its user error.&rdquo;</p>
 <p>-Flare Team</p>
 <h2 id="42-solution">4.2 Solution</h2>
-<p>If we run the executable an arguments it prints something then exits:</p>
+<p>When we run the executable with an arguments it prints something and exits:</p>
 <pre tabindex="0"><code>C:\Users\me\Desktop&gt;darn_mice.exe aaa
 On your plate, you see four olives.
 You leave the room, and a mouse EATS one!
-</code></pre><p>We can find this string in ghidra and follow XREF to this function:</p>
+</code></pre><p>We can find these strings in ghidra and follow the XREF to this function:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="kr">__cdecl</span> <span class="nf">main</span><span class="p">(</span><span class="n">PUCHAR</span> <span class="n">input_string</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
@@ -294,7 +295,7 @@ You leave the room, and a mouse EATS one!
 </span></span><span class="line"><span class="cl">    <span class="n">check_stack_cookie</span><span class="p">(</span><span class="n">stack_cookie</span> <span class="o">^</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="o">&amp;</span><span class="n">stack0xfffffffc</span><span class="p">,</span><span class="n">uVar1</span><span class="p">,</span><span class="n">uVar2</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>we see that the input must be at least 35 characters</p>
+</span></span></code></pre></div><p>We see that the input must not be longer than 35 chrs (actually it must be 35 chrs).</p>
 <pre tabindex="0"><code>C:\Users\me\Desktop&gt;darn_mice.exe aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 On your plate, you see four olives.
 You leave the room, and a mouse EATS one!
@@ -311,10 +312,10 @@ You leave the room, and a mouse EATS one!
 </span></span><span class="line"><span class="cl">            <span class="p">(</span><span class="o">*</span><span class="n">buffer</span><span class="p">)();</span>
 </span></span><span class="line"><span class="cl">            <span class="n">print_str</span><span class="p">((</span><span class="n">wchar_t</span> <span class="o">*</span><span class="p">)</span><span class="n">s_Nibble</span><span class="p">...</span><span class="n">_00419098</span><span class="p">,(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">buffer</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span></code></pre></div><p>The goal is to end up with valid instructions so the loop can continue and finally decrypt our flag.</p>
+</span></span></code></pre></div><p>The goal is to end up with valid instructions so the execution doesn&rsquo;t crash and the loop can continue and finally decrypt our flag.</p>
 <p>We can&rsquo;t just patch it since the decryption key is our input value.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">decrypt_string</span><span class="p">(</span><span class="n">ENCRYPTED_STRING</span><span class="p">,</span><span class="n">SIZE</span><span class="p">,</span><span class="n">input_string</span><span class="p">,(</span><span class="n">PUCHAR</span><span class="p">)</span><span class="n">s_salty_004190c4</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">ENCRYPTED_STRING</span><span class="p">,</span><span class="n">SIZE</span><span class="p">);</span>
-</span></span></code></pre></div><p>Let&rsquo;s write some <code>ret</code> instructions, so we return from the CALL and keep looping.</p>
+</span></span></code></pre></div><p>The idea is to write some <code>ret</code> instructions in the buffer, so once executed, it just returns from the CALL.</p>
 <p><img src="4-call.png" alt="call"></p>
 <p>The opcode <code>RET</code> is 32 bits:</p>
 <pre tabindex="0"><code>% rz-asm -b 32 &#34;ret&#34;

@@ -112,7 +112,7 @@ We need to click the right pixel, and we have 10 attempts.
 
 ![pixelpoker](2-pixel.png)
 
-Following the entry point, we find the main function, which in turn calls
+Following the entry point, we find the main function, which in turn calls the following function:
 
 ```C
 void FUN_00401120(HINSTANCE param_1)
@@ -122,7 +122,7 @@ void FUN_00401120(HINSTANCE param_1)
 
     wc.cbSize = 0x30;
     wc.style = 3;
-    wc.lpfnWndProc = WindowProc;
+    wc.lpfnWndProc = WindowProc;    /* Window Procedure */
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
     wc.hInstance = param_1;
@@ -132,12 +132,13 @@ void FUN_00401120(HINSTANCE param_1)
     wc.lpszMenuName = (LPCWSTR)0x6d;
     wc.lpszClassName = (LPCWSTR)&DAT_004131b0;
     wc.hIconSm = LoadIconW(wc.hInstance,(LPCWSTR)0x6c);
+
     RegisterClassExW(&wc);
     return;
 }
 ```
 
-which registers a window class, which lpfnWndProc pointing the Window Procedure, which will handle our window events.
+which registers a window class, with ```lpfnWndProc``` pointing the Window Procedure that will handle our window events.
 
 References from MSDN:
 - [Writing the Window Procedure](https://learn.microsoft.com/en-us/windows/win32/learnwin32/writing-the-window-procedure)
@@ -201,9 +202,9 @@ LRESULT WindowProc(HWND hwnd,uint uMsg,WPARAM wParam,LPARAM lpParam)
         }
 ```
 
-We can see than we the mouse is moved around the window (```WM_MOUSEMOVE``), the window title is updated with x/y coordinates.
+We can see than we the mouse is moved around the window (```WM_MOUSEMOVE```), the window title is updated with x/y coordinates.
 
-On the click event (``WM_LBUTTONDOWN```), there's a conditionnal check
+On the click event (```WM_LBUTTONDOWN```), there's a conditionnal check:
 
 ```C
 if ((px_x == s_FLARE-On_00412004._0_4_ % DAT_00413280) && (px_y == s_FLARE-On_00412004._4_4_ % DAT_00413284)) {
@@ -211,7 +212,7 @@ if ((px_x == s_FLARE-On_00412004._0_4_ % DAT_00413280) && (px_y == s_FLARE-On_00
 
 which leads further down to some RC4 routine.
 
-Let's run it in a debugger and patch the condition.
+Let's run it in a debugger and patch the 2 following conditionnal jumps.
 
 ![jumps](2-patch1.png)
 
@@ -247,7 +248,7 @@ On the 2 breakpoints, modify the Zero Flag (ZF) and then watch the flag:
 
 ## 4.2 Solution
 
-If we run the executable an arguments it prints something then exits:
+When we run the executable with an arguments it prints something and exits:
 
 ```
 C:\Users\me\Desktop>darn_mice.exe aaa
@@ -255,7 +256,7 @@ On your plate, you see four olives.
 You leave the room, and a mouse EATS one!
 ```
 
-We can find this string in ghidra and follow XREF to this function:
+We can find these strings in ghidra and follow the XREF to this function:
 
 ```C
 
@@ -342,7 +343,7 @@ void __cdecl main(PUCHAR input_string)
 
 ```
 
-we see that the input must be at least 35 characters
+We see that the input must not be longer than 35 chrs (actually it must be 35 chrs).
 
 ```
 C:\Users\me\Desktop>darn_mice.exe aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -370,7 +371,7 @@ The buffer is then executed.
         }
 ```
 
-The goal is to end up with valid instructions so the loop can continue and finally decrypt our flag.
+The goal is to end up with valid instructions so the execution doesn't crash and the loop can continue and finally decrypt our flag.
 
 We can't just patch it since the decryption key is our input value.
 
@@ -378,7 +379,7 @@ We can't just patch it since the decryption key is our input value.
 decrypt_string(ENCRYPTED_STRING,SIZE,input_string,(PUCHAR)s_salty_004190c4,(int)ENCRYPTED_STRING,SIZE);
 ```
 
-Let's write some ```ret``` instructions, so we return from the CALL and keep looping.
+The idea is to write some ```ret``` instructions in the buffer, so once executed, it just returns from the CALL.
 
 ![call](4-call.png)
 
