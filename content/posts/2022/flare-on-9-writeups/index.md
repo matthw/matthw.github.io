@@ -569,7 +569,7 @@ Classic malware technique to hide imports, and build them at runtime.
 Following XREF of what we called ```init_imports```, we find a function starting a new thread:
 
 ```C
-undefined4 dll_main(undefined4 param_1,int param_2)
+undefined4 DllMain(undefined4 param_1,int param_2)
 
 {
     if (param_2 == 1) {

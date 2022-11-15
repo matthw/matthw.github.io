@@ -533,7 +533,7 @@ b&#39;ConnectNamedPipe&#39;
 export table.</p>
 <p>Classic malware technique to hide imports, and build them at runtime.</p>
 <p>Following XREF of what we called <code>init_imports</code>, we find a function starting a new thread:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">undefined4</span> <span class="nf">dll_main</span><span class="p">(</span><span class="n">undefined4</span> <span class="n">param_1</span><span class="p">,</span><span class="kt">int</span> <span class="n">param_2</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">undefined4</span> <span class="nf">DllMain</span><span class="p">(</span><span class="n">undefined4</span> <span class="n">param_1</span><span class="p">,</span><span class="kt">int</span> <span class="n">param_2</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">param_2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
