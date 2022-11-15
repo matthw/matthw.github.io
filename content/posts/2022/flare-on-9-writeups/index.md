@@ -47,6 +47,15 @@ For reference here is my timing:
 
 # 1. Flaredle
 
+## 1.1 Challenge Prompt
+
+Welcome to Flare-On 9!
+
+You probably won't win. Maybe you're like us and spent the year playing Wordle. We made our own version that is too
+hard to beat without cheating.
+
+## 1.2 Solution
+
 Small javascript webapp where we need to guess a word.
 
 Open ```script.js```, starts with:
@@ -91,7 +100,136 @@ flag: ```flareonisallaboutcats@flare-on.com```
 
 # 2. PixelPoker
 
-(who knows when ?)
+## 2.1 Challenge Prompt
+
+I said you wouldn't win that last one. I lied. The last challenge was basically a captcha. Now the real work begins. Shall
+we play another game?
+
+## 2.2 Solution
+
+launching the executable, we get this fancy looking window.
+We need to click the right pixel, and we have 10 attempts.
+
+![pixelpoker](2-pixel.png)
+
+Following the entry point, we find the main function, which in turn calls
+
+```C
+void FUN_00401120(HINSTANCE param_1)
+
+{
+    WNDCLASSEXW wc;
+
+    wc.cbSize = 0x30;
+    wc.style = 3;
+    wc.lpfnWndProc = WindowProc;
+    wc.cbClsExtra = 0;
+    wc.cbWndExtra = 0;
+    wc.hInstance = param_1;
+    wc.hIcon = LoadIconW(param_1,(LPCWSTR)0x6b);
+    wc.hCursor = LoadCursorW(NULL,(LPCWSTR)0x7f00);
+    wc.hbrBackground = (HBRUSH)0x6;
+    wc.lpszMenuName = (LPCWSTR)0x6d;
+    wc.lpszClassName = (LPCWSTR)&DAT_004131b0;
+    wc.hIconSm = LoadIconW(wc.hInstance,(LPCWSTR)0x6c);
+    RegisterClassExW(&wc);
+    return;
+}
+```
+
+which registers a window class, which lpfnWndProc pointing the Window Procedure, which will handle our window events.
+
+References from MSDN:
+- [Writing the Window Procedure](https://learn.microsoft.com/en-us/windows/win32/learnwin32/writing-the-window-procedure)
+- [WM_LBUTTONDOWN message](https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-lbuttondown)
+
+
+With the above references, we can retype the WindowProc prototype in ghidra, as well as use the appropriate WM_* constants on the ```uMsg``` comparisons and then focus on the click events:
+
+```C
+LRESULT WindowProc(HWND hwnd,uint uMsg,WPARAM wParam,LPARAM lpParam)
+
+{
+    // snip
+
+        sVar1 = (short)((uint)lpParam >> 0x10);
+
+        if (uMsg == WM_MOUSEMOVE) {
+            update_window_title(buff,0x104,"PixelPoker (%d,%d) - #%d/%d",(int)(short)lpParam,(int)sVar1,TRIES,10);
+            SetWindowTextA(hwnd,buff);
+            return 0;
+        }
+
+        if (uMsg == WM_LBUTTONDOWN) {
+            px_x = (uint)(short)lpParam;
+            px_y = (uint)sVar1;
+            if (TRIES == 10) {
+                MessageBoxA(NULL,"Womp womp... :(","Please play again!",0);
+                DestroyWindow(hwnd);
+            }
+            else {
+                TRIES = TRIES + 1;
+                if ((px_x == s_FLARE-On_00412004._0_4_ % DAT_00413280) && (px_y == s_FLARE-On_00412004._4_4_ % DAT_00413284)) {
+                    if (0 < (int)DAT_00413284) {
+                        iVar7 = 0;
+                        uVar4 = DAT_00413280;
+                        uVar5 = DAT_00413284;
+                        do {
+                            iVar6 = 0;
+                            if (0 < (int)uVar4) {
+                                do {
+                                    FUN_004015d0(iVar6,iVar7);
+                                    iVar6 = iVar6 + 1;
+                                    uVar4 = DAT_00413280;
+                                    uVar5 = DAT_00413284;
+                                } while (iVar6 < (int)DAT_00413280);
+                            }
+                            iVar7 = iVar7 + 1;
+                        } while (iVar7 < (int)uVar5);
+                    }
+                }
+                else if ((px_x < DAT_00413280) && (px_y < DAT_00413284)) {
+                    FUN_004015d0(px_x,px_y);
+                }
+            }
+            update_window_title(buff,0x104,"PixelPoker (%d,%d) - #%d/%d",px_x,px_y,TRIES,10);
+            SetWindowTextA(hwnd,buff);
+            pHVar2 = GetDC(hwnd);
+            BitBlt(pHVar2,0,0,DAT_00413280,DAT_00413284,DAT_00413278,0,0,0xcc0020);
+            ReleaseDC(hwnd,pHVar2);
+            return 0;
+        }
+```
+
+We can see than we the mouse is moved around the window (```WM_MOUSEMOVE``), the window title is updated with x/y coordinates.
+
+On the click event (``WM_LBUTTONDOWN```), there's a conditionnal check
+
+```C
+if ((px_x == s_FLARE-On_00412004._0_4_ % DAT_00413280) && (px_y == s_FLARE-On_00412004._4_4_ % DAT_00413284)) {
+```
+
+which leads further down to some RC4 routine.
+
+Let's run it in a debugger and patch the condition.
+
+![jumps](2-patch1.png)
+
+Fire x32dbg, set 2 breakpoints:
+
+```
+bp 00401486
+bp 0040149d
+```
+
+Continue execution and click anywhere.
+On the 2 breakpoints, modify the Zero Flag (ZF) and then watch the flag:
+
+![flag](2-flag.png)
+
+
+
+
 
 
 # 3. Magic 8 Ball
@@ -101,7 +239,212 @@ flag: ```flareonisallaboutcats@flare-on.com```
 
 # 4. darn_mice
 
-(probably anytime soon ?)
+## 4.1 Challenge Prompt
+
+"If it crashes its user error."
+
+-Flare Team
+
+## 4.2 Solution
+
+If we run the executable an arguments it prints something then exits:
+
+```
+C:\Users\me\Desktop>darn_mice.exe aaa
+On your plate, you see four olives.
+You leave the room, and a mouse EATS one!
+```
+
+We can find this string in ghidra and follow XREF to this function:
+
+```C
+
+void __cdecl main(PUCHAR input_string)
+
+{
+    size_t len;
+    undefined extraout_DL;
+    undefined extraout_DL_00;
+    undefined uVar1;
+    undefined uVar2;
+    uint n;
+    char some_array [36];
+    uint stack_cookie;
+    code *buffer;
+    
+    stack_cookie = DAT_00419178 ^ (uint)&stack0xfffffffc;
+    buffer = NULL;
+    some_array[0] = '\x50';
+    some_array[1] = 0x5e;
+    some_array[2] = 0x5e;
+    some_array[3] = 0xa3;
+    some_array[4] = 0x4f;
+    some_array[5] = 0x5b;
+    some_array[6] = 0x51;
+    some_array[7] = 0x5e;
+    some_array[8] = 0x5e;
+    some_array[9] = 0x97;
+    some_array[10] = 0xa3;
+    some_array[11] = 0x80;
+    some_array[12] = 0x90;
+    some_array[13] = 0xa3;
+    some_array[14] = 0x80;
+    some_array[15] = 0x90;
+    some_array[16] = 0xa3;
+    some_array[17] = 0x80;
+    some_array[18] = 0x90;
+    some_array[19] = 0xa3;
+    some_array[20] = 0x80;
+    some_array[21] = 0x90;
+    some_array[22] = 0xa3;
+    some_array[23] = 0x80;
+    some_array[24] = 0x90;
+    some_array[25] = 0xa3;
+    some_array[26] = 0x80;
+    some_array[27] = 0x90;
+    some_array[28] = 0xa3;
+    some_array[29] = 0x80;
+    some_array[30] = 0x90;
+    some_array[31] = 0xa2;
+    some_array[32] = 0xa3;
+    some_array[33] = 0x6b;
+    some_array[34] = 0x7f;
+    some_array[35] = 0;
+
+    print_str((wchar_t *)s_On_your_plate,_you_see_four_oliv_00419034,NULL);
+
+    /* input length must be 35 chrs */
+    len = _strlen((char *)input_string);
+    if ((len == 0) || (35 < len)) {
+        print_str((wchar_t *)s_No,_nevermind._0041905c,(char *)buffer);
+        uVar2 = SUB41(buffer,0);
+        uVar1 = extraout_DL;
+    }
+    else {
+        print_str((wchar_t *)s_You_leave_the_room,_and_a_mouse_E_0041906c,(char *)buffer);
+        for (n = 0; ((uVar2 = SUB41(buffer,0), n < 36 && (some_array[n] != '\0')) && (input_string[n] != '\0')); n = n + 1) {
+                    /* allocate buffer */
+            buffer = (code *)VirtualAlloc(NULL,0x1000,0x3000,0x40);
+                    /* write byte to buffer */
+            *buffer = (code)(some_array[n] + input_string[n]);
+                    /* execute buffer */
+            (*buffer)();
+            print_str((wchar_t *)s_Nibble..._00419098,(char *)buffer);
+        }
+        print_str((wchar_t *)s_When_you_return,_you_only:_%s_004190a4,(char *)input_string);
+        decrypt_string(ENCRYPTED_STRING,SIZE,input_string,(PUCHAR)s_salty_004190c4,(int)ENCRYPTED_STRING,SIZE);
+        print_str((wchar_t *)s_%s_004190cc,(char *)ENCRYPTED_STRING);
+        uVar1 = extraout_DL_00;
+    }
+    check_stack_cookie(stack_cookie ^ (uint)&stack0xfffffffc,uVar1,uVar2);
+    return;
+}
+
+```
+
+we see that the input must be at least 35 characters
+
+```
+C:\Users\me\Desktop>darn_mice.exe aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+On your plate, you see four olives.
+You leave the room, and a mouse EATS one!
+```
+
+doing in the same in x32dbg, we see that it crashes:
+
+![crash](4-crash.png)
+
+What actually happens is that for each input character, a buffer is allocated using ```VirtualAlloc()``` and that char value is added to a value of an array element and written to the allocated buffer.
+
+The buffer is then executed.
+
+```C
+        for (n = 0; ((uVar2 = SUB41(buffer,0), n < 36 && (some_array[n] != '\0')) && (input_string[n] != '\0')); n = n + 1) {
+                    /* allocate buffer */
+            buffer = (code *)VirtualAlloc(NULL,0x1000,0x3000,0x40);
+                    /* write byte to buffer */
+            *buffer = (code)(some_array[n] + input_string[n]);
+                    /* execute buffer */
+            (*buffer)();
+            print_str((wchar_t *)s_Nibble..._00419098,(char *)buffer);
+        }
+```
+
+The goal is to end up with valid instructions so the loop can continue and finally decrypt our flag.
+
+We can't just patch it since the decryption key is our input value.
+
+```C
+decrypt_string(ENCRYPTED_STRING,SIZE,input_string,(PUCHAR)s_salty_004190c4,(int)ENCRYPTED_STRING,SIZE);
+```
+
+Let's write some ```ret``` instructions, so we return from the CALL and keep looping.
+
+![call](4-call.png)
+
+The opcode ```RET``` is 32 bits:
+
+```
+% rz-asm -b 32 "ret"
+c3
+```
+
+so we need ```array_value[n] + input_value[n] == 0xc3```
+
+```python
+>>> dat = [ 0x50, 0x5e, 0x5e, 0xa3, 0x4f, 0x5b, 0x51, 0x5e, 0x5e, 0x97, 0xa3, 0x80, 0x90, 0xa3, 0x80, 0x90, 0xa3, 0x80, 0x90, 0xa3, 0x80, 0x90, 0xa3, 0x80, 0x90, 0xa3, 0x80, 0x90, 0xa3, 0x80, 0x90, 0xa2, 0xa3, 0x6b, 0x7f ]
+>>> ''.join([chr(0xc3 - _) for _ in dat])
+'see three, C3 C3 C3 C3 C3 C3 C3! XD'
+```
+
+use it as input and get the flag:
+
+```
+C:\Users\me\Desktop>darn_mice.exe "see three, C3 C3 C3 C3 C3 C3 C3! XD"
+On your plate, you see four olives.
+You leave the room, and a mouse EATS one!
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+When you return, you only: see three, C3 C3 C3 C3 C3 C3 C3! XD
+i_w0uld_l1k3_to_RETurn_this_joke@flare-on.com
+```
+
+
+
+
 
 
 # 5. T8
@@ -111,11 +454,252 @@ flag: ```flareonisallaboutcats@flare-on.com```
 
 # 6. a la mode
 
-(coming soon ?)
+## 6.1 Challenge Prompt
+
+FLARE FACT #824: Disregard flare fact #823 if you are a .NET Reverser too.
+We will now reward your fantastic effort with a small binary challenge. You've earned it kid!
+
+## 6.2 Solution
+
+We get 2 files:
+- HowDoesThisWork.dll
+- IR chat log.txt
+
+```
+[FLARE Team]  Hey IR Team, it looks like this sample has some other binary that might
+              interact with it, do you have any other files that might be of help.
+
+[IR Team]     Nope, sorry this is all we got from the client, let us know what you got.
+```
+
+Looking at the dll in dnSpy, we can see this:
+
+![dnSpy](6-dnspy.png)
+
+It's basically a client to client for named pipe, that will send a **password** and get something back.
+Nothing else, and actually nothing much we can do with...
+
+Let's change our perspective and open the same dll with ghidra.
+
+Inspecting the strings, we can see a serie of weird looking strings:
+
+![suspicious strings](6-strings.png)
+
+Following XREF, we end up in a function where all or most those strings are used as a parameter to the same function:
+
+```C
+void init_imports(void)
+
+{
+    int kernel32;
+    int func_name;
+    
+    _g_memset = wr_memset;
+    g_strcmp = wr_strcmp;
+    g_strcpy = wr_strcpy;
+    kernel32 = get_kernel32();
+    func_name = XOR_17((byte *)s_T{xdr_vys{r_10015060,(int)&DAT_10015a50);
+    CloseHandle = get_proc(kernel32,func_name);
+    func_name = XOR_17((byte *)s_TxyyrtcYvzrsG~gr_10015070,(int)&DAT_10015a50);
+    ConnectNamedPipe = get_proc(kernel32,func_name);
+    func_name = XOR_17((byte *)s_TervcrYvzrsG~grV_10015084,(int)&DAT_10015a50);
+    CreateNamedPipeA = get_proc(kernel32,func_name);
+    func_name = XOR_17((byte *)s_TervcrC_ervs_10015098,(int)&DAT_10015a50);
+    CreateThread = get_proc(kernel32,func_name);
+    func_name = XOR_17((byte *)s_S~dtxyyrtcYvzrsG~gr_100150a8,(int)&DAT_10015a50);
+    DisconnectNamedPipe = get_proc(kernel32,func_name);
+    func_name = XOR_17((byte *)s_Q{bd_Q~{rUbqqred_100150bc,(int)&DAT_10015a50);
+    FlushFileBuffers = get_proc(kernel32,func_name);
+    func_name = XOR_17((byte *)s_Prc[vdcReexe_100150d0,(int)&DAT_10015a50);
+    GetLastError = get_proc(kernel32,func_name);
+    func_name = XOR_17((byte *)s_PrcGextrdd_rvg_100150e0,(int)&DAT_10015a50);
+    GetProcessHeap = get_proc(kernel32,func_name);
+    func_name = XOR_17((byte *)s_{dcetzgV_100150f0,(int)&DAT_10015a50);
+    lstrcmpA = get_proc(kernel32,func_name);
+    func_name = XOR_17((byte *)s_ErvsQ~{r_100150fc,(int)&DAT_10015a50);
+    ReadFile = get_proc(kernel32,func_name);
+    func_name = XOR_17((byte *)s_@e~crQ~{r_10015108,(int)&DAT_10015a50);
+    WriteFile = get_proc(kernel32,func_name);
+    return;
+}
+
+```
+
+The function i call ```XOR_17``` is just xoring the strings with 0x17:
+
+```C
+int __cdecl XOR_17(byte *param_1,int param_2)
+
+{
+    byte bVar1;
+    int iVar2;
+    int iVar3;
+    
+    iVar2 = 0;
+    bVar1 = *param_1;
+    if (bVar1 != 0) {
+        iVar3 = param_2 - (int)param_1;
+        do {
+            iVar2 = iVar2 + 1;
+            param_1[iVar3] = bVar1 ^ 0x17;
+            param_1 = param_1 + 1;
+            bVar1 = *param_1;
+        } while (bVar1 != 0);
+    }
+    *(undefined *)(iVar2 + param_2) = 0;
+    return param_2;
+}
+```
+
+it's easy then to decrypt all those strings:
+
+```
+>>> xor("TxyyrtcYvzrsG~gr", 0x17)
+b'ConnectNamedPipe'
+```
+
+etc...
+
+The decrypted string is passed to a function, which will return a pointer to the given function by accessing the PEB->PEB_LDR_DATA->InMemoryOrderModuleList and then walking the
+export table.
+
+Classic malware technique to hide imports, and build them at runtime.
+
+
+Following XREF of what we called ```init_imports```, we find a function starting a new thread:
+
+```C
+undefined4 dll_main(undefined4 param_1,int param_2)
+
+{
+    if (param_2 == 1) {
+        init_imports();
+        (*CreateThread)(0,0,do_stuff_with_pipe,0,0,0);
+    }
+    return 1;
+}
+```
+
+the thread will create the named pipe, read 64 bytes from it and call a ```check_password``` function:
+
+```C
+undefined4 do_stuff_with_pipe(void)
+
+{
+    int hFile;
+    int iVar1;
+    undefined4 uVar2;
+    undefined4 uVar3;
+    undefined4 uVar4;
+    undefined4 uVar5;
+    undefined4 uVar6;
+    undefined4 uVar7;
+    undefined4 uVar8;
+    undefined lpBuffer [64];
+    undefined local_10 [4];
+    undefined4 local_c;
+    int lpNumberOfBytesRead;
+    
+    _memset(lpBuffer,0,0x40);
+    (*GetProcessHeap)();
+    uVar8 = 0;
+    uVar7 = 0;
+    uVar6 = 0x40;
+    uVar5 = 0x40;
+    uVar4 = 0xff;
+    uVar3 = 6;
+    uVar2 = 3;
+                    /* '\\.\pipe\FlareOn' */
+    hFile = XOR_17((byte *)s_KK9Kg~grKQ{verXy_1001504c,(int)&DAT_100159d8);
+    hFile = (*CreateNamedPipeA)(hFile,uVar2,uVar3,uVar4,uVar5,uVar6,uVar7,uVar8);
+    if (hFile != -1) {
+        iVar1 = (*ConnectNamedPipe)(hFile,0);
+        if (iVar1 == 0) {
+            (*GetLastError)();
+        }
+        iVar1 = (*ReadFile)(hFile,lpBuffer,0x40,&lpNumberOfBytesRead,0);
+        if ((iVar1 == 0) || (lpNumberOfBytesRead == 0)) {
+            (*GetLastError)();
+        }
+        else {
+            (*FlushFileBuffers)(hFile);
+            lpBuffer[lpNumberOfBytesRead] = 0;
+            check_password(lpBuffer,&local_c);
+            (*WriteFile)(hFile,lpBuffer,local_c,local_10,0);
+        }
+        (*FlushFileBuffers)(hFile);
+        (*DisconnectNamedPipe)(hFile);
+        (*CloseHandle)(hFile);
+    }
+    return 0;
+}
+```
+
+
+```check_password``` will initialize a RC4 keystream using the key ```{ 0x55, 0x8b, 0xec, 0x83, 0xec, 0x20, 0xeb, 0xfe }```, use it to decrypt the password and then decrypt the flag.
+
+
+```C
+bool __cdecl check_password(undefined4 password,undefined4 *param_2)
+
+{
+    int iVar1;
+    byte *pbVar2;
+    uint local_40c [258];
+
+    rc4_init(local_40c,(int)RC4KEY,8);
+    rc4_crypt(local_40c,(int)PASSWORD,9);
+    iVar1 = (*lstrcmpA)(PASSWORD,password);
+    if (iVar1 == 0) {
+        pbVar2 = FLAG;
+        rc4_crypt(local_40c,(int)FLAG,0x1f);
+        *param_2 = 0x1f;
+    }
+    else {
+        *param_2 = 0x15;
+                    /* b'Authorization Failed' */
+        pbVar2 = (byte *)XOR_17((byte *)s_Vbc_xe~mvc~xy7Qv~{rs_10015034,(int)&DAT_100159d8);
+    }
+    (*g_strcpy)(password,pbVar2);
+    return iVar1 == 0;
+}
+```
+
+We can replicate that in python:
+
+```python
+from Crypto.Cipher import ARC4
+
+
+RC4KEY = b'\x55\x8b\xec\x83\xec\x20\xeb\xfe'
+PASSWORD = b'\x3e\x39\x51\xfb\xa2\x11\xf7\xb9\x2c'
+FLAG = b'\xe1\x60\xa1\x18\x93\x2e\x96\xad\x73\xbb\x4a\x92\xde\x18\x0a\xaa\x41\x74\xad\xc0\x1d\x9f\x3f\x19\xff\x2b\x02\xdb\xd1\xcd\x1a'
+
+c = ARC4.new(RC4KEY)
+
+#do not re-init the stream
+print(c.decrypt(PASSWORD))
+print(c.decrypt(FLAG))
+```
+
+
+this gives use the password and the flag:
+
+```
+ python slv.py
+b'MyV0ic3!\x00'
+b'M1x3d_M0dE_4_l1f3@flare-on.com\x00'
+```
 
 
 
 # 7. anode
+
+## 7.1 Challenge Prompt
+
+You've made it so far! I can't believe it! And so many people are ahead of you!
+
+## 7.2 Solution
 
 We're getting a big fat 55MB binary which after poking a bit with a stick, turns out to be a javascript script, packed with [nexe](https://github.com/nexe/nexe).
 

@@ -28,9 +28,8 @@ backdoor
 encryptor
 Nur getraumt
 The challenge that shall not be named
-1. Flaredle Small javascript webapp where we need to guess a word.
-Open script.js, starts with:
-import { WORDS } from &amp;#34;./words.js&amp;#34;; const NUMBER_OF_GUESSES = 6; const WORD_LENGTH = 21; const CORRECT_GUESS = 57; let guessesRemaining = NUMBER_OF_GUESSES; let currentGuess = []; let nextLetter = 0; let rightGuessString = WORDS[CORRECT_GUESS]; find correct flag condition:</description>
+1. Flaredle 1.1 Challenge Prompt Welcome to Flare-On 9!
+You probably won&amp;rsquo;t win. Maybe you&amp;rsquo;re like us and spent the year playing Wordle. We made our own version that is too hard to beat without cheating.</description>
 			<content type="html"><![CDATA[<p>Here are (some ?) writeups for this year Flare-On challenge.
 I&rsquo;ll add more in the coming days.</p>
 <p>For reference here is my timing:</p>
@@ -72,6 +71,11 @@ I&rsquo;ll add more in the coming days.</p>
 </li>
 </ol>
 <h1 id="1-flaredle">1. Flaredle</h1>
+<h2 id="11-challenge-prompt">1.1 Challenge Prompt</h2>
+<p>Welcome to Flare-On 9!</p>
+<p>You probably won&rsquo;t win. Maybe you&rsquo;re like us and spent the year playing Wordle. We made our own version that is too
+hard to beat without cheating.</p>
+<h2 id="12-solution">1.2 Solution</h2>
 <p>Small javascript webapp where we need to guess a word.</p>
 <p>Open <code>script.js</code>, starts with:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">WORDS</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&#34;./words.js&#34;</span><span class="p">;</span>
@@ -98,16 +102,461 @@ I&rsquo;ll add more in the coming days.</p>
 </span></span><span class="line"><span class="cl">    58		<span class="s1">&#39;flareonisallaboutcats&#39;</span>,
 </span></span></code></pre></div><p>flag: <code>flareonisallaboutcats@flare-on.com</code></p>
 <h1 id="2-pixelpoker">2. PixelPoker</h1>
-<p>(who knows when ?)</p>
+<h2 id="21-challenge-prompt">2.1 Challenge Prompt</h2>
+<p>I said you wouldn&rsquo;t win that last one. I lied. The last challenge was basically a captcha. Now the real work begins. Shall
+we play another game?</p>
+<h2 id="22-solution">2.2 Solution</h2>
+<p>launching the executable, we get this fancy looking window.
+We need to click the right pixel, and we have 10 attempts.</p>
+<p><img src="2-pixel.png" alt="pixelpoker"></p>
+<p>Following the entry point, we find the main function, which in turn calls</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">FUN_00401120</span><span class="p">(</span><span class="n">HINSTANCE</span> <span class="n">param_1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">WNDCLASSEXW</span> <span class="n">wc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">cbSize</span> <span class="o">=</span> <span class="mh">0x30</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">style</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">lpfnWndProc</span> <span class="o">=</span> <span class="n">WindowProc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">cbClsExtra</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">cbWndExtra</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">hInstance</span> <span class="o">=</span> <span class="n">param_1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">hIcon</span> <span class="o">=</span> <span class="n">LoadIconW</span><span class="p">(</span><span class="n">param_1</span><span class="p">,(</span><span class="n">LPCWSTR</span><span class="p">)</span><span class="mh">0x6b</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">hCursor</span> <span class="o">=</span> <span class="n">LoadCursorW</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,(</span><span class="n">LPCWSTR</span><span class="p">)</span><span class="mh">0x7f00</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">hbrBackground</span> <span class="o">=</span> <span class="p">(</span><span class="n">HBRUSH</span><span class="p">)</span><span class="mh">0x6</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">lpszMenuName</span> <span class="o">=</span> <span class="p">(</span><span class="n">LPCWSTR</span><span class="p">)</span><span class="mh">0x6d</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">lpszClassName</span> <span class="o">=</span> <span class="p">(</span><span class="n">LPCWSTR</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_004131b0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">wc</span><span class="p">.</span><span class="n">hIconSm</span> <span class="o">=</span> <span class="n">LoadIconW</span><span class="p">(</span><span class="n">wc</span><span class="p">.</span><span class="n">hInstance</span><span class="p">,(</span><span class="n">LPCWSTR</span><span class="p">)</span><span class="mh">0x6c</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">RegisterClassExW</span><span class="p">(</span><span class="o">&amp;</span><span class="n">wc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>which registers a window class, which lpfnWndProc pointing the Window Procedure, which will handle our window events.</p>
+<p>References from MSDN:</p>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/learnwin32/writing-the-window-procedure">Writing the Window Procedure</a></li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-lbuttondown">WM_LBUTTONDOWN message</a></li>
+</ul>
+<p>With the above references, we can retype the WindowProc prototype in ghidra, as well as use the appropriate WM_* constants on the <code>uMsg</code> comparisons and then focus on the click events:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">LRESULT</span> <span class="nf">WindowProc</span><span class="p">(</span><span class="n">HWND</span> <span class="n">hwnd</span><span class="p">,</span><span class="n">uint</span> <span class="n">uMsg</span><span class="p">,</span><span class="n">WPARAM</span> <span class="n">wParam</span><span class="p">,</span><span class="n">LPARAM</span> <span class="n">lpParam</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// snip
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">        <span class="n">sVar1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">short</span><span class="p">)((</span><span class="n">uint</span><span class="p">)</span><span class="n">lpParam</span> <span class="o">&gt;&gt;</span> <span class="mh">0x10</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">uMsg</span> <span class="o">==</span> <span class="n">WM_MOUSEMOVE</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">update_window_title</span><span class="p">(</span><span class="n">buff</span><span class="p">,</span><span class="mh">0x104</span><span class="p">,</span><span class="s">&#34;PixelPoker (%d,%d) - #%d/%d&#34;</span><span class="p">,(</span><span class="kt">int</span><span class="p">)(</span><span class="kt">short</span><span class="p">)</span><span class="n">lpParam</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">sVar1</span><span class="p">,</span><span class="n">TRIES</span><span class="p">,</span><span class="mi">10</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">SetWindowTextA</span><span class="p">(</span><span class="n">hwnd</span><span class="p">,</span><span class="n">buff</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">uMsg</span> <span class="o">==</span> <span class="n">WM_LBUTTONDOWN</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">px_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint</span><span class="p">)(</span><span class="kt">short</span><span class="p">)</span><span class="n">lpParam</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">px_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="n">sVar1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">TRIES</span> <span class="o">==</span> <span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">MessageBoxA</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="s">&#34;Womp womp... :(&#34;</span><span class="p">,</span><span class="s">&#34;Please play again!&#34;</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">DestroyWindow</span><span class="p">(</span><span class="n">hwnd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">TRIES</span> <span class="o">=</span> <span class="n">TRIES</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">((</span><span class="n">px_x</span> <span class="o">==</span> <span class="n">s_FLARE</span><span class="o">-</span><span class="n">On_00412004</span><span class="p">.</span><span class="n">_0_4_</span> <span class="o">%</span> <span class="n">DAT_00413280</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">px_y</span> <span class="o">==</span> <span class="n">s_FLARE</span><span class="o">-</span><span class="n">On_00412004</span><span class="p">.</span><span class="n">_4_4_</span> <span class="o">%</span> <span class="n">DAT_00413284</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">DAT_00413284</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">iVar7</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">uVar4</span> <span class="o">=</span> <span class="n">DAT_00413280</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">uVar5</span> <span class="o">=</span> <span class="n">DAT_00413284</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">iVar6</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                            <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">uVar4</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                                <span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                                    <span class="n">FUN_004015d0</span><span class="p">(</span><span class="n">iVar6</span><span class="p">,</span><span class="n">iVar7</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                                    <span class="n">iVar6</span> <span class="o">=</span> <span class="n">iVar6</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                                    <span class="n">uVar4</span> <span class="o">=</span> <span class="n">DAT_00413280</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                                    <span class="n">uVar5</span> <span class="o">=</span> <span class="n">DAT_00413284</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                                <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">iVar6</span> <span class="o">&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">DAT_00413280</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">iVar7</span> <span class="o">=</span> <span class="n">iVar7</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">iVar7</span> <span class="o">&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">uVar5</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span> <span class="k">if</span> <span class="p">((</span><span class="n">px_x</span> <span class="o">&lt;</span> <span class="n">DAT_00413280</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">px_y</span> <span class="o">&lt;</span> <span class="n">DAT_00413284</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">FUN_004015d0</span><span class="p">(</span><span class="n">px_x</span><span class="p">,</span><span class="n">px_y</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">update_window_title</span><span class="p">(</span><span class="n">buff</span><span class="p">,</span><span class="mh">0x104</span><span class="p">,</span><span class="s">&#34;PixelPoker (%d,%d) - #%d/%d&#34;</span><span class="p">,</span><span class="n">px_x</span><span class="p">,</span><span class="n">px_y</span><span class="p">,</span><span class="n">TRIES</span><span class="p">,</span><span class="mi">10</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">SetWindowTextA</span><span class="p">(</span><span class="n">hwnd</span><span class="p">,</span><span class="n">buff</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pHVar2</span> <span class="o">=</span> <span class="n">GetDC</span><span class="p">(</span><span class="n">hwnd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">BitBlt</span><span class="p">(</span><span class="n">pHVar2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">DAT_00413280</span><span class="p">,</span><span class="n">DAT_00413284</span><span class="p">,</span><span class="n">DAT_00413278</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mh">0xcc0020</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ReleaseDC</span><span class="p">(</span><span class="n">hwnd</span><span class="p">,</span><span class="n">pHVar2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span></code></pre></div><p>We can see than we the mouse is moved around the window (```WM_MOUSEMOVE``), the window title is updated with x/y coordinates.</p>
+<p>On the click event (``WM_LBUTTONDOWN```), there&rsquo;s a conditionnal check</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">((</span><span class="n">px_x</span> <span class="o">==</span> <span class="n">s_FLARE</span><span class="o">-</span><span class="n">On_00412004</span><span class="p">.</span><span class="n">_0_4_</span> <span class="o">%</span> <span class="n">DAT_00413280</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">px_y</span> <span class="o">==</span> <span class="n">s_FLARE</span><span class="o">-</span><span class="n">On_00412004</span><span class="p">.</span><span class="n">_4_4_</span> <span class="o">%</span> <span class="n">DAT_00413284</span><span class="p">))</span> <span class="p">{</span>
+</span></span></code></pre></div><p>which leads further down to some RC4 routine.</p>
+<p>Let&rsquo;s run it in a debugger and patch the condition.</p>
+<p><img src="2-patch1.png" alt="jumps"></p>
+<p>Fire x32dbg, set 2 breakpoints:</p>
+<pre tabindex="0"><code>bp 00401486
+bp 0040149d
+</code></pre><p>Continue execution and click anywhere.
+On the 2 breakpoints, modify the Zero Flag (ZF) and then watch the flag:</p>
+<p><img src="2-flag.png" alt="flag"></p>
 <h1 id="3-magic-8-ball">3. Magic 8 Ball</h1>
 <p>(coming soon ?)</p>
 <h1 id="4-darn_mice">4. darn_mice</h1>
-<p>(probably anytime soon ?)</p>
-<h1 id="5-t8">5. T8</h1>
+<h2 id="41-challenge-prompt">4.1 Challenge Prompt</h2>
+<p>&ldquo;If it crashes its user error.&rdquo;</p>
+<p>-Flare Team</p>
+<h2 id="42-solution">4.2 Solution</h2>
+<p>If we run the executable an arguments it prints something then exits:</p>
+<pre tabindex="0"><code>C:\Users\me\Desktop&gt;darn_mice.exe aaa
+On your plate, you see four olives.
+You leave the room, and a mouse EATS one!
+</code></pre><p>We can find this string in ghidra and follow XREF to this function:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="kr">__cdecl</span> <span class="nf">main</span><span class="p">(</span><span class="n">PUCHAR</span> <span class="n">input_string</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size_t</span> <span class="n">len</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">undefined</span> <span class="n">extraout_DL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">undefined</span> <span class="n">extraout_DL_00</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">undefined</span> <span class="n">uVar1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">undefined</span> <span class="n">uVar2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uint</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">some_array</span> <span class="p">[</span><span class="mi">36</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uint</span> <span class="n">stack_cookie</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">code</span> <span class="o">*</span><span class="n">buffer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">stack_cookie</span> <span class="o">=</span> <span class="n">DAT_00419178</span> <span class="o">^</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="o">&amp;</span><span class="n">stack0xfffffffc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">buffer</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\x50&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x5e</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x5e</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0xa3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x4f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x5b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x51</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x5e</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x5e</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x97</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0xa3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x80</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x90</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0xa3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x80</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x90</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0xa3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">17</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x80</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">18</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x90</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">19</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0xa3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x80</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">21</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x90</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">22</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0xa3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x80</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">24</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x90</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">25</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0xa3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">26</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x80</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">27</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x90</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">28</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0xa3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">29</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x80</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">30</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x90</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">31</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0xa2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0xa3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">33</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x6b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">34</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x7f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">some_array</span><span class="p">[</span><span class="mi">35</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">print_str</span><span class="p">((</span><span class="n">wchar_t</span> <span class="o">*</span><span class="p">)</span><span class="n">s_On_your_plate</span><span class="p">,</span><span class="n">_you_see_four_oliv_00419034</span><span class="p">,</span><span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* input length must be 35 chrs */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">len</span> <span class="o">=</span> <span class="n">_strlen</span><span class="p">((</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">input_string</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">((</span><span class="n">len</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="mi">35</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">print_str</span><span class="p">((</span><span class="n">wchar_t</span> <span class="o">*</span><span class="p">)</span><span class="n">s_No</span><span class="p">,</span><span class="n">_nevermind</span><span class="p">.</span><span class="n">_0041905c</span><span class="p">,(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">buffer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">uVar2</span> <span class="o">=</span> <span class="n">SUB41</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">uVar1</span> <span class="o">=</span> <span class="n">extraout_DL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">print_str</span><span class="p">((</span><span class="n">wchar_t</span> <span class="o">*</span><span class="p">)</span><span class="n">s_You_leave_the_room</span><span class="p">,</span><span class="n">_and_a_mouse_E_0041906c</span><span class="p">,(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">buffer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">((</span><span class="n">uVar2</span> <span class="o">=</span> <span class="n">SUB41</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">36</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">some_array</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">))</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">input_string</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">));</span> <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* allocate buffer */</span>
+</span></span><span class="line"><span class="cl">            <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">code</span> <span class="o">*</span><span class="p">)</span><span class="n">VirtualAlloc</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="mh">0x1000</span><span class="p">,</span><span class="mh">0x3000</span><span class="p">,</span><span class="mh">0x40</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* write byte to buffer */</span>
+</span></span><span class="line"><span class="cl">            <span class="o">*</span><span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">code</span><span class="p">)(</span><span class="n">some_array</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+</span> <span class="n">input_string</span><span class="p">[</span><span class="n">n</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* execute buffer */</span>
+</span></span><span class="line"><span class="cl">            <span class="p">(</span><span class="o">*</span><span class="n">buffer</span><span class="p">)();</span>
+</span></span><span class="line"><span class="cl">            <span class="n">print_str</span><span class="p">((</span><span class="n">wchar_t</span> <span class="o">*</span><span class="p">)</span><span class="n">s_Nibble</span><span class="p">...</span><span class="n">_00419098</span><span class="p">,(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">buffer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">print_str</span><span class="p">((</span><span class="n">wchar_t</span> <span class="o">*</span><span class="p">)</span><span class="n">s_When_you_return</span><span class="p">,</span><span class="nl">_you_only</span><span class="p">:</span><span class="n">_</span><span class="o">%</span><span class="n">s_004190a4</span><span class="p">,(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">input_string</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">decrypt_string</span><span class="p">(</span><span class="n">ENCRYPTED_STRING</span><span class="p">,</span><span class="n">SIZE</span><span class="p">,</span><span class="n">input_string</span><span class="p">,(</span><span class="n">PUCHAR</span><span class="p">)</span><span class="n">s_salty_004190c4</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">ENCRYPTED_STRING</span><span class="p">,</span><span class="n">SIZE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">print_str</span><span class="p">((</span><span class="n">wchar_t</span> <span class="o">*</span><span class="p">)</span><span class="n">s_</span><span class="o">%</span><span class="n">s_004190cc</span><span class="p">,(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">ENCRYPTED_STRING</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">uVar1</span> <span class="o">=</span> <span class="n">extraout_DL_00</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">check_stack_cookie</span><span class="p">(</span><span class="n">stack_cookie</span> <span class="o">^</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="o">&amp;</span><span class="n">stack0xfffffffc</span><span class="p">,</span><span class="n">uVar1</span><span class="p">,</span><span class="n">uVar2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>we see that the input must be at least 35 characters</p>
+<pre tabindex="0"><code>C:\Users\me\Desktop&gt;darn_mice.exe aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+On your plate, you see four olives.
+You leave the room, and a mouse EATS one!
+</code></pre><p>doing in the same in x32dbg, we see that it crashes:</p>
+<p><img src="4-crash.png" alt="crash"></p>
+<p>What actually happens is that for each input character, a buffer is allocated using <code>VirtualAlloc()</code> and that char value is added to a value of an array element and written to the allocated buffer.</p>
+<p>The buffer is then executed.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">((</span><span class="n">uVar2</span> <span class="o">=</span> <span class="n">SUB41</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">36</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">some_array</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">))</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">input_string</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">));</span> <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* allocate buffer */</span>
+</span></span><span class="line"><span class="cl">            <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">code</span> <span class="o">*</span><span class="p">)</span><span class="n">VirtualAlloc</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="mh">0x1000</span><span class="p">,</span><span class="mh">0x3000</span><span class="p">,</span><span class="mh">0x40</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* write byte to buffer */</span>
+</span></span><span class="line"><span class="cl">            <span class="o">*</span><span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">code</span><span class="p">)(</span><span class="n">some_array</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+</span> <span class="n">input_string</span><span class="p">[</span><span class="n">n</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* execute buffer */</span>
+</span></span><span class="line"><span class="cl">            <span class="p">(</span><span class="o">*</span><span class="n">buffer</span><span class="p">)();</span>
+</span></span><span class="line"><span class="cl">            <span class="n">print_str</span><span class="p">((</span><span class="n">wchar_t</span> <span class="o">*</span><span class="p">)</span><span class="n">s_Nibble</span><span class="p">...</span><span class="n">_00419098</span><span class="p">,(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">buffer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span></code></pre></div><p>The goal is to end up with valid instructions so the loop can continue and finally decrypt our flag.</p>
+<p>We can&rsquo;t just patch it since the decryption key is our input value.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">decrypt_string</span><span class="p">(</span><span class="n">ENCRYPTED_STRING</span><span class="p">,</span><span class="n">SIZE</span><span class="p">,</span><span class="n">input_string</span><span class="p">,(</span><span class="n">PUCHAR</span><span class="p">)</span><span class="n">s_salty_004190c4</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">ENCRYPTED_STRING</span><span class="p">,</span><span class="n">SIZE</span><span class="p">);</span>
+</span></span></code></pre></div><p>Let&rsquo;s write some <code>ret</code> instructions, so we return from the CALL and keep looping.</p>
+<p><img src="4-call.png" alt="call"></p>
+<p>The opcode <code>RET</code> is 32 bits:</p>
+<pre tabindex="0"><code>% rz-asm -b 32 &#34;ret&#34;
+c3
+</code></pre><p>so we need <code>array_value[n] + input_value[n] == 0xc3</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">dat</span> <span class="o">=</span> <span class="p">[</span> <span class="mh">0x50</span><span class="p">,</span> <span class="mh">0x5e</span><span class="p">,</span> <span class="mh">0x5e</span><span class="p">,</span> <span class="mh">0xa3</span><span class="p">,</span> <span class="mh">0x4f</span><span class="p">,</span> <span class="mh">0x5b</span><span class="p">,</span> <span class="mh">0x51</span><span class="p">,</span> <span class="mh">0x5e</span><span class="p">,</span> <span class="mh">0x5e</span><span class="p">,</span> <span class="mh">0x97</span><span class="p">,</span> <span class="mh">0xa3</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">,</span> <span class="mh">0x90</span><span class="p">,</span> <span class="mh">0xa3</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">,</span> <span class="mh">0x90</span><span class="p">,</span> <span class="mh">0xa3</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">,</span> <span class="mh">0x90</span><span class="p">,</span> <span class="mh">0xa3</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">,</span> <span class="mh">0x90</span><span class="p">,</span> <span class="mh">0xa3</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">,</span> <span class="mh">0x90</span><span class="p">,</span> <span class="mh">0xa3</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">,</span> <span class="mh">0x90</span><span class="p">,</span> <span class="mh">0xa3</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">,</span> <span class="mh">0x90</span><span class="p">,</span> <span class="mh">0xa2</span><span class="p">,</span> <span class="mh">0xa3</span><span class="p">,</span> <span class="mh">0x6b</span><span class="p">,</span> <span class="mh">0x7f</span> <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">chr</span><span class="p">(</span><span class="mh">0xc3</span> <span class="o">-</span> <span class="n">_</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">dat</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="s1">&#39;see three, C3 C3 C3 C3 C3 C3 C3! XD&#39;</span>
+</span></span></code></pre></div><p>use it as input and get the flag:</p>
+<pre tabindex="0"><code>C:\Users\me\Desktop&gt;darn_mice.exe &#34;see three, C3 C3 C3 C3 C3 C3 C3! XD&#34;
+On your plate, you see four olives.
+You leave the room, and a mouse EATS one!
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+Nibble...
+When you return, you only: see three, C3 C3 C3 C3 C3 C3 C3! XD
+i_w0uld_l1k3_to_RETurn_this_joke@flare-on.com
+</code></pre><h1 id="5-t8">5. T8</h1>
 <p>(maybe some day ?)</p>
 <h1 id="6-a-la-mode">6. a la mode</h1>
-<p>(coming soon ?)</p>
-<h1 id="7-anode">7. anode</h1>
+<h2 id="61-challenge-prompt">6.1 Challenge Prompt</h2>
+<p>FLARE FACT #824: Disregard flare fact #823 if you are a .NET Reverser too.
+We will now reward your fantastic effort with a small binary challenge. You&rsquo;ve earned it kid!</p>
+<h2 id="62-solution">6.2 Solution</h2>
+<p>We get 2 files:</p>
+<ul>
+<li>HowDoesThisWork.dll</li>
+<li>IR chat log.txt</li>
+</ul>
+<pre tabindex="0"><code>[FLARE Team]  Hey IR Team, it looks like this sample has some other binary that might
+              interact with it, do you have any other files that might be of help.
+
+[IR Team]     Nope, sorry this is all we got from the client, let us know what you got.
+</code></pre><p>Looking at the dll in dnSpy, we can see this:</p>
+<p><img src="6-dnspy.png" alt="dnSpy"></p>
+<p>It&rsquo;s basically a client to client for named pipe, that will send a <strong>password</strong> and get something back.
+Nothing else, and actually nothing much we can do with&hellip;</p>
+<p>Let&rsquo;s change our perspective and open the same dll with ghidra.</p>
+<p>Inspecting the strings, we can see a serie of weird looking strings:</p>
+<p><img src="6-strings.png" alt="suspicious strings"></p>
+<p>Following XREF, we end up in a function where all or most those strings are used as a parameter to the same function:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">init_imports</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">kernel32</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">func_name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">_g_memset</span> <span class="o">=</span> <span class="n">wr_memset</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">g_strcmp</span> <span class="o">=</span> <span class="n">wr_strcmp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">g_strcpy</span> <span class="o">=</span> <span class="n">wr_strcpy</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">kernel32</span> <span class="o">=</span> <span class="n">get_kernel32</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">func_name</span> <span class="o">=</span> <span class="n">XOR_17</span><span class="p">((</span><span class="n">byte</span> <span class="o">*</span><span class="p">)</span><span class="n">s_T</span><span class="p">{</span><span class="n">xdr_vys</span><span class="p">{</span><span class="n">r_10015060</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_10015a50</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CloseHandle</span> <span class="o">=</span> <span class="n">get_proc</span><span class="p">(</span><span class="n">kernel32</span><span class="p">,</span><span class="n">func_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">func_name</span> <span class="o">=</span> <span class="n">XOR_17</span><span class="p">((</span><span class="n">byte</span> <span class="o">*</span><span class="p">)</span><span class="n">s_TxyyrtcYvzrsG</span><span class="o">~</span><span class="n">gr_10015070</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_10015a50</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ConnectNamedPipe</span> <span class="o">=</span> <span class="n">get_proc</span><span class="p">(</span><span class="n">kernel32</span><span class="p">,</span><span class="n">func_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">func_name</span> <span class="o">=</span> <span class="n">XOR_17</span><span class="p">((</span><span class="n">byte</span> <span class="o">*</span><span class="p">)</span><span class="n">s_TervcrYvzrsG</span><span class="o">~</span><span class="n">grV_10015084</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_10015a50</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CreateNamedPipeA</span> <span class="o">=</span> <span class="n">get_proc</span><span class="p">(</span><span class="n">kernel32</span><span class="p">,</span><span class="n">func_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">func_name</span> <span class="o">=</span> <span class="n">XOR_17</span><span class="p">((</span><span class="n">byte</span> <span class="o">*</span><span class="p">)</span><span class="n">s_TervcrC_ervs_10015098</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_10015a50</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CreateThread</span> <span class="o">=</span> <span class="n">get_proc</span><span class="p">(</span><span class="n">kernel32</span><span class="p">,</span><span class="n">func_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">func_name</span> <span class="o">=</span> <span class="n">XOR_17</span><span class="p">((</span><span class="n">byte</span> <span class="o">*</span><span class="p">)</span><span class="n">s_S</span><span class="o">~</span><span class="n">dtxyyrtcYvzrsG</span><span class="o">~</span><span class="n">gr_100150a8</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_10015a50</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DisconnectNamedPipe</span> <span class="o">=</span> <span class="n">get_proc</span><span class="p">(</span><span class="n">kernel32</span><span class="p">,</span><span class="n">func_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">func_name</span> <span class="o">=</span> <span class="n">XOR_17</span><span class="p">((</span><span class="n">byte</span> <span class="o">*</span><span class="p">)</span><span class="n">s_Q</span><span class="p">{</span><span class="n">bd_Q</span><span class="o">~</span><span class="p">{</span><span class="n">rUbqqred_100150bc</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_10015a50</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">FlushFileBuffers</span> <span class="o">=</span> <span class="n">get_proc</span><span class="p">(</span><span class="n">kernel32</span><span class="p">,</span><span class="n">func_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">func_name</span> <span class="o">=</span> <span class="n">XOR_17</span><span class="p">((</span><span class="n">byte</span> <span class="o">*</span><span class="p">)</span><span class="n">s_Prc</span><span class="p">[</span><span class="n">vdcReexe_100150d0</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_10015a50</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GetLastError</span> <span class="o">=</span> <span class="n">get_proc</span><span class="p">(</span><span class="n">kernel32</span><span class="p">,</span><span class="n">func_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">func_name</span> <span class="o">=</span> <span class="n">XOR_17</span><span class="p">((</span><span class="n">byte</span> <span class="o">*</span><span class="p">)</span><span class="n">s_PrcGextrdd_rvg_100150e0</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_10015a50</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GetProcessHeap</span> <span class="o">=</span> <span class="n">get_proc</span><span class="p">(</span><span class="n">kernel32</span><span class="p">,</span><span class="n">func_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">func_name</span> <span class="o">=</span> <span class="n">XOR_17</span><span class="p">((</span><span class="n">byte</span> <span class="o">*</span><span class="p">)</span><span class="n">s_</span><span class="p">{</span><span class="n">dcetzgV_100150f0</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_10015a50</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">lstrcmpA</span> <span class="o">=</span> <span class="n">get_proc</span><span class="p">(</span><span class="n">kernel32</span><span class="p">,</span><span class="n">func_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">func_name</span> <span class="o">=</span> <span class="n">XOR_17</span><span class="p">((</span><span class="n">byte</span> <span class="o">*</span><span class="p">)</span><span class="n">s_ErvsQ</span><span class="o">~</span><span class="p">{</span><span class="n">r_100150fc</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_10015a50</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ReadFile</span> <span class="o">=</span> <span class="n">get_proc</span><span class="p">(</span><span class="n">kernel32</span><span class="p">,</span><span class="n">func_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">func_name</span> <span class="o">=</span> <span class="n">XOR_17</span><span class="p">((</span><span class="n">byte</span> <span class="o">*</span><span class="p">)</span><span class="n">s_</span><span class="err">@</span><span class="n">e</span><span class="o">~</span><span class="n">crQ</span><span class="o">~</span><span class="p">{</span><span class="n">r_10015108</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_10015a50</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">WriteFile</span> <span class="o">=</span> <span class="n">get_proc</span><span class="p">(</span><span class="n">kernel32</span><span class="p">,</span><span class="n">func_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>The function i call <code>XOR_17</code> is just xoring the strings with 0x17:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">int</span> <span class="kr">__cdecl</span> <span class="nf">XOR_17</span><span class="p">(</span><span class="n">byte</span> <span class="o">*</span><span class="n">param_1</span><span class="p">,</span><span class="kt">int</span> <span class="n">param_2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">byte</span> <span class="n">bVar1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">iVar2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">iVar3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">iVar2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bVar1</span> <span class="o">=</span> <span class="o">*</span><span class="n">param_1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">bVar1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">iVar3</span> <span class="o">=</span> <span class="n">param_2</span> <span class="o">-</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">param_1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">iVar2</span> <span class="o">=</span> <span class="n">iVar2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">param_1</span><span class="p">[</span><span class="n">iVar3</span><span class="p">]</span> <span class="o">=</span> <span class="n">bVar1</span> <span class="o">^</span> <span class="mh">0x17</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">param_1</span> <span class="o">=</span> <span class="n">param_1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">bVar1</span> <span class="o">=</span> <span class="o">*</span><span class="n">param_1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">bVar1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">*</span><span class="p">(</span><span class="n">undefined</span> <span class="o">*</span><span class="p">)(</span><span class="n">iVar2</span> <span class="o">+</span> <span class="n">param_2</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">param_2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>it&rsquo;s easy then to decrypt all those strings:</p>
+<pre tabindex="0"><code>&gt;&gt;&gt; xor(&#34;TxyyrtcYvzrsG~gr&#34;, 0x17)
+b&#39;ConnectNamedPipe&#39;
+</code></pre><p>etc&hellip;</p>
+<p>The decrypted string is passed to a function, which will return a pointer to the given function by accessing the PEB-&gt;PEB_LDR_DATA-&gt;InMemoryOrderModuleList and then walking the
+export table.</p>
+<p>Classic malware technique to hide imports, and build them at runtime.</p>
+<p>Following XREF of what we called <code>init_imports</code>, we find a function starting a new thread:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">undefined4</span> <span class="nf">dll_main</span><span class="p">(</span><span class="n">undefined4</span> <span class="n">param_1</span><span class="p">,</span><span class="kt">int</span> <span class="n">param_2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">param_2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">init_imports</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="o">*</span><span class="n">CreateThread</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">do_stuff_with_pipe</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>the thread will create the named pipe, read 64 bytes from it and call a <code>check_password</code> function:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">undefined4</span> <span class="nf">do_stuff_with_pipe</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">hFile</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">iVar1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">undefined4</span> <span class="n">uVar2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">undefined4</span> <span class="n">uVar3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">undefined4</span> <span class="n">uVar4</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">undefined4</span> <span class="n">uVar5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">undefined4</span> <span class="n">uVar6</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">undefined4</span> <span class="n">uVar7</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">undefined4</span> <span class="n">uVar8</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">undefined</span> <span class="n">lpBuffer</span> <span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">undefined</span> <span class="n">local_10</span> <span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">undefined4</span> <span class="n">local_c</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">lpNumberOfBytesRead</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">_memset</span><span class="p">(</span><span class="n">lpBuffer</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x40</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="o">*</span><span class="n">GetProcessHeap</span><span class="p">)();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uVar8</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uVar7</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uVar6</span> <span class="o">=</span> <span class="mh">0x40</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uVar5</span> <span class="o">=</span> <span class="mh">0x40</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uVar4</span> <span class="o">=</span> <span class="mh">0xff</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uVar3</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uVar2</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* &#39;\\.\pipe\FlareOn&#39; */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">hFile</span> <span class="o">=</span> <span class="n">XOR_17</span><span class="p">((</span><span class="n">byte</span> <span class="o">*</span><span class="p">)</span><span class="n">s_KK9Kg</span><span class="o">~</span><span class="n">grKQ</span><span class="p">{</span><span class="n">verXy_1001504c</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_100159d8</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">hFile</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">CreateNamedPipeA</span><span class="p">)(</span><span class="n">hFile</span><span class="p">,</span><span class="n">uVar2</span><span class="p">,</span><span class="n">uVar3</span><span class="p">,</span><span class="n">uVar4</span><span class="p">,</span><span class="n">uVar5</span><span class="p">,</span><span class="n">uVar6</span><span class="p">,</span><span class="n">uVar7</span><span class="p">,</span><span class="n">uVar8</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">hFile</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">iVar1</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">ConnectNamedPipe</span><span class="p">)(</span><span class="n">hFile</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="p">(</span><span class="o">*</span><span class="n">GetLastError</span><span class="p">)();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">iVar1</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">ReadFile</span><span class="p">)(</span><span class="n">hFile</span><span class="p">,</span><span class="n">lpBuffer</span><span class="p">,</span><span class="mh">0x40</span><span class="p">,</span><span class="o">&amp;</span><span class="n">lpNumberOfBytesRead</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">((</span><span class="n">iVar1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">lpNumberOfBytesRead</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="p">(</span><span class="o">*</span><span class="n">GetLastError</span><span class="p">)();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="p">(</span><span class="o">*</span><span class="n">FlushFileBuffers</span><span class="p">)(</span><span class="n">hFile</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">lpBuffer</span><span class="p">[</span><span class="n">lpNumberOfBytesRead</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">check_password</span><span class="p">(</span><span class="n">lpBuffer</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_c</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">(</span><span class="o">*</span><span class="n">WriteFile</span><span class="p">)(</span><span class="n">hFile</span><span class="p">,</span><span class="n">lpBuffer</span><span class="p">,</span><span class="n">local_c</span><span class="p">,</span><span class="n">local_10</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="o">*</span><span class="n">FlushFileBuffers</span><span class="p">)(</span><span class="n">hFile</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="o">*</span><span class="n">DisconnectNamedPipe</span><span class="p">)(</span><span class="n">hFile</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="o">*</span><span class="n">CloseHandle</span><span class="p">)(</span><span class="n">hFile</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p><code>check_password</code> will initialize a RC4 keystream using the key <code>{ 0x55, 0x8b, 0xec, 0x83, 0xec, 0x20, 0xeb, 0xfe }</code>, use it to decrypt the password and then decrypt the flag.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="kr">__cdecl</span> <span class="nf">check_password</span><span class="p">(</span><span class="n">undefined4</span> <span class="n">password</span><span class="p">,</span><span class="n">undefined4</span> <span class="o">*</span><span class="n">param_2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">iVar1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">byte</span> <span class="o">*</span><span class="n">pbVar2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uint</span> <span class="n">local_40c</span> <span class="p">[</span><span class="mi">258</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">rc4_init</span><span class="p">(</span><span class="n">local_40c</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">RC4KEY</span><span class="p">,</span><span class="mi">8</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">rc4_crypt</span><span class="p">(</span><span class="n">local_40c</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">PASSWORD</span><span class="p">,</span><span class="mi">9</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">iVar1</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">lstrcmpA</span><span class="p">)(</span><span class="n">PASSWORD</span><span class="p">,</span><span class="n">password</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pbVar2</span> <span class="o">=</span> <span class="n">FLAG</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">rc4_crypt</span><span class="p">(</span><span class="n">local_40c</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">FLAG</span><span class="p">,</span><span class="mh">0x1f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="o">*</span><span class="n">param_2</span> <span class="o">=</span> <span class="mh">0x1f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="o">*</span><span class="n">param_2</span> <span class="o">=</span> <span class="mh">0x15</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* b&#39;Authorization Failed&#39; */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pbVar2</span> <span class="o">=</span> <span class="p">(</span><span class="n">byte</span> <span class="o">*</span><span class="p">)</span><span class="n">XOR_17</span><span class="p">((</span><span class="n">byte</span> <span class="o">*</span><span class="p">)</span><span class="n">s_Vbc_xe</span><span class="o">~</span><span class="n">mvc</span><span class="o">~</span><span class="n">xy7Qv</span><span class="o">~</span><span class="p">{</span><span class="n">rs_10015034</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_100159d8</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="o">*</span><span class="n">g_strcpy</span><span class="p">)(</span><span class="n">password</span><span class="p">,</span><span class="n">pbVar2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">iVar1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>We can replicate that in python:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">ARC4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">RC4KEY</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x55\x8b\xec\x83\xec\x20\xeb\xfe</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">PASSWORD</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x3e\x39\x51\xfb\xa2\x11\xf7\xb9\x2c</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">FLAG</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xe1\x60\xa1\x18\x93\x2e\x96\xad\x73\xbb\x4a\x92\xde\x18\x0a\xaa\x41\x74\xad\xc0\x1d\x9f\x3f\x19\xff\x2b\x02\xdb\xd1\xcd\x1a</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">c</span> <span class="o">=</span> <span class="n">ARC4</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">RC4KEY</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#do not re-init the stream</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">PASSWORD</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">FLAG</span><span class="p">))</span>
+</span></span></code></pre></div><p>this gives use the password and the flag:</p>
+<pre tabindex="0"><code> python slv.py
+b&#39;MyV0ic3!\x00&#39;
+b&#39;M1x3d_M0dE_4_l1f3@flare-on.com\x00&#39;
+</code></pre><h1 id="7-anode">7. anode</h1>
+<h2 id="71-challenge-prompt">7.1 Challenge Prompt</h2>
+<p>You&rsquo;ve made it so far! I can&rsquo;t believe it! And so many people are ahead of you!</p>
+<h2 id="72-solution">7.2 Solution</h2>
 <p>We&rsquo;re getting a big fat 55MB binary which after poking a bit with a stick, turns out to be a javascript script, packed with <a href="https://github.com/nexe/nexe">nexe</a>.</p>
 <p>If we run <code>strings</code> on it we can actually see the script at the end along with the <code>&lt;nexe~~sentinel&gt;</code> marker.</p>
 <p>Unpacking (such big word&hellip;) the script using some random nexe unpacker or even with <code>strings</code>, we&rsquo;re left with something like that:</p>

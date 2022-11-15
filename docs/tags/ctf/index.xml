@@ -27,9 +27,8 @@ backdoor
 encryptor
 Nur getraumt
 The challenge that shall not be named
-1. Flaredle Small javascript webapp where we need to guess a word.
-Open script.js, starts with:
-import { WORDS } from &amp;#34;./words.js&amp;#34;; const NUMBER_OF_GUESSES = 6; const WORD_LENGTH = 21; const CORRECT_GUESS = 57; let guessesRemaining = NUMBER_OF_GUESSES; let currentGuess = []; let nextLetter = 0; let rightGuessString = WORDS[CORRECT_GUESS]; find correct flag condition:</description>
+1. Flaredle 1.1 Challenge Prompt Welcome to Flare-On 9!
+You probably won&amp;rsquo;t win. Maybe you&amp;rsquo;re like us and spent the year playing Wordle. We made our own version that is too hard to beat without cheating.</description>
     </item>
     
     <item>
