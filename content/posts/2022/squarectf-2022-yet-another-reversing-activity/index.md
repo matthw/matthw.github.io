@@ -50,9 +50,9 @@ The obvious goal of the challenge is to find a flag that matches the rule in ```
 
 I tried a YARA decompiler i found somewhere on github but it was kind of old and just didn't work for the version of YARA used for this challenge, so i started to dig in the YARA source code.
 
-Compiled YARA rules seem to contain some kind of bytecode and hopefully for us, there's some debug only waiting to be enabled:
+Compiled YARA rules apparently contain some kind of bytecode and hopefully for us, there's some debug only waiting to be enabled.
 
-In ```libyara/exec.c```, the function ```yr_execute_code()``` has all of it:
+The function ```yr_execute_code()``` In ```libyara/exec.c``` has all of it:
 
 ```C
 int yr_execute_code(YR_SCAN_CONTEXT* context)

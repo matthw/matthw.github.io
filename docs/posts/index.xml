@@ -45,8 +45,8 @@ YARA is a tool aimed at (but not limited to) helping malware researchers to iden
 </code></pre><p>The obvious goal of the challenge is to find a flag that matches the rule in <code>flag.yarc</code>.</p>
 <h1 id="3-preparation">3. Preparation</h1>
 <p>I tried a YARA decompiler i found somewhere on github but it was kind of old and just didn&rsquo;t work for the version of YARA used for this challenge, so i started to dig in the YARA source code.</p>
-<p>Compiled YARA rules seem to contain some kind of bytecode and hopefully for us, there&rsquo;s some debug only waiting to be enabled:</p>
-<p>In <code>libyara/exec.c</code>, the function <code>yr_execute_code()</code> has all of it:</p>
+<p>Compiled YARA rules apparently contain some kind of bytecode and hopefully for us, there&rsquo;s some debug only waiting to be enabled.</p>
+<p>The function <code>yr_execute_code()</code> In <code>libyara/exec.c</code> has all of it:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">yr_execute_code</span><span class="p">(</span><span class="n">YR_SCAN_CONTEXT</span><span class="o">*</span> <span class="n">context</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// cut for brevity
