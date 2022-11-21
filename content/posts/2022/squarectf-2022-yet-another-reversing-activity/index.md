@@ -19,7 +19,7 @@ Supposedly [this file](flag.yarc) can recognize a flag. But what could it be?
 
 # 2. Introduction
 
-The file given is a a compiled [YARA](https://github.com/VirusTotal/yara) rule.
+The file given is a compiled [YARA](https://github.com/VirusTotal/yara) rule.
 
 From their website:
 
@@ -50,7 +50,7 @@ The obvious goal of the challenge is to find a flag that matches the rule in ```
 
 I tried a YARA decompiler i found somewhere on github but it was kind of old and just didn't work for the version of YARA used for this challenge, so i started to dig in the YARA source code.
 
-Compiled YARA rule seems to contain some kind of bytecode and hopefully for us, there's some debug only waiting to be enabled:
+Compiled YARA rules seem to contain some kind of bytecode and hopefully for us, there's some debug only waiting to be enabled:
 
 In ```libyara/exec.c```, the function ```yr_execute_code()``` has all of it:
 
@@ -84,7 +84,7 @@ int yr_execute_code(YR_SCAN_CONTEXT* context)
 ```
 
 
-After a few grep here in there, turning debug mode can be done by by passing the  ```--with-debug-verbose=8``` to the configure script (8 is kind of arbitrary here).
+After a few grep here in there, turning debug mode can be done by passing the  ```--with-debug-verbose=8``` to the configure script (8 is kind of arbitrary here).
 
 Best done by editing the ```build.sh``` script:
 

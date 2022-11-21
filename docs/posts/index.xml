@@ -17,14 +17,14 @@
 			<guid>https://matth.dmz42.org/posts/2022/squarectf-2022-yet-another-reversing-activity/</guid>
 			<description>This was one of the reversing challenge during Square CTF, i found it interesting and unusual as it involves YARA.
 1. Description Supposedly this file can recognize a flag. But what could it be?
-2. Introduction The file given is a a compiled YARA rule.
+2. Introduction The file given is a compiled YARA rule.
 From their website:
 YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples. With YARA you can create descriptions of malware families (or whatever you want to describe) based on textual or binary patterns.</description>
 			<content type="html"><![CDATA[<p>This was one of the reversing challenge during <a href="https://squarectf.com/2022/index.html">Square CTF</a>, i found it interesting and unusual as it involves YARA.</p>
 <h1 id="1-description">1. Description</h1>
 <p>Supposedly <a href="flag.yarc">this file</a> can recognize a flag. But what could it be?</p>
 <h1 id="2-introduction">2. Introduction</h1>
-<p>The file given is a a compiled <a href="https://github.com/VirusTotal/yara">YARA</a> rule.</p>
+<p>The file given is a compiled <a href="https://github.com/VirusTotal/yara">YARA</a> rule.</p>
 <p>From their website:</p>
 <p>YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples. With YARA you can create descriptions of malware families (or whatever you want to describe) based on textual or binary patterns. Each description, a.k.a. rule, consists of a set of strings and a boolean expression which determine its logic. Let&rsquo;s see an example:</p>
 <pre tabindex="0"><code class="language-yara" data-lang="yara">rule silent_banker : banker
@@ -45,7 +45,7 @@ YARA is a tool aimed at (but not limited to) helping malware researchers to iden
 </code></pre><p>The obvious goal of the challenge is to find a flag that matches the rule in <code>flag.yarc</code>.</p>
 <h1 id="3-preparation">3. Preparation</h1>
 <p>I tried a YARA decompiler i found somewhere on github but it was kind of old and just didn&rsquo;t work for the version of YARA used for this challenge, so i started to dig in the YARA source code.</p>
-<p>Compiled YARA rule seems to contain some kind of bytecode and hopefully for us, there&rsquo;s some debug only waiting to be enabled:</p>
+<p>Compiled YARA rules seem to contain some kind of bytecode and hopefully for us, there&rsquo;s some debug only waiting to be enabled:</p>
 <p>In <code>libyara/exec.c</code>, the function <code>yr_execute_code()</code> has all of it:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">yr_execute_code</span><span class="p">(</span><span class="n">YR_SCAN_CONTEXT</span><span class="o">*</span> <span class="n">context</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
@@ -73,7 +73,7 @@ YARA is a tool aimed at (but not limited to) helping malware researchers to iden
 </span></span><span class="line"><span class="cl"><span class="c1">// etc...
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>After a few grep here in there, turning debug mode can be done by by passing the  <code>--with-debug-verbose=8</code> to the configure script (8 is kind of arbitrary here).</p>
+</span></span></code></pre></div><p>After a few grep here in there, turning debug mode can be done by passing the  <code>--with-debug-verbose=8</code> to the configure script (8 is kind of arbitrary here).</p>
 <p>Best done by editing the <code>build.sh</code> script:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>./bootstrap.sh

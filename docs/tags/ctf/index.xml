@@ -16,7 +16,7 @@
       <guid>https://matth.dmz42.org/posts/2022/squarectf-2022-yet-another-reversing-activity/</guid>
       <description>This was one of the reversing challenge during Square CTF, i found it interesting and unusual as it involves YARA.
 1. Description Supposedly this file can recognize a flag. But what could it be?
-2. Introduction The file given is a a compiled YARA rule.
+2. Introduction The file given is a compiled YARA rule.
 From their website:
 YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples. With YARA you can create descriptions of malware families (or whatever you want to describe) based on textual or binary patterns.</description>
     </item>
