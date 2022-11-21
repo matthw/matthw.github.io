@@ -50,12 +50,13 @@ The obvious goal of the challenge is to find a flag that matches the rule in ```
 
 I tried a YARA decompiler i found somewhere on github but it was kind of old and just didn't work for the version of YARA used for this challenge, so i started to dig in the YARA source code.
 
-Compiled YARA rules apparently contain some kind of bytecode and hopefully for us, there's some debug only waiting to be enabled.
+Compiled YARA rules apparently contain some kind of bytecode and fortunately for us, there's some debug only waiting to be enabled.
 
-The function ```yr_execute_code()``` In ```libyara/exec.c``` has all of it:
+The function ```yr_execute_code()``` in ```libyara/exec.c``` has all of it:
 
 ```C
 int yr_execute_code(YR_SCAN_CONTEXT* context)
+{
 
 // cut for brevity
  while (!stop)
@@ -86,7 +87,7 @@ int yr_execute_code(YR_SCAN_CONTEXT* context)
 
 After a few grep here in there, turning debug mode can be done by passing the  ```--with-debug-verbose=8``` to the configure script (8 is kind of arbitrary here).
 
-Best done by editing the ```build.sh``` script:
+It's best done by editing the ```build.sh``` script:
 
 ```bash
 #!/bin/sh
