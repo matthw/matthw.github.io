@@ -7,7 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Mon, 14 Nov 2022 13:15:00 +0100</lastBuildDate><atom:link href="https://matth.dmz42.org/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 21 Nov 2022 14:00:00 +0100</lastBuildDate><atom:link href="https://matth.dmz42.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SquareCTF: Yet Another Reversing Activity</title>
+      <link>https://matth.dmz42.org/posts/2022/squarectf-2022-yet-another-reversing-activity/</link>
+      <pubDate>Mon, 21 Nov 2022 14:00:00 +0100</pubDate>
+      
+      <guid>https://matth.dmz42.org/posts/2022/squarectf-2022-yet-another-reversing-activity/</guid>
+      <description>This was one of the reversing challenge during Square CTF, i found it interesting and unusual as it involves YARA.
+1. Description Supposedly this file can recognize a flag. But what could it be?
+2. Introduction The file given is a a compiled YARA rule.
+From their website:
+YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples. With YARA you can create descriptions of malware families (or whatever you want to describe) based on textual or binary patterns.</description>
+    </item>
+    
     <item>
       <title>Flare-On 9 Writeups</title>
       <link>https://matth.dmz42.org/posts/2022/flare-on-9-writeups/</link>

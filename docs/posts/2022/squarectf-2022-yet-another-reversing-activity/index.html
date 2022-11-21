@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="SquareCTF: Yet Another Reversing Activity">
+<meta itemprop="description" content="This was one of the reversing challenge during Square CTF, i found it interesting and unusual as it involves YARA.
+1. Description Supposedly this file can recognize a flag. But what could it be?
+2. Introduction The file given is a a compiled YARA rule.
+From their website:
+YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples. With YARA you can create descriptions of malware families (or whatever you want to describe) based on textual or binary patterns."><meta itemprop="datePublished" content="2022-11-21T14:00:00+01:00" />
+<meta itemprop="dateModified" content="2022-11-21T14:00:00+01:00" />
+<meta itemprop="wordCount" content="1575">
+<meta itemprop="keywords" content="reverse,ctf," /><meta property="og:title" content="SquareCTF: Yet Another Reversing Activity" />
+<meta property="og:description" content="This was one of the reversing challenge during Square CTF, i found it interesting and unusual as it involves YARA.
+1. Description Supposedly this file can recognize a flag. But what could it be?
+2. Introduction The file given is a a compiled YARA rule.
+From their website:
+YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples. With YARA you can create descriptions of malware families (or whatever you want to describe) based on textual or binary patterns." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://matth.dmz42.org/posts/2022/squarectf-2022-yet-another-reversing-activity/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-11-21T14:00:00+01:00" />
+<meta property="article:modified_time" content="2022-11-21T14:00:00+01:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SquareCTF: Yet Another Reversing Activity"/>
+<meta name="twitter:description" content="This was one of the reversing challenge during Square CTF, i found it interesting and unusual as it involves YARA.
+1. Description Supposedly this file can recognize a flag. But what could it be?
+2. Introduction The file given is a a compiled YARA rule.
+From their website:
+YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples. With YARA you can create descriptions of malware families (or whatever you want to describe) based on textual or binary patterns."/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>SquareCTF: Yet Another Reversing Activity</title>
+	<link rel="stylesheet" href="https://matth.dmz42.org/css/style.min.037b6ee8f8c1baab6a3d0a9da11c3ff18a7552471f16c59fd98538d5ce99208b.css" integrity="sha256-A3tu6PjBuqtqPQqdoRw/8Yp1UkcfFsWf2YU41c6ZIIs=" crossorigin="anonymous">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://matth.dmz42.org"># matth.dmz42.org</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://matth.dmz42.org/posts/">Posts</a>
+				<a href="https://matth.dmz42.org/tags/">Tags</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<button id="toc-btn" class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://twitter.com/matth_walter" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/matthw" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://www.linkedin.com/in/mwalter/" target="_blank" rel="noopener me" title="Linkedin"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://matth.dmz42.org/posts/">Posts</a></li>
+			<li><a href="https://matth.dmz42.org/tags/">Tags</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Nov 21, 2022</span></div>
+				<h1>SquareCTF: Yet Another Reversing Activity</h1>
+			</header>
+			<div class="content">
+				<p>This was one of the reversing challenge during <a href="https://squarectf.com/2022/index.html">Square CTF</a>, i found it interesting and unusual as it involves YARA.</p>
+<h1 id="1-description">1. Description<a href="#1-description" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>Supposedly <a href="flag.yarc">this file</a> can recognize a flag. But what could it be?</p>
+<h1 id="2-introduction">2. Introduction<a href="#2-introduction" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>The file given is a a compiled <a href="https://github.com/VirusTotal/yara">YARA</a> rule.</p>
+<p>From their website:</p>
+<p>YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples. With YARA you can create descriptions of malware families (or whatever you want to describe) based on textual or binary patterns. Each description, a.k.a. rule, consists of a set of strings and a boolean expression which determine its logic. Let&rsquo;s see an example:</p>
+<pre tabindex="0"><code class="language-yara" data-lang="yara">rule silent_banker : banker
+{
+    meta:
+        description = &#34;This is just an example&#34;
+        threat_level = 3
+        in_the_wild = true
+
+    strings:
+        $a = {6A 40 68 00 30 00 00 6A 14 8D 91}
+        $b = {8D 4D B0 2B C1 83 C0 27 99 6A 4E 59 F7 F9}
+        $c = &#34;UVODFRYSIHLNWPEJXQZAKCBGMT&#34;
+
+    condition:
+        $a or $b or $c
+}
+</code></pre><p>The obvious goal of the challenge is to find a flag that matches the rule in <code>flag.yarc</code>.</p>
+<h1 id="3-preparation">3. Preparation<a href="#3-preparation" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>I tried a YARA decompiler i found somewhere on github but it was kind of old and just didn&rsquo;t work for the version of YARA used for this challenge, so i started to dig in the YARA source code.</p>
+<p>Compiled YARA rule seems to contain some kind of bytecode and hopefully for us, there&rsquo;s some debug only waiting to be enabled:</p>
+<p>In <code>libyara/exec.c</code>, the function <code>yr_execute_code()</code> has all of it:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">yr_execute_code</span><span class="p">(</span><span class="n">YR_SCAN_CONTEXT</span><span class="o">*</span> <span class="n">context</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// cut for brevity
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">stop</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Read the opcode from the address indicated by the instruction pointer.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">opcode</span> <span class="o">=</span> <span class="o">*</span><span class="n">ip</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Advance the instruction pointer, which now points past the opcode.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">ip</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">switch</span> <span class="p">(</span><span class="n">opcode</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">OP_NOP</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">      <span class="n">YR_DEBUG_FPRINTF</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;- case OP_NOP: // %s()</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">__FUNCTION__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">OP_HALT</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">      <span class="n">YR_DEBUG_FPRINTF</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;- case OP_HALT: // %s()</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">__FUNCTION__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="n">assert</span><span class="p">(</span><span class="n">stack</span><span class="p">.</span><span class="n">sp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>  <span class="c1">// When HALT is reached the stack should be empty.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="n">stop</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// etc...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>After a few grep here in there, turning debug mode can be done by by passing the  <code>--with-debug-verbose=8</code> to the configure script (8 is kind of arbitrary here).</p>
+<p>Best done by editing the <code>build.sh</code> script:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>./bootstrap.sh
+</span></span><span class="line"><span class="cl">./configure --with-debug-verbose<span class="o">=</span><span class="m">8</span>
+</span></span><span class="line"><span class="cl">make
+</span></span></code></pre></div><p>then rebuild YARA:</p>
+<pre tabindex="0"><code>yara-4.2.3% ./bootstrap.sh
+yara-4.2.3% ./build.sh
+</code></pre><h1 id="4-solution">4. Solution<a href="#4-solution" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>Now that we have our debug build, we can try it on a random file.</p>
+<p>We know the flag has a format like <code>flag{....}</code>, so we can use it as a test input file:</p>
+<pre tabindex="0"><code>% echo &#34;flag{test}&#34; &gt; test.txt
+% ./yara-4.2.3/yara -C flag.yarc test.txt
+0.000000 006981 + yr_initialize() {
+0.001316 006981   - hash__initialize() {}
+0.001332 006981 } // yr_initialize()
+0.001434 006981 - yr_scanner_create() {}
+0.001485 006981 + yr_scanner_scan_mem(buffer=0x7f91d236d000 buffer_size=11) {
+0.001492 006981   + yr_scanner_scan_mem_blocks() {
+0.001505 006981     - _yr_get_first_block() {} = 0x7ffc0c7f9650 // default iterator; single memory block, blocking
+0.001517 006981     + _yr_scanner_scan_mem_block(block_data=0x7f91d236d000 block-&gt;base=0x0 block-&gt;size=11) {
+0.001532 006981     } = 0 AKA ERROR_SUCCESS 0 // _yr_scanner_scan_mem_block()
+0.001542 006981     - _yr_get_next_block() {} = (nil) // default iterator; single memory block, blocking
+0.001549 006981     - _yr_get_file_size() {} = 11  // default iterator; single memory block, blocking
+0.001556 006981     + yr_execute_code() {
+0.001576 006981       - case OP_INIT_RULE: // yr_execute_code()
+0.001583 006981       - case OP_PUSH_8: r1.i=0 // yr_execute_code()
+0.001590 006981       - case OP_INT8: // yr_execute_code()
+0.001595 006981       - _yr_get_first_block() {} = 0x7ffc0c7f9650 // default iterator; single memory block, blocking
+0.001604 006981       - case OP_PUSH_8: r1.i=95 // yr_execute_code()
+0.001612 006981       - case OP_PUSH_8: r1.i=57 // yr_execute_code()
+0.001619 006981       - case OP_BITWISE_XOR: // yr_execute_code()
+0.001627 006981       - case OP_INT_EQ: // yr_execute_code()
+0.001634 006981       - case OP_JFALSE: // yr_execute_code()
+0.001642 006981       - case OP_PUSH_8: r1.i=1 // yr_execute_code()
+0.001650 006981       - case OP_INT8: // yr_execute_code()
+0.001657 006981       - _yr_get_first_block() {} = 0x7ffc0c7f9650 // default iterator; single memory block, blocking
+0.001664 006981       - case OP_PUSH_8: r1.i=51 // yr_execute_code()
+0.001671 006981       - case OP_PUSH_8: r1.i=95 // yr_execute_code()
+0.001678 006981       - case OP_BITWISE_XOR: // yr_execute_code()
+0.001685 006981       - case OP_INT_EQ: // yr_execute_code()
+0.001693 006981       - case OP_AND: // yr_execute_code()
+0.001700 006981       - case OP_JFALSE: // yr_execute_code()
+0.001707 006981       - case OP_PUSH_8: r1.i=2 // yr_execute_code()
+0.001714 006981       - case OP_INT8: // yr_execute_code()
+0.001721 006981       - _yr_get_first_block() {} = 0x7ffc0c7f9650 // default iterator; single memory block, blocking
+0.001729 006981       - case OP_PUSH_8: r1.i=248 // yr_execute_code()
+0.001741 006981       - case OP_PUSH_8: r1.i=153 // yr_execute_code()
+0.001745 006981       - case OP_BITWISE_XOR: // yr_execute_code()
+0.001753 006981       - case OP_INT_EQ: // yr_execute_code()
+0.001762 006981       - case OP_AND: // yr_execute_code()
+0.001767 006981       - case OP_JFALSE: // yr_execute_code()
+0.001772 006981       - case OP_PUSH_8: r1.i=3 // yr_execute_code()
+0.001777 006981       - case OP_INT8: // yr_execute_code()
+0.001782 006981       - _yr_get_first_block() {} = 0x7ffc0c7f9650 // default iterator; single memory block, blocking
+0.001790 006981       - case OP_PUSH_8: r1.i=83 // yr_execute_code()
+0.001799 006981       - case OP_PUSH_8: r1.i=52 // yr_execute_code()
+0.001806 006981       - case OP_BITWISE_XOR: // yr_execute_code()
+0.001813 006981       - case OP_INT_EQ: // yr_execute_code()
+0.001819 006981       - case OP_AND: // yr_execute_code()
+0.001828 006981       - case OP_JFALSE: // yr_execute_code()
+0.001839 006981       - case OP_PUSH_8: r1.i=4 // yr_execute_code()
+0.001849 006981       - case OP_INT8: // yr_execute_code()
+0.001856 006981       - _yr_get_first_block() {} = 0x7ffc0c7f9650 // default iterator; single memory block, blocking
+0.001865 006981       - case OP_PUSH_8: r1.i=248 // yr_execute_code()
+0.001876 006981       - case OP_PUSH_8: r1.i=131 // yr_execute_code()
+0.001885 006981       - case OP_BITWISE_XOR: // yr_execute_code()
+0.001892 006981       - case OP_INT_EQ: // yr_execute_code()
+0.001899 006981       - case OP_AND: // yr_execute_code()
+0.001906 006981       - case OP_JFALSE: // yr_execute_code()
+0.001913 006981       - case OP_PUSH_8: r1.i=5 // yr_execute_code()
+0.001922 006981       - case OP_INT8: // yr_execute_code()
+0.001929 006981       - _yr_get_first_block() {} = 0x7ffc0c7f9650 // default iterator; single memory block, blocking
+0.001937 006981       - case OP_PUSH_8: r1.i=154 // yr_execute_code()
+0.001944 006981       - case OP_PUSH_8: r1.i=247 // yr_execute_code()
+0.001952 006981       - case OP_BITWISE_XOR: // yr_execute_code()
+0.001959 006981       - case OP_INT_EQ: // yr_execute_code()
+0.001964 006981       - case OP_AND: // yr_execute_code()
+0.001969 006981       - case OP_JFALSE: // yr_execute_code()
+0.001974 006981       - case OP_JFALSE: // yr_execute_code()
+0.001979 006981       - case OP_JFALSE: // yr_execute_code()
+0.001983 006981       - case OP_JFALSE: // yr_execute_code()
+0.001988 006981       - case OP_JFALSE: // yr_execute_code()
+0.001993 006981       - case OP_JFALSE: // yr_execute_code()
+0.001998 006981       - case OP_JFALSE: // yr_execute_code()
+0.002003 006981       - case OP_JFALSE: // yr_execute_code()
+0.002008 006981       - case OP_JFALSE: // yr_execute_code()
+0.002013 006981       - case OP_JFALSE: // yr_execute_code()
+0.002017 006981       - case OP_JFALSE: // yr_execute_code()
+0.002022 006981       - case OP_JFALSE: // yr_execute_code()
+0.002028 006981       - case OP_JFALSE: // yr_execute_code()
+0.002033 006981       - case OP_JFALSE: // yr_execute_code()
+0.002037 006981       - case OP_JFALSE: // yr_execute_code()
+0.002042 006981       - case OP_JFALSE: // yr_execute_code()
+0.002047 006981       - case OP_JFALSE: // yr_execute_code()
+0.002051 006981       - case OP_JFALSE: // yr_execute_code()
+0.002056 006981       - case OP_JFALSE: // yr_execute_code()
+0.002061 006981       - case OP_JFALSE: // yr_execute_code()
+0.002066 006981       - case OP_MATCH_RULE: // yr_execute_code()
+0.002071 006981       - case OP_HALT: // yr_execute_code()
+0.002093 006981     } = 0 AKA ERROR_SUCCESS 0 // yr_execute_code()
+0.002108 006981     - _yr_scanner_clean_matches() {}
+0.002122 006981   } = 0 AKA ERROR_SUCCESS 0 // yr_scanner_scan_mem_blocks()
+0.002130 006981 } = 0 AKA ERROR_SUCCESS 0 // yr_scanner_scan_mem()
+0.002146 006981 - yr_scanner_destroy() {}
+0.002156 006981 + yr_finalize() {
+0.002162 006981   - hash__finalize() {}
+0.002167 006981 } // yr_finalize()
+</code></pre><p>It produces quite an interesting execution trace, expecially these blocks:</p>
+<pre tabindex="0"><code>0.001604 006981       - case OP_PUSH_8: r1.i=95 // yr_execute_code()
+0.001612 006981       - case OP_PUSH_8: r1.i=57 // yr_execute_code()
+0.001619 006981       - case OP_BITWISE_XOR: // yr_execute_code()
+$
+0.001664 006981       - case OP_PUSH_8: r1.i=51 // yr_execute_code()
+0.001671 006981       - case OP_PUSH_8: r1.i=95 // yr_execute_code()
+0.001678 006981       - case OP_BITWISE_XOR: // yr_execute_code()
+
+0.001729 006981       - case OP_PUSH_8: r1.i=248 // yr_execute_code()
+0.001741 006981       - case OP_PUSH_8: r1.i=153 // yr_execute_code()
+0.001745 006981       - case OP_BITWISE_XOR: // yr_execute_code()
+
+0.001790 006981       - case OP_PUSH_8: r1.i=83 // yr_execute_code()
+0.001799 006981       - case OP_PUSH_8: r1.i=52 // yr_execute_code()
+0.001806 006981       - case OP_BITWISE_XOR: // yr_execute_code()
+
+0.001865 006981       - case OP_PUSH_8: r1.i=248 // yr_execute_code()
+0.001876 006981       - case OP_PUSH_8: r1.i=131 // yr_execute_code()
+0.001885 006981       - case OP_BITWISE_XOR: // yr_execute_code()
+
+0.001937 006981       - case OP_PUSH_8: r1.i=154 // yr_execute_code()
+0.001944 006981       - case OP_PUSH_8: r1.i=247 // yr_execute_code()
+0.001952 006981       - case OP_BITWISE_XOR: // yr_execute_code()
+</code></pre><p>They push 2 values and XOR them together:</p>
+<pre tabindex="0"><code>&gt;&gt;&gt; chr(95 ^ 57)
+&#39;f&#39;
+&gt;&gt;&gt; chr(51 ^ 95)
+&#39;l&#39;
+&gt;&gt;&gt; chr(248 ^ 153)
+&#39;a&#39;
+&gt;&gt;&gt; chr(83 ^ 52)
+&#39;g&#39;
+&gt;&gt;&gt; chr(248 ^ 131)
+&#39;{&#39;
+&gt;&gt;&gt; chr(154 ^ 247)
+&#39;m&#39;
+</code></pre><p>Interestingly they match the begining of our file, which we know is a valid flag start.</p>
+<p>We can guess it checks the characters one by one and exits on the first non-matching character: it expected a <code>m</code> but got a <code>t</code> (test) from our test file.</p>
+<p>We can use to that to <em>bruteforce</em> the flag char by char, by always checking the last xor sequence of the trace:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="c1"># get these last 3 lines from the trace:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 0.001937 006981       - case OP_PUSH_8: r1.i=154 // yr_execute_code()</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 0.001944 006981       - case OP_PUSH_8: r1.i=247 // yr_execute_code()</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 0.001952 006981       - case OP_BITWISE_XOR: // yr_execute_code()</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># extract the 2 values (154 and 247), xor them and convert to char</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">get_next<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    ./yara-4.2.3/yara -C flag.yarc test.txt 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> grep -B2 OP_BITWISE_XOR: <span class="p">|</span> tail -3 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>        <span class="p">|</span> sed -n <span class="s1">&#39;s/.*r1.i=\([0-9]*\).*$/\1/p&#39;</span> <span class="p">|</span> xargs <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>        <span class="p">|</span> python -c <span class="s2">&#34;x,y=[int(_) for _ in input().split()]; print(chr(x^y), end=&#39;&#39;)&#34;</span> 2&gt;/dev/null
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">rm -f test.txt
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># get flag char by char</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="nv">flag</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> x in <span class="k">$(</span>seq 32<span class="k">)</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">c</span><span class="o">=</span><span class="s2">&#34;`get_next`&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">flag</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">flag</span><span class="si">}${</span><span class="nv">c</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="nv">$flag</span> &gt; test.txt
+</span></span><span class="line"><span class="cl">    cat test.txt
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span></code></pre></div><p>running this script gives the flag:</p>
+<pre tabindex="0"><code>% sh bruteforce.sh
+
+f
+fl
+fla
+flag
+flag{
+flag{m
+flag{m3
+flag{m33
+flag{m33t
+flag{m33t_
+flag{m33t_m
+flag{m33t_me
+flag{m33t_me_
+flag{m33t_me_1
+flag{m33t_me_1n
+flag{m33t_me_1n_
+flag{m33t_me_1n_7
+flag{m33t_me_1n_7h
+flag{m33t_me_1n_7h3
+flag{m33t_me_1n_7h3_
+flag{m33t_me_1n_7h3_a
+flag{m33t_me_1n_7h3_ar
+flag{m33t_me_1n_7h3_ar3
+flag{m33t_me_1n_7h3_ar3n
+flag{m33t_me_1n_7h3_ar3n4
+flag{m33t_me_1n_7h3_ar3n4}
+flag{m33t_me_1n_7h3_ar3n4}}
+flag{m33t_me_1n_7h3_ar3n4}}}
+flag{m33t_me_1n_7h3_ar3n4}}}}
+flag{m33t_me_1n_7h3_ar3n4}}}}}
+flag{m33t_me_1n_7h3_ar3n4}}}}}}
+</code></pre>
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://matth.dmz42.org/tags/reverse">reverse</a></span><span class="tag"><a href="https://matth.dmz42.org/tags/ctf">ctf</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1575 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2022-11-21 14:00 &#43;0100</p>
+			</footer>
+		</article>
+		<aside id="toc">
+			<div class="toc-title">Table of Contents</div>
+			<nav id="TableOfContents"></nav>
+		</aside>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://matth.dmz42.org/posts/2022/flare-on-9-writeups/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Flare-On 9 Writeups</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2022 <a href="https://matth.dmz42.org">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://matth.dmz42.org/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+
+	<script src="https://matth.dmz42.org/js/bundle.min.580988ed2982bcbb74a1773c7abea97b43e4c43b9324e10cda0813ec6ec4bb67.js" integrity="sha256-WAmI7SmCvLt0oXc8er6pe0PkxDuTJOEM2ggT7G7Eu2c=" crossorigin="anonymous"></script>
+	
+
+</body>
+
+</html>
