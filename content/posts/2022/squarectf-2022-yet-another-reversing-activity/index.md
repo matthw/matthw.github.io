@@ -1,5 +1,5 @@
 ---
-title: "SquareCTF: Yet Another Reversing Activity"
+title: "Square CTF 2022: Yet Another Reversing Activity"
 date: 2022-11-21T14:00:00+01:00
 draft: false
 toc: true
