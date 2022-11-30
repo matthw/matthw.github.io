@@ -1325,7 +1325,7 @@ The parent process has attached the child process with ptrace and can catch the 
 So, when the child process will execute the UD2 instruction, the parent will *catch* it and will:
 - read 8 bytes of memory at the child RIP
     - verify the last 2 bytes are 0xb0f
-        - UD2 instruction's opcode are 0FB0 - but little endian...
+        - UD2 instruction's opcode are 0F0B - but little endian...
     - read the next 2 bytes as the compressed data size
     - read the next 4 bytes as the decompressed data size
 - zlib decompress the compressed data following these 8 bytes

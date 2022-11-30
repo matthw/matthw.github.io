@@ -2900,7 +2900,7 @@ Correct!
 <ul>
 <li>verify the last 2 bytes are 0xb0f
 <ul>
-<li>UD2 instruction&rsquo;s opcode are 0FB0 - but little endian&hellip;</li>
+<li>UD2 instruction&rsquo;s opcode are 0F0B - but little endian&hellip;</li>
 </ul>
 </li>
 <li>read the next 2 bytes as the compressed data size</li>
