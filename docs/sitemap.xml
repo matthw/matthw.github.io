@@ -3,21 +3,24 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://matth.dmz42.org/</loc>
-    <lastmod>2022-11-21T14:00:00+01:00</lastmod>
+    <lastmod>2022-12-09T08:00:00+01:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/tags/ctf/</loc>
-    <lastmod>2022-11-21T14:00:00+01:00</lastmod>
+    <lastmod>2022-12-09T08:00:00+01:00</lastmod>
+  </url><url>
+    <loc>https://matth.dmz42.org/posts/2022/hitcon-ctf-2022-meow-way/</loc>
+    <lastmod>2022-12-09T08:00:00+01:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/posts/</loc>
-    <lastmod>2022-11-21T14:00:00+01:00</lastmod>
+    <lastmod>2022-12-09T08:00:00+01:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/tags/reverse/</loc>
-    <lastmod>2022-11-21T14:00:00+01:00</lastmod>
-  </url><url>
-    <loc>https://matth.dmz42.org/posts/2022/squarectf-2022-yet-another-reversing-activity/</loc>
-    <lastmod>2022-11-21T14:00:00+01:00</lastmod>
+    <lastmod>2022-12-09T08:00:00+01:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/tags/</loc>
+    <lastmod>2022-12-09T08:00:00+01:00</lastmod>
+  </url><url>
+    <loc>https://matth.dmz42.org/posts/2022/squarectf-2022-yet-another-reversing-activity/</loc>
     <lastmod>2022-11-21T14:00:00+01:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/posts/2022/flare-on-9-writeups/</loc>

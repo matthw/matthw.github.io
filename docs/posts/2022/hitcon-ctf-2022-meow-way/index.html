@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="HITCON CTF 2022: Meow Way">
+<meta itemprop="description" content="This is a 32 bit PE file using an interesting trick.
+You can grab the file here.
+1. Quick Recon Opening the file in ghidra and navigating from the entry point to the main function we find something like:
+if (argc &lt; 2) { printf(&#34;Usage: %s &lt;flag&gt;\n&#34;,(char)*argv); /* WARNING: Subroutine does not return */ exit(1); } f = argv[1]; argv1 = f &#43; 1; do { cVar1 = *f; f = f &#43; 1; } while (cVar1 !"><meta itemprop="datePublished" content="2022-12-09T08:00:00+01:00" />
+<meta itemprop="dateModified" content="2022-12-09T08:00:00+01:00" />
+<meta itemprop="wordCount" content="2144">
+<meta itemprop="keywords" content="reverse,ctf," /><meta property="og:title" content="HITCON CTF 2022: Meow Way" />
+<meta property="og:description" content="This is a 32 bit PE file using an interesting trick.
+You can grab the file here.
+1. Quick Recon Opening the file in ghidra and navigating from the entry point to the main function we find something like:
+if (argc &lt; 2) { printf(&#34;Usage: %s &lt;flag&gt;\n&#34;,(char)*argv); /* WARNING: Subroutine does not return */ exit(1); } f = argv[1]; argv1 = f &#43; 1; do { cVar1 = *f; f = f &#43; 1; } while (cVar1 !" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://matth.dmz42.org/posts/2022/hitcon-ctf-2022-meow-way/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-12-09T08:00:00+01:00" />
+<meta property="article:modified_time" content="2022-12-09T08:00:00+01:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="HITCON CTF 2022: Meow Way"/>
+<meta name="twitter:description" content="This is a 32 bit PE file using an interesting trick.
+You can grab the file here.
+1. Quick Recon Opening the file in ghidra and navigating from the entry point to the main function we find something like:
+if (argc &lt; 2) { printf(&#34;Usage: %s &lt;flag&gt;\n&#34;,(char)*argv); /* WARNING: Subroutine does not return */ exit(1); } f = argv[1]; argv1 = f &#43; 1; do { cVar1 = *f; f = f &#43; 1; } while (cVar1 !"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>HITCON CTF 2022: Meow Way</title>
+	<link rel="stylesheet" href="https://matth.dmz42.org/css/style.min.037b6ee8f8c1baab6a3d0a9da11c3ff18a7552471f16c59fd98538d5ce99208b.css" integrity="sha256-A3tu6PjBuqtqPQqdoRw/8Yp1UkcfFsWf2YU41c6ZIIs=" crossorigin="anonymous">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://matth.dmz42.org"># matth.dmz42.org</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://matth.dmz42.org/posts/">Posts</a>
+				<a href="https://matth.dmz42.org/tags/">Tags</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<button id="toc-btn" class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://twitter.com/matth_walter" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/matthw" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://www.linkedin.com/in/mwalter/" target="_blank" rel="noopener me" title="Linkedin"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://matth.dmz42.org/posts/">Posts</a></li>
+			<li><a href="https://matth.dmz42.org/tags/">Tags</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Dec 9, 2022</span></div>
+				<h1>HITCON CTF 2022: Meow Way</h1>
+			</header>
+			<div class="content">
+				<p>This is a 32 bit PE file using an interesting trick.</p>
+<p>You can grab the file <a href="meow_way-d3c58f1d74aae3647cfb5c5bb2791da4d900dc16.zip">here</a>.</p>
+<h1 id="1-quick-recon">1. Quick Recon<a href="#1-quick-recon" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>Opening the file in ghidra and navigating from the entry point to the main function we find something like:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Usage: %s &lt;flag&gt;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,(</span><span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="n">argv</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">f</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">argv1</span> <span class="o">=</span> <span class="n">f</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cVar1</span> <span class="o">=</span> <span class="o">*</span><span class="n">f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span> <span class="o">=</span> <span class="n">f</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">cVar1</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">f</span> <span class="o">-</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">argv1</span> <span class="o">!=</span> <span class="mi">48</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Wrong length</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="n">in_stack_ffffffd8</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span></code></pre></div><p>So we already know that we need to pass the flag as argument and that this flag must be 48 characters.</p>
+<p>What follows is a serie of calls, checking the flag characters one by one:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">    <span class="n">argv1</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="o">*</span><span class="n">DAT_0040544c</span><span class="p">)(</span><span class="n">argv1</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">argv1</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="n">argv1</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">argv1</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="mh">0xc4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_10</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">local_10</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">chr</span> <span class="o">=</span> <span class="n">argv1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="o">*</span><span class="n">DAT_004053a8</span><span class="p">)(</span><span class="n">chr</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">chr</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="n">chr</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">chr</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="mh">0x16</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_10</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">local_10</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">chr</span> <span class="o">=</span> <span class="n">argv1</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="o">*</span><span class="n">DAT_004053b4</span><span class="p">)(</span><span class="n">chr</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">chr</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="n">chr</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">chr</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="mh">0x8e</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_10</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">local_10</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">chr</span> <span class="o">=</span> <span class="n">argv1</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="o">*</span><span class="n">DAT_004053f0</span><span class="p">)(</span><span class="n">chr</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">chr</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="n">chr</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">chr</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="mh">0x77</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_10</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">local_10</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">chr</span> <span class="o">=</span> <span class="n">argv1</span> <span class="o">+</span> <span class="mi">4</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="o">*</span><span class="n">DAT_00405448</span><span class="p">)(</span><span class="n">chr</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">chr</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="n">chr</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">chr</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_10</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">local_10</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">chr</span> <span class="o">=</span> <span class="n">argv1</span> <span class="o">+</span> <span class="mi">5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="o">*</span><span class="n">DAT_004053fc</span><span class="p">)(</span><span class="n">chr</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">chr</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="n">chr</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">chr</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="mh">0xb9</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_10</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">local_10</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">        cut for brevity
+</span></span></span><span class="line"><span class="cl"><span class="cm">    */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">chr</span> <span class="o">=</span> <span class="n">argv1</span> <span class="o">+</span> <span class="mh">0x2d</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="o">*</span><span class="n">DAT_0040540c</span><span class="p">)(</span><span class="n">chr</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">chr</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="n">chr</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">chr</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="mh">0xf9</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_10</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">local_10</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">chr</span> <span class="o">=</span> <span class="n">argv1</span> <span class="o">+</span> <span class="mh">0x2e</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="o">*</span><span class="n">DAT_004053f4</span><span class="p">)(</span><span class="n">chr</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">chr</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="n">chr</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">chr</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="mh">0x98</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_10</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">local_10</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">argv1</span> <span class="o">=</span> <span class="n">argv1</span> <span class="o">+</span> <span class="mh">0x2f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="o">*</span><span class="n">DAT_00405438</span><span class="p">)(</span><span class="n">argv1</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">argv1</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="n">argv1</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">argv1</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="mh">0x65</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_10</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">local_10</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">);</span>
+</span></span></code></pre></div><p>Finally a <code>memcmp</code> call against a global array:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">    <span class="n">iVar2</span> <span class="o">=</span> <span class="n">memcmp</span><span class="p">(</span><span class="n">FLAG</span><span class="p">,</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mh">0x30</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">iVar2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Wrong</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,(</span><span class="kt">char</span><span class="p">)</span><span class="n">iVar2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;I know you know the flag!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,(</span><span class="kt">char</span><span class="p">)</span><span class="n">iVar2</span><span class="p">);</span>
+</span></span></code></pre></div><p>The content of this array is, we can already save it for later:</p>
+<pre tabindex="0"><code>                         FLAG                                                         XREF[1]:   main:00401c05(*)
+      00405018 96 50 cf 2c eb 9b aa     db[48]
+               fb 53 ab 73 dd 6c 9e
+               db bc ee ab 23 d6 1
+         00405018 [0]           96h, 50h, CFh, 2Ch,
+         0040501c [4]           EBh, 9Bh, AAh, FBh,
+         00405020 [8]           53h, ABh, 73h, DDh,
+         00405024 [12]          6Ch, 9Eh, DBh, BCh,
+         00405028 [16]          EEh, ABh, 23h, D6h,
+         0040502c [20]          16h, FDh, F1h, F0h,
+         00405030 [24]          B9h, 75h, C3h, 28h,
+         00405034 [28]          A2h, 74h, 7Dh, E3h,
+         00405038 [32]          27h, D5h, 95h, 5Ch,
+         0040503c [36]          F5h, 76h, 75h, C9h,
+         00405040 [40]          8Ch, FBh, 42h,  Eh,
+         00405044 [44]          BDh, 51h, A2h, 98h
+</code></pre><p>So we know what we need to find, we just have to reverse all the flag character check functions.</p>
+<p>Each check is actually a call to a different function pointer and these pointers are initialized at runtime:</p>
+<p><img src="func_pointers.png" alt="function pointer"></p>
+<p>If we follow the XREF, we see that each of them are resolved by a serie of stub functions</p>
+<pre tabindex="0"><code>                         DAT_004030cc                                                 XREF[1]:   entry:00401d92(*)
+      004030cc 00                       ??                   00h
+      004030cd 00                       ??                   00h
+      004030ce 00                       ??                   00h
+      004030cf 00                       ??                   00h
+      004030d0 0e 1d 40 00              addr                 LAB_00401d0e
+      004030d4 00 10 40 00              addr                 FUN_00401000
+      004030d8 10 10 40 00              addr                 FUN_00401010
+      004030dc 20 10 40 00              addr                 FUN_00401020
+      004030e0 30 10 40 00              addr                 FUN_00401030
+      004030e4 40 10 40 00              addr                 FUN_00401040
+      004030e8 50 10 40 00              addr                 FUN_00401050
+      004030ec 60 10 40 00              addr                 FUN_00401060
+      004030f0 70 10 40 00              addr                 FUN_00401070
+      004030f4 80 10 40 00              addr                 FUN_00401080
+      004030f8 90 10 40 00              addr                 FUN_00401090
+      004030fc a0 10 40 00              addr                 FUN_004010a0
+      00403100 b0 10 40 00              addr                 FUN_004010b0
+      00403104 c0 10 40 00              addr                 FUN_004010c0
+      00403108 d0 10 40 00              addr                 FUN_004010d0
+      0040310c e0 10 40 00              addr                 FUN_004010e0
+      00403110 f0 10 40 00              addr                 FUN_004010f0
+      00403114 00 11 40 00              addr                 FUN_00401100
+      00403118 10 11 40 00              addr                 FUN_00401110
+      0040311c 20 11 40 00              addr                 FUN_00401120
+      00403120 30 11 40 00              addr                 FUN_00401130
+      00403124 40 11 40 00              addr                 FUN_00401140
+      00403128 50 11 40 00              addr                 FUN_00401150
+      0040312c 60 11 40 00              addr                 FUN_00401160
+      00403130 70 11 40 00              addr                 FUN_00401170
+      00403134 80 11 40 00              addr                 FUN_00401180
+      00403138 90 11 40 00              addr                 FUN_00401190
+      0040313c a0 11 40 00              addr                 FUN_004011a0
+      00403140 b0 11 40 00              addr                 FUN_004011b0
+      00403144 c0 11 40 00              addr                 FUN_004011c0
+      00403148 d0 11 40 00              addr                 FUN_004011d0
+      0040314c e0 11 40 00              addr                 FUN_004011e0
+      00403150 f0 11 40 00              addr                 FUN_004011f0
+      00403154 00 12 40 00              addr                 FUN_00401200
+      00403158 10 12 40 00              addr                 FUN_00401210
+      0040315c 20 12 40 00              addr                 FUN_00401220
+      00403160 30 12 40 00              addr                 FUN_00401230
+      00403164 40 12 40 00              addr                 FUN_00401240
+      00403168 50 12 40 00              addr                 FUN_00401250
+      0040316c 60 12 40 00              addr                 FUN_00401260
+      00403170 70 12 40 00              addr                 FUN_00401270
+      00403174 80 12 40 00              addr                 FUN_00401280
+      00403178 90 12 40 00              addr                 FUN_00401290
+      0040317c a0 12 40 00              addr                 FUN_004012a0
+      00403180 b0 12 40 00              addr                 FUN_004012b0
+      00403184 c0 12 40 00              addr                 FUN_004012c0
+      00403188 d0 12 40 00              addr                 FUN_004012d0
+      0040318c e0 12 40 00              addr                 FUN_004012e0
+      00403190 f0 12 40 00              addr                 FUN_004012f0
+</code></pre><p>during the <code>_initterm()</code> call before the main invocation</p>
+<pre tabindex="0"><code>      00401d92 68 cc 30 40 00           PUSH                 DAT_004030cc
+      00401d97 e8 57 0a 00 00           CALL                 API-MS-WIN-CRT-RUNTIME-L1-1-0.DLL::_initterm                                             undefined _initterm()
+</code></pre><h1 id="2-the-magic">2. The Magic<a href="#2-the-magic" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>Eeach stub looks the same, only initializing a different pointer with a different address:</p>
+<p><img src="stub.png" alt="stub"></p>
+<p>we can follow <em>code</em> and force disassembly to find something like:</p>
+<p><img src="code.png" alt="code"></p>
+<p>and this where the magic happen: the <code>RETF</code>instruction (RET <em>FAR</em>), will not only pop the EIP register but also the CS register.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="err">004031</span><span class="nf">c0</span>    <span class="no">PUSH</span>    <span class="mi">0x33</span>            <span class="c1">; push 0x33 to the stack
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">004031</span><span class="nf">c2</span>    <span class="no">CALL</span>    <span class="no">LAB_004031c7</span>    <span class="c1">; push return address to the stack (right after the call: 004031c7)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nl">LAB_004031c7:</span>
+</span></span><span class="line"><span class="cl"><span class="err">004031</span><span class="nf">c7</span>    <span class="no">ADD</span>     <span class="p">[</span><span class="no">ESP</span><span class="p">],</span> <span class="mi">5</span>        <span class="c1">; increment saved return address by 5 (ADD is 4 bytes, RETF 1 bytes)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                                    <span class="c1">; saved EIP is now 004031cc
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">004031</span><span class="nf">cb</span>    <span class="no">RETF</span>                    <span class="c1">; pop EIP from the stack (so EIP = 004031cc) and CS (0x33)
+</span></span></span><span class="line"><span class="cl"><span class="c1">; continues execution
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">004031</span><span class="nf">cc</span>    <span class="err">??</span>
+</span></span></code></pre></div><p>By putting 0x33 into CS, the processor switches to 64 bits mode, that&rsquo;s why ghidra is getting all confused after the RETF.</p>
+<p>we can quickly disassemble the bytes using radare2 or rizin:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="c1">; % rz-asm -b 64 -d 4831c065488b4060480fb64002678b4c241c67890185c07518678b7c2404678b74240c678b4c241467020e80f1ba67880fe800000000c7442404230000008304240dcbc3
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">xor</span> <span class="no">rax</span><span class="p">,</span> <span class="no">rax</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">rax</span><span class="p">,</span> <span class="no">qword</span> <span class="no">gs</span><span class="p">:[</span><span class="no">rax</span> <span class="err">+</span> <span class="mi">0x60</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">movzx</span> <span class="no">rax</span><span class="p">,</span> <span class="no">byte</span> <span class="p">[</span><span class="no">rax</span> <span class="err">+</span> <span class="mi">2</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">ecx</span><span class="p">,</span> <span class="no">dword</span> <span class="p">[</span><span class="no">esp</span> <span class="err">+</span> <span class="mi">0x1c</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">dword</span> <span class="p">[</span><span class="no">ecx</span><span class="p">],</span> <span class="no">eax</span>
+</span></span><span class="line"><span class="cl"><span class="nf">test</span> <span class="no">eax</span><span class="p">,</span> <span class="no">eax</span>
+</span></span><span class="line"><span class="cl"><span class="nf">jne</span> <span class="mi">0x31</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">edi</span><span class="p">,</span> <span class="no">dword</span> <span class="p">[</span><span class="no">esp</span> <span class="err">+</span> <span class="mi">4</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">esi</span><span class="p">,</span> <span class="no">dword</span> <span class="p">[</span><span class="no">esp</span> <span class="err">+</span> <span class="mi">0xc</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">ecx</span><span class="p">,</span> <span class="no">dword</span> <span class="p">[</span><span class="no">esp</span> <span class="err">+</span> <span class="mi">0x14</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">add</span> <span class="no">cl</span><span class="p">,</span> <span class="no">byte</span> <span class="p">[</span><span class="no">esi</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">xor</span> <span class="no">cl</span><span class="p">,</span> <span class="mi">0xba</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">byte</span> <span class="p">[</span><span class="no">edi</span><span class="p">],</span> <span class="no">cl</span>
+</span></span><span class="line"><span class="cl"><span class="nf">call</span> <span class="mi">0x36</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">dword</span> <span class="p">[</span><span class="no">rsp</span> <span class="err">+</span> <span class="mi">4</span><span class="p">],</span> <span class="mi">0x23</span>
+</span></span><span class="line"><span class="cl"><span class="nf">add</span> <span class="no">dword</span> <span class="p">[</span><span class="no">rsp</span><span class="p">],</span> <span class="mi">0xd</span>
+</span></span><span class="line"><span class="cl"><span class="nf">retf</span>
+</span></span><span class="line"><span class="cl"><span class="nf">ret</span>
+</span></span></code></pre></div><p>this piece of code starts with some anti debug:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">xor</span> <span class="no">rax</span><span class="p">,</span> <span class="no">rax</span> 
+</span></span><span class="line"><span class="cl"><span class="no">mov</span> <span class="no">rax</span><span class="p">,</span> <span class="no">qword</span> <span class="no">gs</span><span class="p">:[</span><span class="no">rax</span> <span class="err">+</span> <span class="mi">0x60</span><span class="p">]</span>      <span class="c1">; PEB
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">movzx</span> <span class="no">rax</span><span class="p">,</span> <span class="no">byte</span> <span class="p">[</span><span class="no">rax</span> <span class="err">+</span> <span class="mi">2</span><span class="p">]</span>           <span class="c1">; PEB-&gt;BeingDebugged
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">mov</span> <span class="no">ecx</span><span class="p">,</span> <span class="no">dword</span> <span class="p">[</span><span class="no">esp</span> <span class="err">+</span> <span class="mi">0x1c</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">dword</span> <span class="p">[</span><span class="no">ecx</span><span class="p">],</span> <span class="no">eax</span> 
+</span></span><span class="line"><span class="cl"><span class="no">test</span> <span class="no">eax</span><span class="p">,</span> <span class="no">eax</span> 
+</span></span><span class="line"><span class="cl"><span class="no">jne</span> <span class="mi">0x31</span>
+</span></span></code></pre></div><p>It check <code>PEB-&gt;BeingDebugged</code>  for the presence of a debugger and skips the rest if found.</p>
+<p>More info on the TEB/PEB here:</p>
+<ul>
+<li><a href="https://www.geoffchappell.com/studies/windows/km/ntoskrnl/inc/api/pebteb/teb/index.htm">https://www.geoffchappell.com/studies/windows/km/ntoskrnl/inc/api/pebteb/teb/index.htm</a></li>
+<li><a href="https://www.geoffchappell.com/studies/windows/km/ntoskrnl/inc/api/pebteb/peb/index.htm">https://www.geoffchappell.com/studies/windows/km/ntoskrnl/inc/api/pebteb/peb/index.htm</a></li>
+</ul>
+<p>Then it manipulates the flag character it&rsquo;s checking:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">edi</span><span class="p">,</span> <span class="no">dword</span> <span class="p">[</span><span class="no">esp</span> <span class="err">+</span> <span class="mi">4</span><span class="p">]</span>        <span class="c1">; ptr to the character we&#39;re checking in argv[1]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">mov</span> <span class="no">esi</span><span class="p">,</span> <span class="no">dword</span> <span class="p">[</span><span class="no">esp</span> <span class="err">+</span> <span class="mi">0xc</span><span class="p">]</span>      <span class="c1">; same as above
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">mov</span> <span class="no">ecx</span><span class="p">,</span> <span class="no">dword</span> <span class="p">[</span><span class="no">esp</span> <span class="err">+</span> <span class="mi">0x14</span><span class="p">]</span>     <span class="c1">; ptr to some constant passed during the call - let&#39;s call the value V
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">add</span> <span class="no">cl</span><span class="p">,</span> <span class="no">byte</span> <span class="p">[</span><span class="no">esi</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">xor</span> <span class="no">cl</span><span class="p">,</span> <span class="mi">0xba</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">byte</span> <span class="p">[</span><span class="no">edi</span><span class="p">],</span> <span class="no">cl</span>
+</span></span></code></pre></div><p>The stack layout was dumped using a debugger before the CPU switches to 64 bits mode (and makes the debugger go banana), and this piece of code is doing:</p>
+<pre tabindex="0"><code>argv[1][0] = (argv[1][0] + V) ^ 0xba
+</code></pre><p>we can get the value <em>V</em> (0xc4 in this case) from the function call in main:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">    <span class="n">argv1</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="o">*</span><span class="n">function_ptr</span><span class="p">)(</span><span class="n">argv1</span> <span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">argv1</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span> <span class="p">,</span>  <span class="n">argv1</span>  <span class="p">,</span>  <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">argv1</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span>  <span class="mh">0xc4</span>   <span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_10</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">local_10</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                                                                           <span class="o">-----&gt;</span>  <span class="n">V</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ESP</span>      <span class="o">+</span><span class="mi">4</span>   <span class="p">,</span>         <span class="o">+</span><span class="mi">8</span>         <span class="p">,</span>  <span class="o">+</span><span class="mh">0xc</span>   <span class="p">,</span>      <span class="o">+</span><span class="mh">0x10</span>         <span class="p">,</span>  <span class="o">+</span><span class="mh">0x14</span>  <span class="p">,</span> <span class="p">.....</span>              
+</span></span></code></pre></div><p>The last bit of code is responsible for switching back to 32 bits mode, this time by setting CS to 0x23:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">call</span> <span class="mi">0x36</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">dword</span> <span class="p">[</span><span class="no">rsp</span> <span class="err">+</span> <span class="mi">4</span><span class="p">],</span> <span class="mi">0x23</span>
+</span></span><span class="line"><span class="cl"><span class="nf">add</span> <span class="no">dword</span> <span class="p">[</span><span class="no">rsp</span><span class="p">],</span> <span class="mi">0xd</span>
+</span></span><span class="line"><span class="cl"><span class="nf">retf</span>
+</span></span></code></pre></div><p>Alright so here we know that:</p>
+<pre tabindex="0"><code>argv[1][0] = (argv[1][0] + 0xc4) ^ 0xba
+</code></pre><p>and that is should be equal to 0x96 (first byte of the memcmp&rsquo;d array)</p>
+<p>which means the firt character of the flag must be <code>h</code> (even though we already know that because flags are like hitcon{&hellip;.}):</p>
+<pre tabindex="0"><code>&gt;&gt;&gt; chr((0x96 ^ 0xba) - 0xc4 &amp; 0xff)
+&#39;h&#39;
+</code></pre><p>At least the track seems solid&hellip;</p>
+<h1 id="3-rinse-and-repeat">3. Rinse and Repeat<a href="#3-rinse-and-repeat" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>48 characters, 48 different functions, time to go dirty.</p>
+<p>I&rsquo;ve noticed 2 interesting properties:</p>
+<ul>
+<li>the flag char check functions are in the correct &ldquo;memory order&rdquo; (meaning that the function checking chr 2 is at a higher address than the one checking chr 1, and the one checking chr 3 is at a higher address than the one checking chr 2, etc..)</li>
+<li>these functions always start/end with the same byte sequence</li>
+</ul>
+<p>which make a good and simple &ldquo;automation&rdquo; case.</p>
+<p>The start byte sequence is <code>\x6a\x33\xe8\x00\x00\x00\x00\x83\x04\x24\x05\xcb</code>, the end byte sequence is <code>\xcb\x3c</code> (RETF; RET)</p>
+<p><img src="prologue.png" alt="prologue"></p>
+<p>using the following script we can disassemble all the functions we need:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">capstone</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">disasm</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">md</span> <span class="o">=</span> <span class="n">Cs</span><span class="p">(</span><span class="n">CS_ARCH_X86</span><span class="p">,</span> <span class="n">CS_MODE_64</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">md</span><span class="o">.</span><span class="n">disasm</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="mh">0x1000</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;0x</span><span class="si">%x</span><span class="s2">:</span><span class="se">\t</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&#34;</span> <span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">mnemonic</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">op_str</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">dat</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;meow_way.exe&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dat</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;</span><span class="se">\x6a\x33\xe8\x00\x00\x00\x00\x83\x04\x24\x05\xcb</span><span class="s2">&#34;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;H1&#39;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;#############################&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">disasm</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xcb\xc3</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+</span></span></code></pre></div><p>and we can notice that some of these functions are not adding the value, but substracting:</p>
+<pre tabindex="0"><code>% python disasm64.py| more
+[....]
+
+#############################
+0x1000:	xor	rax, rax
+0x1003:	mov	rax, qword ptr gs:[rax + 0x60]
+0x1008:	movzx	rax, byte ptr [rax + 2]
+0x100d:	mov	ecx, dword ptr [esp + 0x1c]
+0x1012:	mov	dword ptr [ecx], eax
+0x1015:	test	eax, eax
+0x1017:	jne	0x1031
+0x1019:	mov	edi, dword ptr [esp + 4]
+0x101e:	mov	esi, dword ptr [esp + 0xc]
+0x1023:	mov	ecx, dword ptr [esp + 0x14]
+0x1028:	add	cl, byte ptr [esi]                  &lt;-- ADD
+0x102b:	xor	cl, 0x9f
+0x102e:	mov	byte ptr [edi], cl
+0x1031:	call	0x1036
+0x1036:	mov	dword ptr [rsp + 4], 0x23
+0x103e:	add	dword ptr [rsp], 0xd
+#############################
+0x1000:	xor	rax, rax
+0x1003:	mov	rax, qword ptr gs:[rax + 0x60]
+0x1008:	movzx	rax, byte ptr [rax + 2]
+0x100d:	mov	ecx, dword ptr [esp + 0x1c]
+0x1012:	mov	dword ptr [ecx], eax
+0x1015:	test	eax, eax
+0x1017:	jne	0x1031
+0x1019:	mov	edi, dword ptr [esp + 4]
+0x101e:	mov	esi, dword ptr [esp + 0xc]
+0x1023:	mov	ecx, dword ptr [esp + 0x14]
+0x1028:	sub	cl, byte ptr [esi]                  &lt;--- SUB
+0x102b:	xor	cl, 0xd0
+0x102e:	mov	byte ptr [edi], cl
+0x1031:	call	0x1036
+0x1036:	mov	dword ptr [rsp + 4], 0x23
+0x103e:	add	dword ptr [rsp], 0xd
+[...]
+</code></pre><p>At this point we know all the information we need to get in order to find the flag:</p>
+<ul>
+<li>the memcmp array it&rsquo;s checked against</li>
+<li>the XOR value hardcoded in each function</li>
+<li>the operation performed by each function (SUB or ADD)</li>
+<li>the value parameter passed to the functions</li>
+</ul>
+<h2 id="31-the-memcmp-array">3.1 The memcmp array<a href="#31-the-memcmp-array" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>easy, it&rsquo;s in the code:</p>
+<pre tabindex="0"><code>[ 0x96, 0x50, 0xcf, 0x2c, 0xeb, 0x9b, 0xaa, 0xfb, 0x53, 0xab, 0x73, 0xdd, 0x6c, 0x9e, 0xdb, 0xbc, 0xee, 0xab, 0x23, 0xd6, 0x16, 0xfd, 0xf1, 0xf0, 0xb9, 0x75, 0xc3, 0x28, 0xa2, 0x74, 0x7d,
+0xe3, 0x27, 0xd5, 0x95, 0x5c, 0xf5, 0x76, 0x75, 0xc9, 0x8c, 0xfb, 0x42, 0x0e, 0xbd, 0x51, 0xa2, 0x98 ]
+</code></pre><h2 id="32-the-xor-values">3.2 The XOR values<a href="#32-the-xor-values" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>just grep them:</p>
+<pre tabindex="0"><code>% python disasm64.py | egrep &#34;xor.*cl&#34; | cut -d, -f2 | xargs | tr &#34; &#34; &#34;,&#34;
+0xba,0x2f,0xcd,0xf6,0x9f,0xd0,0x22,0xf7,0xd0,0x1f,0xa8,0x3d,0xc7,0xa5,0x47,0x68,0xd7,0x4a,0x96,0x91,0x2e,0x19,0xc5,0xe3,0x88,0xbd,0x4e,0x93,0x13,0xf1,0xcc,0x47,0xab,0xc9,0x48,0x2b,9,0x50,0x4f,0xe9,0xc0,0x5e,0xef,0x8b,0x85,0xcb,0x55,0x70
+</code></pre><h2 id="33-the-operations">3.3 The operations<a href="#33-the-operations" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>grep them too:</p>
+<pre tabindex="0"><code>% python disasm64.py| egrep &#34;(add|sub).*cl&#34; | cat -n | grep sub | awk &#39;{ print $1-1}&#39; | xargs | tr &#34; &#34; &#34;,&#34;
+5,7,10,11,14,17,19,25,28,29,34,35,37,39,40,42,43,44,45,47
+</code></pre><p>for character 5, 7, 10, &hellip; it&rsquo;s doing a sub, for the others, an add.</p>
+<h2 id="34-the-parameter-values">3.4 The parameter values.<a href="#34-the-parameter-values" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>Just copy the ghidra decompiler output of the main function to a file:</p>
+<pre tabindex="0"><code>% cat bla.txt
+    (*DAT_0040544c)(argv1,(int)argv1 &gt;&gt; 0x1f,argv1,(int)argv1 &gt;&gt; 0x1f,0xc4,0,&amp;local_10,(int)&amp;local_10 &gt;&gt; 0x1f);
+    chr = argv1 + 1;
+    (*DAT_004053a8)(chr,(int)chr &gt;&gt; 0x1f,chr,(int)chr &gt;&gt; 0x1f,0x16,0,&amp;local_10,(int)&amp;local_10 &gt;&gt; 0x1f);
+    chr = argv1 + 2;
+    (*DAT_004053b4)(chr,(int)chr &gt;&gt; 0x1f,chr,(int)chr &gt;&gt; 0x1f,0x8e,0,&amp;local_10,(int)&amp;local_10 &gt;&gt; 0x1f);
+    chr = argv1 + 3;
+    (*DAT_004053f0)(chr,(int)chr &gt;&gt; 0x1f,chr,(int)chr &gt;&gt; 0x1f,0x77,0,&amp;local_10,(int)&amp;local_10 &gt;&gt; 0x1f);
+// etc....
+</code></pre><p>and get the values:</p>
+<pre tabindex="0"><code>% cat bla.txt| grep DAT | cut -d, -f 5 | xargs | tr &#34; &#34; &#34;,&#34;
+0xc4,0x16,0x8e,0x77,5,0xb9,0xd,0x6b,0x24,0x55,0x12,0x35,0x76,0xe7,0xfb,0xa0,0xda,0x34,0x84,0xb4,200,0x9b,0xef,0xb4,0xb9,10,0x57,0x5c,0xfe,0xc5,0x6a,0x73,0x49,0xbd,0x11,0xd6,0x8f,0x6b,10,0x97,0xab,0x4e,0xed,0xfe,0x97,0xf9,0x98
+</code></pre><h1 id="4-the-solution">4. The solution<a href="#4-the-solution" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>Put all these arrays in a python script and watch the flag:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># xor values</span>
+</span></span><span class="line"><span class="cl"><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0xba</span><span class="p">,</span><span class="mh">0x2f</span><span class="p">,</span><span class="mh">0xcd</span><span class="p">,</span><span class="mh">0xf6</span><span class="p">,</span><span class="mh">0x9f</span><span class="p">,</span><span class="mh">0xd0</span><span class="p">,</span><span class="mh">0x22</span><span class="p">,</span><span class="mh">0xf7</span><span class="p">,</span><span class="mh">0xd0</span><span class="p">,</span><span class="mh">0x1f</span><span class="p">,</span><span class="mh">0xa8</span><span class="p">,</span><span class="mh">0x3d</span><span class="p">,</span><span class="mh">0xc7</span><span class="p">,</span><span class="mh">0xa5</span><span class="p">,</span><span class="mh">0x47</span><span class="p">,</span><span class="mh">0x68</span><span class="p">,</span><span class="mh">0xd7</span><span class="p">,</span><span class="mh">0x4a</span><span class="p">,</span><span class="mh">0x96</span><span class="p">,</span><span class="mh">0x91</span><span class="p">,</span><span class="mh">0x2e</span><span class="p">,</span><span class="mh">0x19</span><span class="p">,</span><span class="mh">0xc5</span><span class="p">,</span><span class="mh">0xe3</span><span class="p">,</span><span class="mh">0x88</span><span class="p">,</span><span class="mh">0xbd</span><span class="p">,</span><span class="mh">0x4e</span><span class="p">,</span><span class="mh">0x93</span><span class="p">,</span><span class="mh">0x13</span><span class="p">,</span><span class="mh">0xf1</span><span class="p">,</span><span class="mh">0xcc</span><span class="p">,</span><span class="mh">0x47</span><span class="p">,</span><span class="mh">0xab</span><span class="p">,</span><span class="mh">0xc9</span><span class="p">,</span><span class="mh">0x48</span><span class="p">,</span><span class="mh">0x2b</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mh">0x50</span><span class="p">,</span><span class="mh">0x4f</span><span class="p">,</span><span class="mh">0xe9</span><span class="p">,</span><span class="mh">0xc0</span><span class="p">,</span><span class="mh">0x5e</span><span class="p">,</span><span class="mh">0xef</span><span class="p">,</span><span class="mh">0x8b</span><span class="p">,</span><span class="mh">0x85</span><span class="p">,</span><span class="mh">0xcb</span><span class="p">,</span><span class="mh">0x55</span><span class="p">,</span><span class="mh">0x70</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># parameters values</span>
+</span></span><span class="line"><span class="cl"><span class="n">param</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0xc4</span><span class="p">,</span><span class="mh">0x16</span><span class="p">,</span><span class="mh">0x8e</span><span class="p">,</span><span class="mh">0x77</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mh">0xb9</span><span class="p">,</span><span class="mh">0xd</span><span class="p">,</span><span class="mh">0x6b</span><span class="p">,</span><span class="mh">0x24</span><span class="p">,</span><span class="mh">0x55</span><span class="p">,</span><span class="mh">0x12</span><span class="p">,</span><span class="mh">0x35</span><span class="p">,</span><span class="mh">0x76</span><span class="p">,</span><span class="mh">0xe7</span><span class="p">,</span><span class="mh">0xfb</span><span class="p">,</span><span class="mh">0xa0</span><span class="p">,</span><span class="mh">0xda</span><span class="p">,</span><span class="mh">0x34</span><span class="p">,</span><span class="mh">0x84</span><span class="p">,</span><span class="mh">0xb4</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mh">0x9b</span><span class="p">,</span><span class="mh">0xef</span><span class="p">,</span><span class="mh">0xb4</span><span class="p">,</span><span class="mh">0xb9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mh">0x57</span><span class="p">,</span><span class="mh">0x5c</span><span class="p">,</span><span class="mh">0xfe</span><span class="p">,</span><span class="mh">0xc5</span><span class="p">,</span><span class="mh">0x6a</span><span class="p">,</span><span class="mh">0x73</span><span class="p">,</span><span class="mh">0x49</span><span class="p">,</span><span class="mh">0xbd</span><span class="p">,</span><span class="mh">0x11</span><span class="p">,</span><span class="mh">0xd6</span><span class="p">,</span><span class="mh">0x8f</span><span class="p">,</span><span class="mh">0x6b</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mh">0x97</span><span class="p">,</span><span class="mh">0xab</span><span class="p">,</span><span class="mh">0x4e</span><span class="p">,</span><span class="mh">0xed</span><span class="p">,</span><span class="mh">0xfe</span><span class="p">,</span><span class="mh">0x97</span><span class="p">,</span><span class="mh">0xf9</span><span class="p">,</span><span class="mh">0x98</span><span class="p">,</span><span class="mh">0x65</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># memcmp</span>
+</span></span><span class="line"><span class="cl"><span class="n">memcmp</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x96</span><span class="p">,</span><span class="mh">0x50</span><span class="p">,</span><span class="mh">0xcf</span><span class="p">,</span><span class="mh">0x2c</span><span class="p">,</span><span class="mh">0xeb</span><span class="p">,</span><span class="mh">0x9b</span><span class="p">,</span><span class="mh">0xaa</span><span class="p">,</span><span class="mh">0xfb</span><span class="p">,</span><span class="mh">0x53</span><span class="p">,</span><span class="mh">0xab</span><span class="p">,</span><span class="mh">0x73</span><span class="p">,</span><span class="mh">0xdd</span><span class="p">,</span><span class="mh">0x6c</span><span class="p">,</span><span class="mh">0x9e</span><span class="p">,</span><span class="mh">0xdb</span><span class="p">,</span><span class="mh">0xbc</span><span class="p">,</span><span class="mh">0xee</span><span class="p">,</span><span class="mh">0xab</span><span class="p">,</span><span class="mh">0x23</span><span class="p">,</span><span class="mh">0xd6</span><span class="p">,</span><span class="mh">0x16</span><span class="p">,</span><span class="mh">0xfd</span><span class="p">,</span><span class="mh">0xf1</span><span class="p">,</span><span class="mh">0xf0</span><span class="p">,</span><span class="mh">0xb9</span><span class="p">,</span><span class="mh">0x75</span><span class="p">,</span><span class="mh">0xc3</span><span class="p">,</span><span class="mh">0x28</span><span class="p">,</span><span class="mh">0xa2</span><span class="p">,</span><span class="mh">0x74</span><span class="p">,</span><span class="mh">0x7d</span><span class="p">,</span><span class="mh">0xe3</span><span class="p">,</span><span class="mh">0x27</span><span class="p">,</span><span class="mh">0xd5</span><span class="p">,</span><span class="mh">0x95</span><span class="p">,</span><span class="mh">0x5c</span><span class="p">,</span><span class="mh">0xf5</span><span class="p">,</span><span class="mh">0x76</span><span class="p">,</span><span class="mh">0x75</span><span class="p">,</span><span class="mh">0xc9</span><span class="p">,</span><span class="mh">0x8c</span><span class="p">,</span><span class="mh">0xfb</span><span class="p">,</span><span class="mh">0x42</span><span class="p">,</span><span class="mh">0x0e</span><span class="p">,</span><span class="mh">0xbd</span><span class="p">,</span><span class="mh">0x51</span><span class="p">,</span><span class="mh">0xa2</span><span class="p">,</span><span class="mh">0x98</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># index of &#39;sub&#39; functions</span>
+</span></span><span class="line"><span class="cl"><span class="n">subs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">29</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="mi">37</span><span class="p">,</span><span class="mi">39</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">42</span><span class="p">,</span><span class="mi">43</span><span class="p">,</span><span class="mi">44</span><span class="p">,</span><span class="mi">45</span><span class="p">,</span><span class="mi">47</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">f</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">48</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">subs</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">p</span> <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="p">((</span><span class="n">memcmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="o">&amp;</span> <span class="mh">0xff</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">p</span> <span class="o">=</span> <span class="p">((</span><span class="n">memcmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&amp;</span> <span class="mh">0xff</span>
+</span></span><span class="line"><span class="cl">    <span class="n">f</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</span></span></code></pre></div><p>-&gt; <code>hitcon{___7U5T_4_S1mpIE_xB6_M@G1C_4_mE0w_W@y___}</code></p>
+<h1 id="5-bonus">5. Bonus<a href="#5-bonus" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>Some of the check functions have an alternative anti-debug check:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">xor</span> <span class="no">rax</span><span class="p">,</span> <span class="no">rax</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">rax</span><span class="p">,</span> <span class="no">qword</span> <span class="no">gs</span><span class="p">:[</span><span class="no">rax</span> <span class="err">+</span> <span class="mi">0x60</span><span class="p">]</span>  <span class="c1">; PEB
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">movzx</span> <span class="no">rax</span><span class="p">,</span> <span class="no">byte</span> <span class="p">[</span><span class="no">rax</span> <span class="err">+</span> <span class="mi">0xbc</span><span class="p">]</span>    <span class="c1">; PEB-&gt;NtGlobalFlag
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">mov</span> <span class="no">ecx</span><span class="p">,</span> <span class="no">dword</span> <span class="p">[</span><span class="no">esp</span> <span class="err">+</span> <span class="mi">0x1c</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nf">and</span> <span class="no">eax</span><span class="p">,</span> <span class="mi">0x70</span>                   <span class="c1">; FLG_HEAP_ENABLE_TAIL_CHECK|FLG_HEAP_ENABLE_FREE_CHECK|FLG_HEAP_VALIDATE_PARAMETERS
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">mov</span> <span class="no">dword</span> <span class="p">[</span><span class="no">ecx</span><span class="p">],</span> <span class="no">eax</span>
+</span></span><span class="line"><span class="cl"><span class="nf">test</span> <span class="no">eax</span><span class="p">,</span> <span class="no">eax</span>
+</span></span><span class="line"><span class="cl"><span class="nf">jne</span> <span class="mi">0x37</span>
+</span></span></code></pre></div><p>it tests <code>PEB-&gt;NtGlobalFlag &amp; 0x70</code> to check for the presence of a debugger (more info here: <a href="https://www.aldeid.com/wiki/PEB-Process-Environment-Block/NtGlobalFlag">https://www.aldeid.com/wiki/PEB-Process-Environment-Block/NtGlobalFlag</a>)</p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://matth.dmz42.org/tags/reverse">reverse</a></span><span class="tag"><a href="https://matth.dmz42.org/tags/ctf">ctf</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2144 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2022-12-09 08:00 &#43;0100</p>
+			</footer>
+		</article>
+		<aside id="toc">
+			<div class="toc-title">Table of Contents</div>
+			<nav id="TableOfContents">
+  <ul>
+    <li><a href="#31-the-memcmp-array">3.1 The memcmp array</a></li>
+    <li><a href="#32-the-xor-values">3.2 The XOR values</a></li>
+    <li><a href="#33-the-operations">3.3 The operations</a></li>
+    <li><a href="#34-the-parameter-values">3.4 The parameter values.</a></li>
+  </ul>
+</nav>
+		</aside>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://matth.dmz42.org/posts/2022/squarectf-2022-yet-another-reversing-activity/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Square CTF 2022: Yet Another Reversing Activity</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2022 <a href="https://matth.dmz42.org">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://matth.dmz42.org/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+
+	<script src="https://matth.dmz42.org/js/bundle.min.580988ed2982bcbb74a1773c7abea97b43e4c43b9324e10cda0813ec6ec4bb67.js" integrity="sha256-WAmI7SmCvLt0oXc8er6pe0PkxDuTJOEM2ggT7G7Eu2c=" crossorigin="anonymous"></script>
+	
+
+</body>
+
+</html>
