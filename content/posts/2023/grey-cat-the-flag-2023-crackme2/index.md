@@ -384,8 +384,8 @@ bloc: 0xab3   0x44c6f479
 
 also there must be some kind of conditionnal instruction somewhere to trigger the good or bad message.
 
-Some block contains a `cmp` instruction, but they are just decoys and here for more confusion.
-The before last block of the new trace in interesting as it ends with:
+Some block contain a `cmp` instruction, but they are just decoys and here for more confusion.
+The before last block of the new trace is interesting as it ends with:
 
 ```
 0x1e1:  test    r12, r12
@@ -445,7 +445,7 @@ If we debug the binary and force r12 to be 0 at this stage, we end up with the w
 0x1e1:	test	r12, r12
 ```
 
-it's first initialized to 0 and sometimes, or'd with another register (which must 0 as well).
+it's first initialized to 0 and sometimes `or`'d with another register (which must zero as well if we want it to remain zero).
 
 starring at the screen, we can notice a recurring pattern in some blocks, like this one:
 
@@ -468,7 +468,7 @@ bloc: 0x165c   0x803ed377
 0xfb:   or  r12, rdx
 ```
 
-so if can find these blocks, get the character index that being check (from the movzx instruction) and then manage to get 0 in the or'd register with r12, we should be good to go.
+so if can we find these blocks, get the character index that being checked (from the movzx instruction) and then manage to get 0 in the or'd register with r12, we should be good to go.
 
 
 # 4. Poor man's ugly emulation

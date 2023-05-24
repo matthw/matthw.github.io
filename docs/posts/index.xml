@@ -309,8 +309,8 @@ bloc: 0xab3   0x44c6f479
 0x42:	lea	r10, [rbp + r10]
 [...]
 </code></pre><p>also there must be some kind of conditionnal instruction somewhere to trigger the good or bad message.</p>
-<p>Some block contains a <code>cmp</code> instruction, but they are just decoys and here for more confusion.
-The before last block of the new trace in interesting as it ends with:</p>
+<p>Some block contain a <code>cmp</code> instruction, but they are just decoys and here for more confusion.
+The before last block of the new trace is interesting as it ends with:</p>
 <pre tabindex="0"><code>0x1e1:  test    r12, r12
 0x1e4:  cmove   rdx, rbx
 0x1e8:  mov rcx, rdx
@@ -361,7 +361,7 @@ The before last block of the new trace in interesting as it ends with:</p>
 0x122:	or	r12, r10
 0xfb:	test	r12, r12
 0x1e1:	test	r12, r12
-</code></pre><p>it&rsquo;s first initialized to 0 and sometimes, or&rsquo;d with another register (which must 0 as well).</p>
+</code></pre><p>it&rsquo;s first initialized to 0 and sometimes <code>or</code>&rsquo;d with another register (which must zero as well if we want it to remain zero).</p>
 <p>starring at the screen, we can notice a recurring pattern in some blocks, like this one:</p>
 <pre tabindex="0"><code>bloc: 0x165c   0x803ed377
 ;
@@ -379,7 +379,7 @@ The before last block of the new trace in interesting as it ends with:</p>
 ;
 ; do a or with r12
 0xfb:   or  r12, rdx
-</code></pre><p>so if can find these blocks, get the character index that being check (from the movzx instruction) and then manage to get 0 in the or&rsquo;d register with r12, we should be good to go.</p>
+</code></pre><p>so if can we find these blocks, get the character index that being checked (from the movzx instruction) and then manage to get 0 in the or&rsquo;d register with r12, we should be good to go.</p>
 <h1 id="4-poor-mans-ugly-emulation">4. Poor man&rsquo;s ugly emulation</h1>
 <p>As i&rsquo;m not familiar enough with <a href="https://miasm.re/">miasm</a> or <a href="https://triton-library.github.io/">Triton</a> to quickly do what i wanted in my limited available i went down the quick
 and dirty road:</p>
