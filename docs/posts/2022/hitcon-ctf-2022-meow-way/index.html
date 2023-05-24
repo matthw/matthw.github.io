@@ -23,7 +23,6 @@ if (argc &lt; 2) { printf(&#34;Usage: %s &lt;flag&gt;\n&#34;,(char)*argv); /* WA
 <meta property="og:url" content="https://matth.dmz42.org/posts/2022/hitcon-ctf-2022-meow-way/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-12-09T08:00:00+01:00" />
 <meta property="article:modified_time" content="2022-12-09T08:00:00+01:00" />
-
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="HITCON CTF 2022: Meow Way"/>
 <meta name="twitter:description" content="This is a 32 bit PE file using an interesting trick.
@@ -83,9 +82,9 @@ if (argc &lt; 2) { printf(&#34;Usage: %s &lt;flag&gt;\n&#34;,(char)*argv); /* WA
 <h1 id="1-quick-recon">1. Quick Recon<a href="#1-quick-recon" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
 <p>Opening the file in ghidra and navigating from the entry point to the main function we find something like:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Usage: %s &lt;flag&gt;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,(</span><span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="n">argv</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Usage: %s &lt;flag&gt;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,(</span><span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="n">argv</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
-</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="n">f</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">    <span class="n">argv1</span> <span class="o">=</span> <span class="n">f</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
@@ -94,9 +93,9 @@ if (argc &lt; 2) { printf(&#34;Usage: %s &lt;flag&gt;\n&#34;,(char)*argv); /* WA
 </span></span><span class="line"><span class="cl">        <span class="n">f</span> <span class="o">=</span> <span class="n">f</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">cVar1</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">f</span> <span class="o">-</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">argv1</span> <span class="o">!=</span> <span class="mi">48</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Wrong length</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="n">in_stack_ffffffd8</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Wrong length</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="n">in_stack_ffffffd8</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
-</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span></code></pre></div><p>So we already know that we need to pass the flag as argument and that this flag must be 48 characters.</p>
 <p>What follows is a serie of calls, checking the flag characters one by one:</p>
@@ -122,13 +121,13 @@ if (argc &lt; 2) { printf(&#34;Usage: %s &lt;flag&gt;\n&#34;,(char)*argv); /* WA
 </span></span><span class="line"><span class="cl">    <span class="n">argv1</span> <span class="o">=</span> <span class="n">argv1</span> <span class="o">+</span> <span class="mh">0x2f</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="o">*</span><span class="n">DAT_00405438</span><span class="p">)(</span><span class="n">argv1</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">argv1</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="n">argv1</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">argv1</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">,</span><span class="mh">0x65</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_10</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">local_10</span> <span class="o">&gt;&gt;</span> <span class="mh">0x1f</span><span class="p">);</span>
 </span></span></code></pre></div><p>Finally a <code>memcmp</code> call against a global array:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">    <span class="n">iVar2</span> <span class="o">=</span> <span class="n">memcmp</span><span class="p">(</span><span class="n">FLAG</span><span class="p">,</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mh">0x30</span><span class="p">);</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">    <span class="n">iVar2</span> <span class="o">=</span> <span class="nf">memcmp</span><span class="p">(</span><span class="n">FLAG</span><span class="p">,</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mh">0x30</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">iVar2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Wrong</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,(</span><span class="kt">char</span><span class="p">)</span><span class="n">iVar2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Wrong</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,(</span><span class="kt">char</span><span class="p">)</span><span class="n">iVar2</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
-</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;I know you know the flag!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,(</span><span class="kt">char</span><span class="p">)</span><span class="n">iVar2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;I know you know the flag!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,(</span><span class="kt">char</span><span class="p">)</span><span class="n">iVar2</span><span class="p">);</span>
 </span></span></code></pre></div><p>The content of this array is, we can already save it for later:</p>
 <pre tabindex="0"><code>                         FLAG                                                         XREF[1]:   main:00401c05(*)
       00405018 96 50 cf 2c eb 9b aa     db[48]
@@ -438,6 +437,9 @@ if (argc &lt; 2) { printf(&#34;Usage: %s &lt;flag&gt;\n&#34;,(char)*argv); /* WA
 </nav>
 		</aside>
 		<div class="post-nav thin">
+			<a class="next-post" href="https://matth.dmz42.org/posts/2023/grey-cat-the-flag-2023-crackme2/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>Grey Cat the Flag CTF 2023 - Crackme2</span>
+			</a>
 			<a class="prev-post" href="https://matth.dmz42.org/posts/2022/squarectf-2022-yet-another-reversing-activity/">
 				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Square CTF 2022: Yet Another Reversing Activity</span>
 			</a>
@@ -447,7 +449,7 @@ if (argc &lt; 2) { printf(&#34;Usage: %s &lt;flag&gt;\n&#34;,(char)*argv); /* WA
 	</main>
 
 	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
-		<p>&copy; 2022 <a href="https://matth.dmz42.org">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>&copy; 2023 <a href="https://matth.dmz42.org">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
 		<p>
 			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://matth.dmz42.org/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
 		</p>

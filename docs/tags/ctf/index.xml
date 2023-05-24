@@ -7,7 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Fri, 09 Dec 2022 08:00:00 +0100</lastBuildDate><atom:link href="https://matth.dmz42.org/tags/ctf/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 24 May 2023 08:54:33 +0200</lastBuildDate><atom:link href="https://matth.dmz42.org/tags/ctf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Grey Cat the Flag CTF 2023 - Crackme2</title>
+      <link>https://matth.dmz42.org/posts/2023/grey-cat-the-flag-2023-crackme2/</link>
+      <pubDate>Wed, 24 May 2023 08:54:33 +0200</pubDate>
+      
+      <guid>https://matth.dmz42.org/posts/2023/grey-cat-the-flag-2023-crackme2/</guid>
+      <description>Grey Cat The Flag CTF 2023 had some nice reversing challenges, this one was very nice and i think deserves a small writeup.
+You can grab the original file here. A fixed version was later released fixed, but i used the original binary.
+1. Quick Recon it&amp;rsquo;s a 64 bits ELF that takes the flag as input
+% file crackme2 crackme2: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.</description>
+    </item>
+    
     <item>
       <title>HITCON CTF 2022: Meow Way</title>
       <link>https://matth.dmz42.org/posts/2022/hitcon-ctf-2022-meow-way/</link>

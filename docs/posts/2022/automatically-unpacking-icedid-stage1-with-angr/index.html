@@ -21,7 +21,6 @@ I&rsquo;ll skip over some details of the stager (like API hashing and injection)
 <meta property="og:url" content="https://matth.dmz42.org/posts/2022/automatically-unpacking-icedid-stage1-with-angr/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-05-30T09:15:00+02:00" />
 <meta property="article:modified_time" content="2022-05-30T09:15:00+02:00" />
-
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Automatically Unpacking IcedID Stage 1 with angr"/>
 <meta name="twitter:description" content="It started with 0verfl0w posting a small challenge on the Zero 2 Automated discord server asking to automatically extract the configuration of an unpacked IcedID sample (0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7).
@@ -136,12 +135,12 @@ to do.</p>
 </span></span><span class="line"><span class="cl">                <span class="n">chr</span> <span class="o">=</span> <span class="n">hexencoded_data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">                <span class="n">next_chr</span> <span class="o">=</span> <span class="n">hexencoded_data</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">                
-</span></span><span class="line"><span class="cl">                <span class="n">v1</span> <span class="o">=</span> <span class="n">is_valid_hex_chr</span><span class="p">(</span><span class="n">chr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">v1</span> <span class="o">=</span> <span class="nf">is_valid_hex_chr</span><span class="p">(</span><span class="n">chr</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">                
 </span></span><span class="line"><span class="cl">                <span class="cm">/* not an hex digit, ciao */</span>
-</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">((</span><span class="n">v1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">v1</span> <span class="o">=</span> <span class="n">is_valid_hex_chr</span><span class="p">(</span><span class="n">next_chr</span><span class="p">),</span> <span class="n">v1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">memset</span><span class="p">((</span><span class="n">ulonglong</span><span class="p">)</span><span class="n">destination</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x10</span><span class="p">,</span><span class="n">uVar2</span><span class="p">,</span><span class="n">chr</span><span class="p">,</span><span class="n">length</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">get_TEB</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">((</span><span class="n">v1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">v1</span> <span class="o">=</span> <span class="nf">is_valid_hex_chr</span><span class="p">(</span><span class="n">next_chr</span><span class="p">),</span> <span class="n">v1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nf">memset</span><span class="p">((</span><span class="n">ulonglong</span><span class="p">)</span><span class="n">destination</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x10</span><span class="p">,</span><span class="n">uVar2</span><span class="p">,</span><span class="n">chr</span><span class="p">,</span><span class="n">length</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="nf">get_TEB</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">                    <span class="p">(</span><span class="o">*</span><span class="n">RtlFreeHeap</span><span class="p">)();</span>
 </span></span><span class="line"><span class="cl">                    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">                <span class="p">}</span>
@@ -149,12 +148,12 @@ to do.</p>
 </span></span><span class="line"><span class="cl">                <span class="o">/</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">                <span class="cm">/* convert 1st ascii chr to hex value, ex: &#39;a&#39; -&gt; 0xa */</span>
-</span></span><span class="line"><span class="cl">                <span class="n">v1</span> <span class="o">=</span> <span class="n">hex_digit_to_int</span><span class="p">(</span><span class="n">chr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">v1</span> <span class="o">=</span> <span class="nf">hex_digit_to_int</span><span class="p">(</span><span class="n">chr</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">                <span class="cm">/* 0xa -&gt; 0xa0 */</span>
 </span></span><span class="line"><span class="cl">                <span class="n">high4</span> <span class="o">=</span> <span class="p">(</span><span class="n">byte</span><span class="p">)(</span><span class="n">v1</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">                <span class="cm">/* convert 2nd ascii chr to hex value &#39;8&#39; -&gt; 0x8 */</span>
-</span></span><span class="line"><span class="cl">                <span class="n">low4</span> <span class="o">=</span> <span class="n">hex_digit_to_int</span><span class="p">(</span><span class="n">next_chr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">low4</span> <span class="o">=</span> <span class="nf">hex_digit_to_int</span><span class="p">(</span><span class="n">next_chr</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">                <span class="cm">/* make it a byte: 0xa0 | 0x8 == 0xa8 */</span>
 </span></span><span class="line"><span class="cl">                <span class="o">*</span><span class="p">(</span><span class="n">byte</span> <span class="o">*</span><span class="p">)(</span><span class="o">*</span><span class="n">destination</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">))</span> <span class="o">=</span> <span class="n">high4</span> <span class="o">|</span> <span class="p">(</span><span class="n">byte</span><span class="p">)</span><span class="n">low4</span><span class="p">;</span>
@@ -844,7 +843,7 @@ found 5 elements
 	</main>
 
 	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
-		<p>&copy; 2022 <a href="https://matth.dmz42.org">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>&copy; 2023 <a href="https://matth.dmz42.org">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
 		<p>
 			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://matth.dmz42.org/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
 		</p>
