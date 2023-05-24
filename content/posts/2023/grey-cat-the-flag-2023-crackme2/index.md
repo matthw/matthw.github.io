@@ -596,6 +596,7 @@ bloc: 0x3f84   0xd25edc37
 
 # 5. Files
 
+- binary: [crackme2](crackme2)
 - gdb trace script: [trace.py](trace.py)
 - disassembler: [dump.py](dump.py)
 - ptrace patcher: [patch.py](patch.py)
