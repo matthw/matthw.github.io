@@ -381,7 +381,7 @@ The before last block of the new trace is interesting as it ends with:</p>
 0xfb:   or  r12, rdx
 </code></pre><p>so if can we find these blocks, get the character index that being checked (from the movzx instruction) and then manage to get 0 in the or&rsquo;d register with r12, we should be good to go.</p>
 <h1 id="4-poor-mans-ugly-emulation">4. Poor man&rsquo;s ugly emulation</h1>
-<p>As i&rsquo;m not familiar enough with <a href="https://miasm.re/">miasm</a> or <a href="https://triton-library.github.io/">Triton</a> to quickly do what i wanted in my limited available i went down the quick
+<p>As i&rsquo;m not familiar enough with <a href="https://miasm.re/">miasm</a> or <a href="https://triton-library.github.io/">Triton</a> to quickly do what i wanted in my limited available time, i went down the quick
 and dirty road:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">emu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
 </span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;######################&#34;</span><span class="p">)</span>

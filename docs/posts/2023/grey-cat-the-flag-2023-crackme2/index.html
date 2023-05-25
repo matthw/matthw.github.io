@@ -13,7 +13,7 @@ You can grab the original file here. A fixed version was later released fixed, b
 1. Quick Recon it&rsquo;s a 64 bits ELF that takes the flag as input
 % file crackme2 crackme2: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64."><meta itemprop="datePublished" content="2023-05-24T08:54:33+02:00" />
 <meta itemprop="dateModified" content="2023-05-24T08:54:33+02:00" />
-<meta itemprop="wordCount" content="2230">
+<meta itemprop="wordCount" content="2231">
 <meta itemprop="keywords" content="reverse,ctf," /><meta property="og:title" content="Grey Cat the Flag CTF 2023 - Crackme2" />
 <meta property="og:description" content="Grey Cat The Flag CTF 2023 had some nice reversing challenges, this one was very nice and i think deserves a small writeup.
 You can grab the original file here. A fixed version was later released fixed, but i used the original binary.
@@ -439,7 +439,7 @@ The before last block of the new trace is interesting as it ends with:</p>
 0xfb:   or  r12, rdx
 </code></pre><p>so if can we find these blocks, get the character index that being checked (from the movzx instruction) and then manage to get 0 in the or&rsquo;d register with r12, we should be good to go.</p>
 <h1 id="4-poor-mans-ugly-emulation">4. Poor man&rsquo;s ugly emulation<a href="#4-poor-mans-ugly-emulation" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
-<p>As i&rsquo;m not familiar enough with <a href="https://miasm.re/">miasm</a> or <a href="https://triton-library.github.io/">Triton</a> to quickly do what i wanted in my limited available i went down the quick
+<p>As i&rsquo;m not familiar enough with <a href="https://miasm.re/">miasm</a> or <a href="https://triton-library.github.io/">Triton</a> to quickly do what i wanted in my limited available time, i went down the quick
 and dirty road:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">emu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
 </span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;######################&#34;</span><span class="p">)</span>
@@ -566,7 +566,7 @@ bloc: 0x3f84   0xd25edc37
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://matth.dmz42.org/tags/reverse">reverse</a></span><span class="tag"><a href="https://matth.dmz42.org/tags/ctf">ctf</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2230 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2231 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2023-05-24 08:54 &#43;0200</p>
 			</footer>
 		</article>

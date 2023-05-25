@@ -473,7 +473,7 @@ so if can we find these blocks, get the character index that being checked (from
 
 # 4. Poor man's ugly emulation
 
-As i'm not familiar enough with [miasm](https://miasm.re/) or [Triton](https://triton-library.github.io/) to quickly do what i wanted in my limited available i went down the quick
+As i'm not familiar enough with [miasm](https://miasm.re/) or [Triton](https://triton-library.github.io/) to quickly do what i wanted in my limited available time, i went down the quick
 and dirty road:
 
 ```python
