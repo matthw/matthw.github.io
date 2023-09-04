@@ -7,7 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 24 May 2023 08:54:33 +0200</lastBuildDate><atom:link href="https://matth.dmz42.org/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 04 Sep 2023 08:54:33 +0200</lastBuildDate><atom:link href="https://matth.dmz42.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>BarbHack CTF 2023 - illusion</title>
+      <link>https://matth.dmz42.org/posts/2023/barbhack-2023-illusion/</link>
+      <pubDate>Mon, 04 Sep 2023 08:54:33 +0200</pubDate>
+      
+      <guid>https://matth.dmz42.org/posts/2023/barbhack-2023-illusion/</guid>
+      <description>BarbHack 2023 had some pretty cool reversing challenges. I could not attend the conf, so i solved them afterwards (not sure i would have time to solve this one during the CTF anyway).
+This writeup is about illusion.exe, a fun binary by sar - thanks to him for providing these to me afterwards :)
+1. Clicky click if we run the binary it just produces this output and exits:
+C:\Users\me\Desktop&amp;gt;illusion.exe Reading key.</description>
+    </item>
+    
     <item>
       <title>Grey Cat the Flag CTF 2023 - Crackme2</title>
       <link>https://matth.dmz42.org/posts/2023/grey-cat-the-flag-2023-crackme2/</link>

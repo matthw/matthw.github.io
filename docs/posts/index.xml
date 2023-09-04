@@ -6,8 +6,585 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>en-us</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Wed, 24 May 2023 08:54:33 +0200</lastBuildDate>
+		<lastBuildDate>Mon, 04 Sep 2023 08:54:33 +0200</lastBuildDate>
 		<atom:link href="https://matth.dmz42.org/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>BarbHack CTF 2023 - illusion</title>
+			<link>https://matth.dmz42.org/posts/2023/barbhack-2023-illusion/</link>
+			<pubDate>Mon, 04 Sep 2023 08:54:33 +0200</pubDate>
+			
+			<guid>https://matth.dmz42.org/posts/2023/barbhack-2023-illusion/</guid>
+			<description>BarbHack 2023 had some pretty cool reversing challenges. I could not attend the conf, so i solved them afterwards (not sure i would have time to solve this one during the CTF anyway).
+This writeup is about illusion.exe, a fun binary by sar - thanks to him for providing these to me afterwards :)
+1. Clicky click if we run the binary it just produces this output and exits:
+C:\Users\me\Desktop&amp;gt;illusion.exe Reading key.</description>
+			<content type="html"><![CDATA[<p><a href="https://www.barbhack.fr/2023/en/">BarbHack 2023</a> had some pretty cool reversing challenges.
+I could not attend the conf, so i solved them afterwards (not sure i would have time to solve this one during the CTF anyway).</p>
+<p>This writeup is about <strong>illusion.exe</strong>, a fun binary by <a href="https://twitter.com/sar5430">sar</a> - thanks to him for providing these to me afterwards :)</p>
+<h1 id="1-clicky-click">1. Clicky click</h1>
+<p>if we run the binary it just produces this output and exits:</p>
+<pre tabindex="0"><code>C:\Users\me\Desktop&gt;illusion.exe
+Reading key...
+</code></pre><h1 id="2-reversing">2. Reversing</h1>
+<p>There&rsquo;s a number TLS callbacks defined. They will be executed before the entry point.</p>
+<p>Ghidra will automatically label them as <code>tls_callback_X</code> and x64dbg will break on them by
+default.</p>
+<p>We can see some odd stuff like a call to <code>VirtualQuery</code> that doesn&rsquo;t make any sense:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">tls_callback_1</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">DAT_0053d430</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* CreateThread */</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">VirtualQuery</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,(</span><span class="n">SIZE_T</span><span class="p">)</span><span class="n">FUN_00401849</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">DAT_0053d430</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h2 id="21-tls_callback_0">2.1 tls_callback_0</h2>
+<h3 id="211-anti-disassembly">2.1.1 Anti Disassembly</h3>
+<p>The first TLS callback calls a function that doesn&rsquo;t make much sense at first</p>
+<p><img src="tls0.png" alt="tls_callback_0"></p>
+<p>It&rsquo;s using a common obfuscation technique with JZ/JNZ to produce a non-conditionnal jump but
+still confuse the disassembler.</p>
+<p>The method is well described in the great <a href="https://nostarch.com/malware">Practical Malware Analysis</a> book, which i highly recommend everyone to read.</p>
+<p><img src="jzjnz.png" alt="JZ / JNZ"></p>
+<p>We can get rid of it by looking for the <code>JZ +3; JNZ +1; CALL</code> pattern and NOPing it:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">dat</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;illusion.exe&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># nop the jz/jnz trick</span>
+</span></span><span class="line"><span class="cl"><span class="n">dat</span> <span class="o">=</span> <span class="n">dat</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x74\x03\x75\x01\xe8</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x90\x90\x90\x90\x90</span><span class="s1">&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;illu_patched.exe&#34;</span><span class="p">,</span> <span class="s2">&#34;wb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">dat</span><span class="p">)</span>
+</span></span></code></pre></div><p>after running the patch and doing some retyping it becomes clear what this function is doing:</p>
+<p><img src="deob1.png" alt="JZ / JNZ deob"></p>
+<h3 id="212-iat-scrambling">2.1.2 IAT Scrambling</h3>
+<p>It accesses the <code>PEB</code> via <code>FS:[0x30]</code>, parses the PE header structures and reverses the IAT.</p>
+<p>This explains why the <code>VirtualQuery</code> calls wasn&rsquo;t making sense: because it&rsquo;s not VirtualQuery.</p>
+<p>The following script will statically reverse the IAT entries (sorry, CTF quality&hellip;)</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">pefile</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">shutil</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_string</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">off</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">out</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">curr</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">off</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">123</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">out</span> <span class="o">+=</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">out</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">curr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">out</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">curr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">apply_patches</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">patches</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">addr</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">patches</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">patches</span><span class="p">[</span><span class="n">addr</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">pe</span> <span class="o">=</span> <span class="n">pefile</span><span class="o">.</span><span class="n">PE</span><span class="p">(</span><span class="s2">&#34;illusion.exe&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">patches</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;illusion.exe&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">assert</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;MZ&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mh">0x3c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nt</span> <span class="o">=</span> <span class="n">u32</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">nt</span> <span class="o">+</span> <span class="mh">0x80</span><span class="p">)</span> <span class="c1"># DIRECTORY_IMPORT</span>
+</span></span><span class="line"><span class="cl">    <span class="n">addr</span> <span class="o">=</span> <span class="n">pe</span><span class="o">.</span><span class="n">get_offset_from_rva</span><span class="p">(</span><span class="n">u32</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">data</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="mi">5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># end of import dir</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="o">*</span><span class="mi">20</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">break</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">img_import_desc</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;IIIII&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">name_off</span> <span class="o">=</span> <span class="n">pe</span><span class="o">.</span><span class="n">get_offset_from_rva</span><span class="p">(</span><span class="n">img_import_desc</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">        <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">name_off</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># save current offset</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dir_offset</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">imps</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">imp_offset</span> <span class="o">=</span> <span class="n">pe</span><span class="o">.</span><span class="n">get_offset_from_rva</span><span class="p">(</span><span class="n">img_import_desc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">imp_offset</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">i</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x00\x00\x00\x00</span><span class="s1">&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">break</span>
+</span></span><span class="line"><span class="cl">            <span class="n">imps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># reverse shit</span>
+</span></span><span class="line"><span class="cl">        <span class="n">imps</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">imps</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">        <span class="n">patches</span><span class="p">[</span><span class="n">imp_offset</span><span class="p">]</span> <span class="o">=</span> <span class="n">imps</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">dir_offset</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="s2">&#34;illu_patched.exe&#34;</span><span class="p">,</span> <span class="s2">&#34;illusion_imps.exe&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;illusion_imps.exe&#34;</span><span class="p">,</span> <span class="s2">&#34;br+&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">apply_patches</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">patches</span><span class="p">)</span>
+</span></span></code></pre></div><p>Before patching:</p>
+<pre tabindex="0"><code>% emit illu_patched.exe | pemeta -I -t | grep KERNEL32
+Imports.KERNEL32[0x00] : WideCharToMultiByte
+Imports.KERNEL32[0x01] : VirtualQuery
+Imports.KERNEL32[0x02] : VirtualProtect
+Imports.KERNEL32[0x03] : TlsGetValue
+Imports.KERNEL32[0x04] : Sleep
+Imports.KERNEL32[0x05] : SetUnhandledExceptionFilter
+Imports.KERNEL32[0x06] : MultiByteToWideChar
+Imports.KERNEL32[0x07] : LoadLibraryA
+Imports.KERNEL32[0x08] : LeaveCriticalSection
+Imports.KERNEL32[0x09] : IsDebuggerPresent
+Imports.KERNEL32[0x0A] : IsDBCSLeadByteEx
+Imports.KERNEL32[0x0B] : InitializeCriticalSection
+Imports.KERNEL32[0x0C] : GetStartupInfoA
+Imports.KERNEL32[0x0D] : GetProcAddress
+Imports.KERNEL32[0x0E] : GetModuleHandleW
+Imports.KERNEL32[0x0F] : GetModuleHandleA
+Imports.KERNEL32[0x10] : GetModuleFileNameA
+Imports.KERNEL32[0x11] : GetLastError
+Imports.KERNEL32[0x12] : GetFileSize
+Imports.KERNEL32[0x13] : GetCurrentThread
+Imports.KERNEL32[0x14] : GetCurrentProcess
+Imports.KERNEL32[0x15] : FlushInstructionCache
+Imports.KERNEL32[0x16] : ExitProcess
+Imports.KERNEL32[0x17] : EnterCriticalSection
+Imports.KERNEL32[0x18] : DeleteCriticalSection
+Imports.KERNEL32[0x19] : CreateThread
+Imports.KERNEL32[0x1A] : CheckRemoteDebuggerPresent
+</code></pre><p>after patching:</p>
+<pre tabindex="0"><code>% emit illusion_imps.exe | pemeta -I -t | grep KERNEL32
+Imports.KERNEL32[0x00] : CheckRemoteDebuggerPresent
+Imports.KERNEL32[0x01] : CreateThread
+Imports.KERNEL32[0x02] : DeleteCriticalSection
+Imports.KERNEL32[0x03] : EnterCriticalSection
+Imports.KERNEL32[0x04] : ExitProcess
+Imports.KERNEL32[0x05] : FlushInstructionCache
+Imports.KERNEL32[0x06] : GetCurrentProcess
+Imports.KERNEL32[0x07] : GetCurrentThread
+Imports.KERNEL32[0x08] : GetFileSize
+Imports.KERNEL32[0x09] : GetLastError
+Imports.KERNEL32[0x0A] : GetModuleFileNameA
+Imports.KERNEL32[0x0B] : GetModuleHandleA
+Imports.KERNEL32[0x0C] : GetModuleHandleW
+Imports.KERNEL32[0x0D] : GetProcAddress
+Imports.KERNEL32[0x0E] : GetStartupInfoA
+Imports.KERNEL32[0x0F] : InitializeCriticalSection
+Imports.KERNEL32[0x10] : IsDBCSLeadByteEx
+Imports.KERNEL32[0x11] : IsDebuggerPresent
+Imports.KERNEL32[0x12] : LeaveCriticalSection
+Imports.KERNEL32[0x13] : LoadLibraryA
+Imports.KERNEL32[0x14] : MultiByteToWideChar
+Imports.KERNEL32[0x15] : SetUnhandledExceptionFilter
+Imports.KERNEL32[0x16] : Sleep
+Imports.KERNEL32[0x17] : TlsGetValue
+Imports.KERNEL32[0x18] : VirtualProtect
+Imports.KERNEL32[0x19] : VirtualQuery
+Imports.KERNEL32[0x1A] : WideCharToMultiByte
+</code></pre><p>(use <a href="https://github.com/binref/refinery">binref</a>, it&rsquo;s cool)</p>
+<p>If we go back to the <code>tls_callback_1</code>, we can see that the call to <code>VirtualQuery</code> is in fact a call to <code>CreateThread</code>, which makes much more sense:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">tls_callback_1</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">DAT_0053d430</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">CreateThread</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">FUN_00401849</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">DAT_0053d430</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h2 id="22-tls_callback_1">2.2 tls_callback_1</h2>
+<p>Diving into the next callback, and following the thread entry point, we end up into another mess:</p>
+<p><img src="tls1_1.png" alt="tls_callback_1_1"></p>
+<p>there&rsquo;s call to a function that ends up doing some crypto, followed by a 4 bytes nop marker:</p>
+<pre tabindex="0"><code>0f 1f 40 00                  NOP                     dword ptr [EAX]
+</code></pre><p>the function will look for the 2 of the above <code>0f 1f 40 00</code> markers and use RC4 on the data in
+between using the key provided as parameter:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="kr">__cdecl</span> <span class="nf">scan_and_decrypt</span><span class="p">(</span><span class="n">undefined4</span> <span class="n">sort_of_key</span><span class="p">,</span><span class="kt">int</span> <span class="n">increment</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">bVar1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">bVar2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="o">*</span><span class="n">pcVar3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="o">*</span><span class="n">end_scan</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="o">*</span><span class="n">start_scan_addr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="o">*</span><span class="n">end_addr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="o">*</span><span class="n">start_addr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">start_scan_addr</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="nf">get_return_addr_from_func</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bVar1</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bVar2</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* scan for
+</span></span></span><span class="line"><span class="cl"><span class="cm">                                                    scanned pattern
+</span></span></span><span class="line"><span class="cl"><span class="cm">                       00401863 0f 1f 40 00                  NOP                     dword ptr [EAX]
+</span></span></span><span class="line"><span class="cl"><span class="cm">                        */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="n">pcVar3</span> <span class="o">=</span> <span class="n">start_addr</span><span class="p">,</span> <span class="n">end_scan</span> <span class="o">=</span> <span class="n">start_addr</span><span class="p">,</span> <span class="o">!</span><span class="n">bVar1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">((((</span><span class="o">*</span><span class="n">start_scan_addr</span> <span class="o">==</span> <span class="mh">0xf</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">start_scan_addr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x1f</span><span class="p">))</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">start_scan_addr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x40</span><span class="p">))</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">           <span class="p">(</span><span class="n">start_scan_addr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x0</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">bVar1</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">start_addr</span> <span class="o">=</span> <span class="n">start_scan_addr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">start_scan_addr</span> <span class="o">=</span> <span class="n">start_scan_addr</span> <span class="o">+</span> <span class="n">increment</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="n">end_scan</span> <span class="o">=</span> <span class="n">end_scan</span> <span class="o">+</span> <span class="n">increment</span><span class="p">,</span> <span class="o">!</span><span class="n">bVar2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(((</span><span class="o">*</span><span class="n">end_scan</span> <span class="o">==</span> <span class="mh">0xf</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">end_scan</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x1f</span><span class="p">))</span> <span class="o">&amp;&amp;</span> <span class="p">((</span><span class="n">end_scan</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x40</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">end_scan</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0x0</span><span class="p">))))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">bVar2</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">end_addr</span> <span class="o">=</span> <span class="n">end_scan</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">increment</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">start_addr</span> <span class="o">=</span> <span class="n">end_addr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">end_addr</span> <span class="o">=</span> <span class="n">pcVar3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// decrypt code in place between the 2 markers 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">decrypt</span><span class="p">(</span><span class="n">sort_of_key</span><span class="p">,(</span><span class="n">BYTE</span> <span class="o">*</span><span class="p">)(</span><span class="n">start_addr</span> <span class="o">+</span> <span class="mi">4</span><span class="p">),(</span><span class="kt">int</span><span class="p">)</span><span class="n">end_addr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>The decryption is done using standard crypto API and the actual RC4 key is derived from the md5 hash of the provided key, nothing fancy.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="kr">__cdecl</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">undefined4</span> <span class="n">key</span><span class="p">,</span><span class="n">BYTE</span> <span class="o">*</span><span class="n">start_address</span><span class="p">,</span><span class="kt">int</span> <span class="n">end_address</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">BOOL</span> <span class="n">r</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">HANDLE</span> <span class="n">hProcess</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DWORD</span> <span class="n">local_24</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DWORD</span> <span class="n">old_prots</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DWORD</span> <span class="n">size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">HCRYPTHASH</span> <span class="n">phHash</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">HCRYPTKEY</span> <span class="n">phKey</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">HCRYPTPROV</span> <span class="n">hProv</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">size</span> <span class="o">=</span> <span class="n">end_address</span> <span class="o">-</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">start_address</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">VirtualProtect</span><span class="p">(</span><span class="n">start_address</span><span class="p">,</span><span class="n">end_address</span> <span class="o">-</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">start_address</span><span class="p">,</span><span class="mh">0x40</span><span class="p">,</span><span class="o">&amp;</span><span class="n">old_prots</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r</span> <span class="o">=</span> <span class="nf">CryptAcquireContextA</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hProv</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">CRYPT_VERIFYCONTEXT</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">ExitProcess</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r</span> <span class="o">=</span> <span class="nf">CryptCreateHash</span><span class="p">(</span><span class="n">hProv</span><span class="p">,</span><span class="n">CALG_MD5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">phHash</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">ExitProcess</span><span class="p">(</span><span class="mh">0x3e9</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r</span> <span class="o">=</span> <span class="nf">CryptHashData</span><span class="p">(</span><span class="n">phHash</span><span class="p">,(</span><span class="n">BYTE</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">key</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">ExitProcess</span><span class="p">(</span><span class="mh">0x3ea</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r</span> <span class="o">=</span> <span class="nf">CryptDeriveKey</span><span class="p">(</span><span class="n">hProv</span><span class="p">,</span><span class="n">CALG_RC4</span><span class="p">,</span><span class="n">phHash</span><span class="p">,</span><span class="mh">0x280011</span><span class="p">,</span><span class="o">&amp;</span><span class="n">phKey</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">ExitProcess</span><span class="p">(</span><span class="mh">0x3eb</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r</span> <span class="o">=</span> <span class="nf">CryptEncrypt</span><span class="p">(</span><span class="n">phKey</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">start_address</span><span class="p">,</span><span class="o">&amp;</span><span class="n">size</span><span class="p">,</span><span class="n">end_address</span> <span class="o">-</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">start_address</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">ExitProcess</span><span class="p">(</span><span class="mh">0x3ec</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">VirtualProtect</span><span class="p">(</span><span class="n">start_address</span><span class="p">,</span><span class="n">end_address</span> <span class="o">-</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">start_address</span><span class="p">,</span><span class="n">old_prots</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_24</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">hProcess</span> <span class="o">=</span> <span class="nf">GetCurrentProcess</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">FlushInstructionCache</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>We can use the following script to statically perform decryption:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">hashlib</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">ARC4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">scan_pattern</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x0f\x1f\x40\x00</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">find_pattern</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pat</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">offsets</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">off</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">off</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">pat</span><span class="p">,</span> <span class="n">off</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">off</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">break</span>
+</span></span><span class="line"><span class="cl">        <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">off</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">offsets</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bla</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">start</span> <span class="o">-</span> <span class="mi">12</span><span class="p">:</span><span class="n">start</span> <span class="o">-</span> <span class="mi">12</span> <span class="o">+</span> <span class="mi">7</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">#         00401857 c7 04 24 5f 34 42 5a         MOV                     dword ptr [ESP]=&gt;local_7c,0x5a42345f</span>
+</span></span><span class="line"><span class="cl">    <span class="k">assert</span> <span class="n">bla</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xc7\x04\x24</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key</span> <span class="o">=</span> <span class="n">bla</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">enc</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">start</span><span class="o">+</span><span class="mi">4</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">h</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># CryptDeriveKey w/ 0x280011 only uses the 5 first bytes</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># https://elis531989.medium.com/dissecting-and-automating-hancitors-config-extraction-1a6ed85d99b8</span>
+</span></span><span class="line"><span class="cl">    <span class="n">c</span> <span class="o">=</span> <span class="n">ARC4</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">h</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">enc</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">off</span> <span class="o">=</span> <span class="n">find_pattern</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">scan_pattern</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">off</span> <span class="o">=</span> <span class="p">[</span><span class="n">off</span><span class="p">[</span><span class="n">n</span><span class="p">:</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">off</span><span class="p">),</span> <span class="mi">2</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="ow">in</span> <span class="n">off</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;decrypt 0x</span><span class="si">%x</span><span class="s2"> -&gt; 0x</span><span class="si">%x</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dec</span> <span class="o">=</span> <span class="n">decrypt</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dec</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">data</span><span class="p">[</span><span class="n">start</span><span class="o">+</span><span class="mi">4</span><span class="o">+</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.dec&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></span></code></pre></div><p>After patching, we can see the thread is running an anti debug loop:</p>
+<p><img src="antidebug.png" alt="anti debug"></p>
+<h2 id="23-main-meat">2.3 main meat</h2>
+<p>now we can safely go the main function and find out what&rsquo;s up with that key:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">undefined4</span> <span class="nf">FUN_0040248b</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">time_t</span> <span class="n">tVar1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">FUN_00533900</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">rc4</span><span class="p">(</span><span class="mh">0x172431ff</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>                  <span class="c1">// decrypt
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">tVar1</span> <span class="o">=</span> <span class="nf">FUN_0040155c</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">srand</span><span class="p">((</span><span class="n">uint</span><span class="p">)</span><span class="n">tVar1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">FUN_0040244d</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">rc4</span><span class="p">(</span><span class="mh">0x172431ff</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>                 <span class="c1">// encrypt back
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>we can descend the call stack, several functions down, all between encrypt/decrypt calls until we reach something like that:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">uint</span> <span class="nf">FUN_0040214E</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">rc4</span><span class="p">(</span><span class="mh">0x499aadb1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * SNIP
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">Sleep</span><span class="p">(</span><span class="mh">0x40</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pHVar3</span> <span class="o">=</span> <span class="nf">GetModuleHandleA</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">iVar4</span> <span class="o">=</span> <span class="nf">read_key_from_registry</span><span class="p">(</span><span class="o">&amp;</span><span class="n">KEY</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">set_trap_handler_and_check_key</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * SNIP
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">rc4</span><span class="p">(</span><span class="mh">0x499aadb1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">DVar9</span> <span class="o">+</span> <span class="p">((</span><span class="kt">int</span><span class="p">)(((</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">pHVar7</span><span class="o">-&gt;</span><span class="n">unused</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">                           <span class="n">iVar8</span> <span class="o">+</span> <span class="p">((</span><span class="kt">int</span><span class="p">)(((</span><span class="kt">int</span><span class="p">)(((</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">pHVar6</span><span class="o">-&gt;</span><span class="n">unused</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">                                                  <span class="n">cx_frame_size</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">                                                  <span class="p">((</span><span class="kt">int</span><span class="p">)(((</span><span class="kt">int</span><span class="p">)((</span><span class="n">DVar5</span> <span class="o">+</span> <span class="p">((</span><span class="kt">int</span><span class="p">)(((</span><span class="kt">int</span><span class="p">)(</span><span class="n">pHVar3</span> <span class="o">+</span> <span class="p">((</span><span class="kt">int</span><span class="p">)((</span><span class="n">DVar2</span> <span class="o">+</span> <span class="p">((</span><span class="kt">int</span><span class="p">)(</span><span class="n">pHVar1</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">                                                                 <span class="mh">0xc214400</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span> <span class="o">^</span> <span class="mh">0xdeadbeefU</span><span class="p">)</span> <span class="o">^</span> <span class="mh">0xcafebabe</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mh">0xc</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span> <span class="o">^</span>
+</span></span><span class="line"><span class="cl">                                                                 <span class="mh">0x14530451U</span><span class="p">)</span> <span class="o">*</span> <span class="mh">0x400</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span> <span class="o">^</span> <span class="mh">0x14530451U</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mh">0xc</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">iVar4</span> <span class="o">^</span>
+</span></span><span class="line"><span class="cl">                                                                <span class="mh">0x14530451</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mh">0xc</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span> <span class="o">^</span> <span class="mh">0x14530451U</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mh">0xc</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">^</span>
+</span></span><span class="line"><span class="cl">                                                 <span class="mh">0x14530451U</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mh">0xc</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span> <span class="o">^</span> <span class="mh">0x14530451U</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mh">0xc</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span> <span class="o">^</span> <span class="mh">0xdeadbeefU</span><span class="p">)</span> <span class="o">^</span> <span class="mh">0xcafebabe</span>
+</span></span><span class="line"><span class="cl">                          <span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mh">0xc</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">^</span> <span class="mh">0x14530451</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>The <code>read_key_from_registry</code> will read the the key from the registry in</p>
+<pre tabindex="0"><code>HKCU\Software\Microsoft\Windows\illusion\Run\hell_on_earth
+</code></pre><p>The <code>set_trap_handler_and_check_key</code> will check the key&hellip;</p>
+<h1 id="3-key-check">3. Key Check</h1>
+<p>To perform the key check, an exception handler is setup:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">undefined4</span> <span class="nf">set_trap_handler_and_check_key</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">rc4</span><span class="p">(</span><span class="mh">0x8820afda</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">SetUnhandledExceptionFilter</span><span class="p">(</span><span class="n">unhandled_exception_filter</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">jump_to_key_check</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">rc4</span><span class="p">(</span><span class="mh">0x8820afda</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>this exception handler is quite simple:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">undefined4</span> <span class="nf">unhandled_exception_filter</span><span class="p">(</span><span class="n">EXCEPTION_POINTERS</span> <span class="o">*</span><span class="n">except_ptr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">byte</span> <span class="o">*</span><span class="n">exception_address</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">key_entry</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="nf">rc4</span><span class="p">(</span><span class="mh">0x994a4b42</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">exception_address</span> <span class="o">=</span> <span class="p">(</span><span class="n">byte</span> <span class="o">*</span><span class="p">)</span><span class="n">except_ptr</span><span class="o">-&gt;</span><span class="n">ExceptionRecord</span><span class="o">-&gt;</span><span class="n">ExceptionAddress</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* reencrypt previous block */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(((</span><span class="n">PREV_START_ADDR</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">PREV_END_ADDR</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">))</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">PREV_RC4_KEY</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">rc4_again</span><span class="p">(</span><span class="n">PREV_RC4_KEY</span><span class="p">,</span><span class="n">PREV_START_ADDR</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">PREV_END_ADDR</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* INT3 */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">exception_address</span> <span class="o">==</span> <span class="mh">0xcc</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* read key char */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">key_entry</span> <span class="o">=</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">KEY</span><span class="p">)[</span><span class="n">INDEX</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* Key must only be A B C D characters */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(((</span><span class="n">key_entry</span> <span class="o">!=</span> <span class="sc">&#39;A&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">key_entry</span> <span class="o">!=</span> <span class="sc">&#39;B&#39;</span><span class="p">))</span> <span class="o">&amp;&amp;</span> <span class="p">((</span><span class="n">key_entry</span> <span class="o">!=</span> <span class="sc">&#39;C&#39;</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">key_entry</span> <span class="o">!=</span> <span class="sc">&#39;D&#39;</span><span class="p">))))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nf">ExitProcess</span><span class="p">(</span><span class="mh">0x29b</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">INDEX</span> <span class="o">=</span> <span class="n">INDEX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* jump back to decrypted block, offset depends on key char:
+</span></span></span><span class="line"><span class="cl"><span class="cm">                       A = 0
+</span></span></span><span class="line"><span class="cl"><span class="cm">                       B = 0xe
+</span></span></span><span class="line"><span class="cl"><span class="cm">                       C = 0x1c
+</span></span></span><span class="line"><span class="cl"><span class="cm">                       D = 0x2a */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">except_ptr</span><span class="o">-&gt;</span><span class="n">ContextRecord</span><span class="o">-&gt;</span><span class="n">Eip</span> <span class="o">=</span> <span class="n">except_ptr</span><span class="o">-&gt;</span><span class="n">ContextRecord</span><span class="o">-&gt;</span><span class="n">Eip</span> <span class="o">+</span> <span class="p">(</span><span class="n">key_entry</span> <span class="o">+</span> <span class="o">-</span><span class="mh">0x41</span><span class="p">)</span> <span class="o">*</span> <span class="mh">0xe</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* decrypt block of size 0x38 bytes using the RC4 with key from EBX reg */</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">rc4_again</span><span class="p">(</span><span class="n">except_ptr</span><span class="o">-&gt;</span><span class="n">ContextRecord</span><span class="o">-&gt;</span><span class="n">Ebx</span><span class="p">,</span><span class="n">exception_address</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,(</span><span class="kt">int</span><span class="p">)(</span><span class="n">exception_address</span> <span class="o">+</span> <span class="mh">0x39</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* save for reencryption when reaching next block */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">PREV_START_ADDR</span> <span class="o">=</span> <span class="n">exception_address</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">PREV_END_ADDR</span> <span class="o">=</span> <span class="n">exception_address</span> <span class="o">+</span> <span class="mh">0x39</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">PREV_RC4_KEY</span> <span class="o">=</span> <span class="n">except_ptr</span><span class="o">-&gt;</span><span class="n">ContextRecord</span><span class="o">-&gt;</span><span class="n">Ebx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nf">rc4</span><span class="p">(</span><span class="mh">0x994a4b42</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mh">0xffffffff</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* HLT */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">exception_address</span> <span class="o">==</span> <span class="mh">0xf4</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* decrypt flag using the key and print it */</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">give_flag</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">ExitProcess</span><span class="p">(</span><span class="mi">999</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ExitProcess</span><span class="p">(</span><span class="mh">0x29a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>it is setup to handle <code>INT3</code> (0xcc) and <code>HLT</code> (0xf4) instructions.</p>
+<p>When handling an <code>HLT</code> instruction, it will print the flag (decrypting it using the key)</p>
+<p>When handling an <code>INT3</code> instruction, it will:</p>
+<ul>
+<li>read the RC4 key from the exception context&rsquo;s EBX register</li>
+<li>use it to decrypt 0x38 bytes of code after the crash location</li>
+<li>read the next character from the registry key (which must only be A B C or D) and use it to jump into the freshly decrypted code.
+<ul>
+<li>&lsquo;A&rsquo; will jump at offset 0x00</li>
+<li>&lsquo;B&rsquo; will jump at offset 0x0e</li>
+<li>&lsquo;C&rsquo; will jump at offset 0x1c</li>
+<li>&lsquo;D&rsquo; will jump at offset 0x2a</li>
+</ul>
+</li>
+</ul>
+<p>After setting up this handler, it sets a value into EBX, computes some jump location and go for it:</p>
+<p><img src="jmp_eax.png" alt="jmp eax"></p>
+<p>the jump location starts with a <code>INT3</code>, which nicely fits what could read from the exception handler:</p>
+<p><img src="jump_loc.png" alt="jmp loc"></p>
+<p>We can use unicorn to emulate and see what happens, at least for the first &ldquo;block&rdquo;:</p>
+<pre tabindex="0"><code>0x40259a    add    eax, ecx
+0x40259c    mov    ebx, 0xd4100192
+0x4025a1    jmp    eax
+0x4e9c17    int3
+###############
+# HANDLER CC
+###############
+key = 0xd4100192
+b&#39;\xcd\x03\xcd\x03\xcd\x03\xcd\x03\xcd\x03\xcd\x03\xcd\x03\xb8K0\x06\x00\x01\xc8\xbbR\x9a\xb1\xb9\xff\xe0\xb8X\x03\x0b\x00\x01\xc8\xbb\xf9\x18\xc8\x91\xff\xe0\xb8\xdc\x9c\x02\x00\x01\xc8\xbb}\x01U\xa3\xff\xe0&#39;
+0x4e9c18    int    3                        ; offset key &#39;A&#39;
+0x4e9c1a    int    3
+0x4e9c1c    int    3
+0x4e9c1e    int    3
+0x4e9c20    int    3
+0x4e9c22    int    3
+0x4e9c24    int    3
+0x4e9c26    mov    eax, 0x6304b             ; offset key &#39;B&#39;
+0x4e9c2b    add    eax, ecx
+0x4e9c2d    mov    ebx, 0xb9b19a52
+0x4e9c32    jmp    eax
+0x4e9c34    mov    eax, 0xb0358             ; offset key &#39;C&#39;
+0x4e9c39    add    eax, ecx
+0x4e9c3b    mov    ebx, 0x91c818f9
+0x4e9c40    jmp    eax
+0x4e9c42    mov    eax, 0x29cdc             ; offset key &#39;D&#39;
+0x4e9c47    add    eax, ecx
+0x4e9c49    mov    ebx, 0xa355017d
+0x4e9c4e    jmp    eax
+using key B
+new eip: 0x4e9c26
+
+0x4e9c26    mov    eax, 0x6304b
+0x4e9c2b    add    eax, ecx
+0x4e9c2d    mov    ebx, 0xb9b19a52
+0x4e9c32    jmp    eax
+0x4655d7    int3
+###############
+# HANDLER CC
+###############
+key = 0xb9b19a52
+b&#34;)\x0cZ\x86s\x10\x0c\xfd\x8e\xfbxar\xd0?\x86\xe4M\x15\x8cA,|\xf5\xb8`\x1c=\xe7;q&amp;&#39;\x17\xcaS\x88i\xa4\x10\xfaU\x92P\x1a\x91}|\xce\xe6+\x80[\xd9\xd0\x92&#34;
+0x4655d8    sub    dword ptr [edx + ebx*2], ecx
+0x4655db    xchg    byte ptr [ebx + 0x10], dh
+0x4655de    or    al, 0xfd
+</code></pre><p>The first decrypted block clearly offers 4 choices.</p>
+<ul>
+<li>The first path is obviously invalid because it&rsquo;s just <code>int</code>.</li>
+<li>The 3 other ones, will set a new key in <code>EBX</code> and compute a new jump location.</li>
+</ul>
+<p>If we take the &lsquo;B&rsquo; path and follow it, we end up to another <code>CC</code> instruction, but the decrypted content doesn&rsquo;t make sense: the path is invalid.</p>
+<p>If we take the &lsquo;C&rsquo; path, we end up in another 4 choices block:</p>
+<pre tabindex="0"><code>// snip
+using key C
+new eip: 0x4e9c34
+
+0x4e9c34    mov    eax, 0xb0358
+0x4e9c39    add    eax, ecx
+0x4e9c3b    mov    ebx, 0x91c818f9
+0x4e9c40    jmp    eax
+0x4b28e4    int3
+###############
+# HANDLER CC
+###############
+key = 0x91c818f9
+b&#39;\xb8\x8bv\x0e\x00\x01\xc8\xbb\x92\x01\x10\xd4\xff\xe0\xb8\xba\xa2\x05\x00\x01\xc8\xbb=\xf6\x86\xa6\xff\xe0\xb8X\x81\x08\x00\x01\xc8\xbb\x93\xb4}\xd8\xff\xe0\xb8\xf3\x9a\x0c\x00\x01\xc8\xbb\xd9\xd0\x16\x1d\xff\xe0&#39;
+0x4b28e5    mov    eax, 0xe768b
+0x4b28ea    add    eax, ecx
+0x4b28ec    mov    ebx, 0xd4100192
+0x4b28f1    jmp    eax
+0x4b28f3    mov    eax, 0x5a2ba
+0x4b28f8    add    eax, ecx
+0x4b28fa    mov    ebx, 0xa686f63d
+0x4b28ff    jmp    eax
+0x4b2901    mov    eax, 0x88158
+0x4b2906    add    eax, ecx
+0x4b2908    mov    ebx, 0xd87db493
+0x4b290d    jmp    eax
+0x4b290f    mov    eax, 0xc9af3
+0x4b2914    add    eax, ecx
+0x4b2916    mov    ebx, 0x1d16d0d9
+0x4b291b    jmp    eax
+</code></pre><p>We&rsquo;re in a maze: in each decrypted block is a room, in each room we can go in direction A B C or D and sometimes we reach deadends.</p>
+<p>The exit of the maze if when we find the <code>HLT</code> instruction.</p>
+<h1 id="4-solving-the-maze">4. Solving The Maze</h1>
+<p>I used unicorn to emulate code and solve the maze recursively. It&rsquo;s not pretty but it works and the script is available <a href="emu4.py">here</a></p>
+<p>It recursively checks all paths/keys and produces a trace.</p>
+<p>For some reason it&rsquo;s not able to stop when it reaches the HLT instruction, so i had to dig into the trace (instead of fixing the issue :^))</p>
+<pre tabindex="0"><code>% python emu4.py &gt; trace
+% grep -B6 hlt trace
+trying key C
+DESCEND
+        &gt;&gt;  0x4e8828	mov	eax, 0x12170a
+        &gt;&gt;  0x4e882d	add	eax, ecx
+        &gt;&gt;  0x4e882f	mov	ebx, 0x13241a9b
+        &gt;&gt;  0x4e8834	jmp	eax
+        &gt;&gt;  0x523c96	hlt
+% grep -P &#34;trying C|hlt&#34; trace | grep -B1 hlt
+trying CDDCDDDCCCCCDDDCDDDCCDDCCDDDCCDDDDCCCDDCCBBCCBBBCCCBBCCCCCCCCBCCCCCDDDDAAAADDDDDDCDDDDDDDCDCDDDADDDCCDDDCCCDDDDCCCCCCCDCD
+        &gt;&gt;  0x523c96	hlt	
+</code></pre><p>so the key should be <code>CDDCDDDCCCCCDDDCDDDCCDDCCDDDCCDDDDCCCDDCCBBCCBBBCCCBBCCCCCCCCBCCCCCDDDDAAAADDDDDDCDDDDDDDCDCDDDADDDCCDDDCCCDDDDCCCCCCCDCDC</code></p>
+<p>We can create the registry entry:</p>
+<pre tabindex="0"><code class="language-%" data-lang="%">Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\illusion\Run]
+&#34;hell_on_earth&#34;=&#34;CDDCDDDCCCCCDDDCDDDCCDDCCDDDCCDDDDCCCDDCCBBCCBBBCCCBBCCCCCCCCBCCCCCDDDDAAAADDDDDDCDDDDDDDCDCDDDADDDCCDDDCCCDDDDCCCCCCCDCDC&#34;
+</code></pre><p>and try it:</p>
+<pre tabindex="0"><code>C:\Users\me\Desktop&gt;illusion.exe
+Reading key...
+Congratz!! brb{Im_having_illusions_all_this_confusion_is_driving_me_mad_inside}
+</code></pre>]]></content>
+		</item>
 		
 		<item>
 			<title>Grey Cat the Flag CTF 2023 - Crackme2</title>
