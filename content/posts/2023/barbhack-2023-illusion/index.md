@@ -649,11 +649,11 @@ b'\xb8\x8bv\x0e\x00\x01\xc8\xbb\x92\x01\x10\xd4\xff\xe0\xb8\xba\xa2\x05\x00\x01\
 
 We're in a maze: in each decrypted block is a room, in each room we can go in direction A B C or D and sometimes we reach deadends.
 
-The exit of the maze if when we find the `HLT` instruction.
+The exit of the maze is when we find the `HLT` instruction.
 
 # 4. Solving The Maze
 
-I used unicorn to emulate code and solve the maze recursively. It's not pretty but it works and the script is available [here](https://gist.github.com/matthw/b82849ed0f919603bdb0f12a4b527346).
+I used unicorn to emulate the code and solve the maze recursively. It's not pretty but it works and the script is available [here](https://gist.github.com/matthw/b82849ed0f919603bdb0f12a4b527346).
 
 It recursively checks all paths/keys and produces a trace.
 
