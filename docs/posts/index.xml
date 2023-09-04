@@ -557,7 +557,7 @@ b&#39;\xb8\x8bv\x0e\x00\x01\xc8\xbb\x92\x01\x10\xd4\xff\xe0\xb8\xba\xa2\x05\x00\
 </code></pre><p>We&rsquo;re in a maze: in each decrypted block is a room, in each room we can go in direction A B C or D and sometimes we reach deadends.</p>
 <p>The exit of the maze if when we find the <code>HLT</code> instruction.</p>
 <h1 id="4-solving-the-maze">4. Solving The Maze</h1>
-<p>I used unicorn to emulate code and solve the maze recursively. It&rsquo;s not pretty but it works and the script is available <a href="emu4.py">here</a></p>
+<p>I used unicorn to emulate code and solve the maze recursively. It&rsquo;s not pretty but it works and the script is available <a href="https://gist.github.com/matthw/b82849ed0f919603bdb0f12a4b527346">here</a>.</p>
 <p>It recursively checks all paths/keys and produces a trace.</p>
 <p>For some reason it&rsquo;s not able to stop when it reaches the HLT instruction, so i had to dig into the trace (instead of fixing the issue :^))</p>
 <pre tabindex="0"><code>% python emu4.py &gt; trace

@@ -663,7 +663,7 @@ The exit of the maze if when we find the `HLT` instruction.
 
 # 4. Solving The Maze
 
-I used unicorn to emulate code and solve the maze recursively. It's not pretty but it works and the script is available [here](emu4.py)
+I used unicorn to emulate code and solve the maze recursively. It's not pretty but it works and the script is available [here](https://gist.github.com/matthw/b82849ed0f919603bdb0f12a4b527346).
 
 It recursively checks all paths/keys and produces a trace.
 
