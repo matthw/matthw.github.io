@@ -12,7 +12,7 @@
 This writeup is about illusion.exe, a fun binary by sar - thanks to him for providing it to me afterwards and allowing me to host it here :)
 1. Clicky click if we run the binary it just produces this output and exits:"><meta itemprop="datePublished" content="2023-09-04T08:54:33+02:00" />
 <meta itemprop="dateModified" content="2023-09-04T08:54:33+02:00" />
-<meta itemprop="wordCount" content="2281">
+<meta itemprop="wordCount" content="2230">
 <meta itemprop="keywords" content="reverse,ctf," /><meta property="og:title" content="BarbHack CTF 2023 - illusion" />
 <meta property="og:description" content="BarbHack 2023 had some pretty cool reversing challenges. I could not attend the conf, so i solved them afterwards (not sure i would have time to solve this one during the CTF anyway).
 This writeup is about illusion.exe, a fun binary by sar - thanks to him for providing it to me afterwards and allowing me to host it here :)
@@ -82,15 +82,13 @@ I could not attend the conf, so i solved them afterwards (not sure i would have 
 <pre tabindex="0"><code>C:\Users\me\Desktop&gt;illusion.exe
 Reading key...
 </code></pre><h1 id="2-reversing">2. Reversing<a href="#2-reversing" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
-<p>There&rsquo;s a number TLS callbacks defined. They will be executed before the entry point.</p>
-<p>Ghidra will automatically label them as <code>tls_callback_X</code> and x64dbg will break on them by
-default.</p>
+<p>There&rsquo;s a number of TLS callbacks defined. They will be executed before the entry point.</p>
+<p>Ghidra automatically labels them as <code>tls_callback_X</code> and x64dbg will auto break on them by default.</p>
 <p>We can see some odd stuff like a call to <code>VirtualQuery</code> that doesn&rsquo;t make any sense:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">tls_callback_1</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">DAT_0053d430</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="cm">/* CreateThread */</span>
 </span></span><span class="line"><span class="cl">        <span class="nf">VirtualQuery</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,(</span><span class="n">SIZE_T</span><span class="p">)</span><span class="n">FUN_00401849</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="n">DAT_0053d430</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
@@ -245,7 +243,7 @@ Imports.KERNEL32[0x17] : TlsGetValue
 Imports.KERNEL32[0x18] : VirtualProtect
 Imports.KERNEL32[0x19] : VirtualQuery
 Imports.KERNEL32[0x1A] : WideCharToMultiByte
-</code></pre><p>(use <a href="https://github.com/binref/refinery">binref</a>, it&rsquo;s cool)</p>
+</code></pre><p>(btw: use <a href="https://github.com/binref/refinery">binref</a>, it&rsquo;s cool)</p>
 <p>If we go back to the <code>tls_callback_1</code>, we can see that the call to <code>VirtualQuery</code> is in fact a call to <code>CreateThread</code>, which makes much more sense:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">tls_callback_1</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
@@ -261,8 +259,7 @@ Imports.KERNEL32[0x1A] : WideCharToMultiByte
 <p><img src="tls1_1.png" alt="tls_callback_1_1"></p>
 <p>there&rsquo;s call to a function that ends up doing some crypto, followed by a 4 bytes nop marker:</p>
 <pre tabindex="0"><code>0f 1f 40 00                  NOP                     dword ptr [EAX]
-</code></pre><p>the function will look for the 2 of the above <code>0f 1f 40 00</code> markers and use RC4 on the data in
-between using the key provided as parameter:</p>
+</code></pre><p>the function will look for 2 of the above <code>0f 1f 40 00</code> markers and do some RC4 on the data in-between using the key provided as parameter:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="kr">__cdecl</span> <span class="nf">scan_and_decrypt</span><span class="p">(</span><span class="n">undefined4</span> <span class="n">sort_of_key</span><span class="p">,</span><span class="kt">int</span> <span class="n">increment</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
@@ -321,27 +318,22 @@ between using the key provided as parameter:</p>
 </span></span><span class="line"><span class="cl">    <span class="nf">VirtualProtect</span><span class="p">(</span><span class="n">start_address</span><span class="p">,</span><span class="n">end_address</span> <span class="o">-</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">start_address</span><span class="p">,</span><span class="mh">0x40</span><span class="p">,</span><span class="o">&amp;</span><span class="n">old_prots</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="n">r</span> <span class="o">=</span> <span class="nf">CryptAcquireContextA</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hProv</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">CRYPT_VERIFYCONTEXT</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
 </span></span><span class="line"><span class="cl">        <span class="nf">ExitProcess</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="n">r</span> <span class="o">=</span> <span class="nf">CryptCreateHash</span><span class="p">(</span><span class="n">hProv</span><span class="p">,</span><span class="n">CALG_MD5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">phHash</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
 </span></span><span class="line"><span class="cl">        <span class="nf">ExitProcess</span><span class="p">(</span><span class="mh">0x3e9</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="n">r</span> <span class="o">=</span> <span class="nf">CryptHashData</span><span class="p">(</span><span class="n">phHash</span><span class="p">,(</span><span class="n">BYTE</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">key</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
 </span></span><span class="line"><span class="cl">        <span class="nf">ExitProcess</span><span class="p">(</span><span class="mh">0x3ea</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="n">r</span> <span class="o">=</span> <span class="nf">CryptDeriveKey</span><span class="p">(</span><span class="n">hProv</span><span class="p">,</span><span class="n">CALG_RC4</span><span class="p">,</span><span class="n">phHash</span><span class="p">,</span><span class="mh">0x280011</span><span class="p">,</span><span class="o">&amp;</span><span class="n">phKey</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
 </span></span><span class="line"><span class="cl">        <span class="nf">ExitProcess</span><span class="p">(</span><span class="mh">0x3eb</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="n">r</span> <span class="o">=</span> <span class="nf">CryptEncrypt</span><span class="p">(</span><span class="n">phKey</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">start_address</span><span class="p">,</span><span class="o">&amp;</span><span class="n">size</span><span class="p">,</span><span class="n">end_address</span> <span class="o">-</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">start_address</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
 </span></span><span class="line"><span class="cl">        <span class="nf">ExitProcess</span><span class="p">(</span><span class="mh">0x3ec</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">VirtualProtect</span><span class="p">(</span><span class="n">start_address</span><span class="p">,</span><span class="n">end_address</span> <span class="o">-</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">start_address</span><span class="p">,</span><span class="n">old_prots</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_24</span><span class="p">);</span>
@@ -471,25 +463,25 @@ between using the key provided as parameter:</p>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/* INT3 */</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">exception_address</span> <span class="o">==</span> <span class="mh">0xcc</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="cm">/* read key char */</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* read key char */</span>
 </span></span><span class="line"><span class="cl">        <span class="n">key_entry</span> <span class="o">=</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">KEY</span><span class="p">)[</span><span class="n">INDEX</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">                    <span class="cm">/* Key must only be A B C D characters */</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* Key must only be A B C D characters */</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(((</span><span class="n">key_entry</span> <span class="o">!=</span> <span class="sc">&#39;A&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">key_entry</span> <span class="o">!=</span> <span class="sc">&#39;B&#39;</span><span class="p">))</span> <span class="o">&amp;&amp;</span> <span class="p">((</span><span class="n">key_entry</span> <span class="o">!=</span> <span class="sc">&#39;C&#39;</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">key_entry</span> <span class="o">!=</span> <span class="sc">&#39;D&#39;</span><span class="p">))))</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="nf">ExitProcess</span><span class="p">(</span><span class="mh">0x29b</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="n">INDEX</span> <span class="o">=</span> <span class="n">INDEX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                    <span class="cm">/* jump back to decrypted block, offset depends on key char:
+</span></span><span class="line"><span class="cl">        <span class="cm">/* jump back to decrypted block, offset depends on key char:
 </span></span></span><span class="line"><span class="cl"><span class="cm">                       A = 0
 </span></span></span><span class="line"><span class="cl"><span class="cm">                       B = 0xe
 </span></span></span><span class="line"><span class="cl"><span class="cm">                       C = 0x1c
 </span></span></span><span class="line"><span class="cl"><span class="cm">                       D = 0x2a */</span>
 </span></span><span class="line"><span class="cl">        <span class="n">except_ptr</span><span class="o">-&gt;</span><span class="n">ContextRecord</span><span class="o">-&gt;</span><span class="n">Eip</span> <span class="o">=</span> <span class="n">except_ptr</span><span class="o">-&gt;</span><span class="n">ContextRecord</span><span class="o">-&gt;</span><span class="n">Eip</span> <span class="o">+</span> <span class="p">(</span><span class="n">key_entry</span> <span class="o">+</span> <span class="o">-</span><span class="mh">0x41</span><span class="p">)</span> <span class="o">*</span> <span class="mh">0xe</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">                    <span class="cm">/* decrypt block of size 0x38 bytes using the RC4 with key from EBX reg */</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* decrypt block of size 0x38 bytes using the RC4 with key from EBX reg */</span>
 </span></span><span class="line"><span class="cl">        <span class="nf">rc4_again</span><span class="p">(</span><span class="n">except_ptr</span><span class="o">-&gt;</span><span class="n">ContextRecord</span><span class="o">-&gt;</span><span class="n">Ebx</span><span class="p">,</span><span class="n">exception_address</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,(</span><span class="kt">int</span><span class="p">)(</span><span class="n">exception_address</span> <span class="o">+</span> <span class="mh">0x39</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">                    <span class="cm">/* save for reencryption when reaching next block */</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* save for reencryption when reaching next block */</span>
 </span></span><span class="line"><span class="cl">        <span class="n">PREV_START_ADDR</span> <span class="o">=</span> <span class="n">exception_address</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="n">PREV_END_ADDR</span> <span class="o">=</span> <span class="n">exception_address</span> <span class="o">+</span> <span class="mh">0x39</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="n">PREV_RC4_KEY</span> <span class="o">=</span> <span class="n">except_ptr</span><span class="o">-&gt;</span><span class="n">ContextRecord</span><span class="o">-&gt;</span><span class="n">Ebx</span><span class="p">;</span>
@@ -501,12 +493,10 @@ between using the key provided as parameter:</p>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/* HLT */</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">exception_address</span> <span class="o">==</span> <span class="mh">0xf4</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="cm">/* decrypt flag using the key and print it */</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* decrypt flag using the key and print it */</span>
 </span></span><span class="line"><span class="cl">        <span class="nf">give_flag</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
 </span></span><span class="line"><span class="cl">        <span class="nf">ExitProcess</span><span class="p">(</span><span class="mi">999</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">ExitProcess</span><span class="p">(</span><span class="mh">0x29a</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>it is setup to handle <code>INT3</code> (0xcc) and <code>HLT</code> (0xf4) instructions.</p>
@@ -645,7 +635,7 @@ Congratz!! brb{Im_having_illusions_all_this_confusion_is_driving_me_mad_inside}
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://matth.dmz42.org/tags/reverse">reverse</a></span><span class="tag"><a href="https://matth.dmz42.org/tags/ctf">ctf</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2281 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2230 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2023-09-04 08:54 &#43;0200</p>
 			</footer>
 		</article>

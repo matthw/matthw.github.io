@@ -24,10 +24,9 @@ Reading key...
 
 # 2. Reversing
 
-There's a number TLS callbacks defined. They will be executed before the entry point.
+There's a number of TLS callbacks defined. They will be executed before the entry point.
 
-Ghidra will automatically label them as `tls_callback_X` and x64dbg will break on them by
-default.
+Ghidra automatically labels them as `tls_callback_X` and x64dbg will auto break on them by default.
 
 We can see some odd stuff like a call to `VirtualQuery` that doesn't make any sense:
 ```C
@@ -35,7 +34,6 @@ void tls_callback_1(void)
 
 {
     if (DAT_0053d430 == 0) {
-                    /* CreateThread */
         VirtualQuery(NULL,NULL,(SIZE_T)FUN_00401849);
         DAT_0053d430 = 1;
     }
@@ -221,7 +219,7 @@ Imports.KERNEL32[0x19] : VirtualQuery
 Imports.KERNEL32[0x1A] : WideCharToMultiByte
 ```
 
-(use [binref](https://github.com/binref/refinery), it's cool)
+(btw: use [binref](https://github.com/binref/refinery), it's cool)
 
 If we go back to the `tls_callback_1`, we can see that the call to `VirtualQuery` is in fact a call to `CreateThread`, which makes much more sense:
 
@@ -250,8 +248,7 @@ there's call to a function that ends up doing some crypto, followed by a 4 bytes
 0f 1f 40 00                  NOP                     dword ptr [EAX]
 ```
 
-the function will look for the 2 of the above `0f 1f 40 00` markers and use RC4 on the data in
-between using the key provided as parameter:
+the function will look for 2 of the above `0f 1f 40 00` markers and do some RC4 on the data in-between using the key provided as parameter:
 
 ```C
 void __cdecl scan_and_decrypt(undefined4 sort_of_key,int increment)
@@ -317,27 +314,22 @@ void __cdecl decrypt(undefined4 key,BYTE *start_address,int end_address)
     VirtualProtect(start_address,end_address - (int)start_address,0x40,&old_prots);
     r = CryptAcquireContextA(&hProv,NULL,NULL,1,CRYPT_VERIFYCONTEXT);
     if (r == 0) {
-                    /* WARNING: Subroutine does not return */
         ExitProcess(1000);
     }
     r = CryptCreateHash(hProv,CALG_MD5,0,0,&phHash);
     if (r == 0) {
-                    /* WARNING: Subroutine does not return */
         ExitProcess(0x3e9);
     }
     r = CryptHashData(phHash,(BYTE *)&key,4,0);
     if (r == 0) {
-                    /* WARNING: Subroutine does not return */
         ExitProcess(0x3ea);
     }
     r = CryptDeriveKey(hProv,CALG_RC4,phHash,0x280011,&phKey);
     if (r == 0) {
-                    /* WARNING: Subroutine does not return */
         ExitProcess(0x3eb);
     }
     r = CryptEncrypt(phKey,0,1,0,start_address,&size,end_address - (int)start_address);
     if (r == 0) {
-                    /* WARNING: Subroutine does not return */
         ExitProcess(0x3ec);
     }
     VirtualProtect(start_address,end_address - (int)start_address,old_prots,&local_24);
@@ -502,25 +494,25 @@ undefined4 unhandled_exception_filter(EXCEPTION_POINTERS *except_ptr)
 
     /* INT3 */
     if (*exception_address == 0xcc) {
-                    /* read key char */
+        /* read key char */
         key_entry = (&KEY)[INDEX];
 
-                    /* Key must only be A B C D characters */
+        /* Key must only be A B C D characters */
         if (((key_entry != 'A') && (key_entry != 'B')) && ((key_entry != 'C' && (key_entry != 'D')))) {
             ExitProcess(0x29b);
         }
         INDEX = INDEX + 1;
-                    /* jump back to decrypted block, offset depends on key char:
+        /* jump back to decrypted block, offset depends on key char:
                        A = 0
                        B = 0xe
                        C = 0x1c
                        D = 0x2a */
         except_ptr->ContextRecord->Eip = except_ptr->ContextRecord->Eip + (key_entry + -0x41) * 0xe + 1;
 
-                    /* decrypt block of size 0x38 bytes using the RC4 with key from EBX reg */
+        /* decrypt block of size 0x38 bytes using the RC4 with key from EBX reg */
         rc4_again(except_ptr->ContextRecord->Ebx,exception_address + 1,(int)(exception_address + 0x39));
 
-                    /* save for reencryption when reaching next block */
+        /* save for reencryption when reaching next block */
         PREV_START_ADDR = exception_address + 1;
         PREV_END_ADDR = exception_address + 0x39;
         PREV_RC4_KEY = except_ptr->ContextRecord->Ebx;
@@ -532,12 +524,10 @@ undefined4 unhandled_exception_filter(EXCEPTION_POINTERS *except_ptr)
 
     /* HLT */
     if (*exception_address == 0xf4) {
-                    /* decrypt flag using the key and print it */
+        /* decrypt flag using the key and print it */
         give_flag();
-                    /* WARNING: Subroutine does not return */
         ExitProcess(999);
     }
-                    /* WARNING: Subroutine does not return */
     ExitProcess(0x29a);
 }
 ```
