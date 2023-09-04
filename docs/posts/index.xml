@@ -16,12 +16,11 @@
 			
 			<guid>https://matth.dmz42.org/posts/2023/barbhack-2023-illusion/</guid>
 			<description>BarbHack 2023 had some pretty cool reversing challenges. I could not attend the conf, so i solved them afterwards (not sure i would have time to solve this one during the CTF anyway).
-This writeup is about illusion.exe, a fun binary by sar - thanks to him for providing these to me afterwards :)
-1. Clicky click if we run the binary it just produces this output and exits:
-C:\Users\me\Desktop&amp;gt;illusion.exe Reading key.</description>
+This writeup is about illusion.exe, a fun binary by sar - thanks to him for providing it to me afterwards and allowing me to host it here :)
+1. Clicky click if we run the binary it just produces this output and exits:</description>
 			<content type="html"><![CDATA[<p><a href="https://www.barbhack.fr/2023/en/">BarbHack 2023</a> had some pretty cool reversing challenges.
 I could not attend the conf, so i solved them afterwards (not sure i would have time to solve this one during the CTF anyway).</p>
-<p>This writeup is about <strong>illusion.exe</strong>, a fun binary by <a href="https://twitter.com/sar5430">sar</a> - thanks to him for providing these to me afterwards :)</p>
+<p>This writeup is about <a href="illusion.exe">illusion.exe</a>, a fun binary by <a href="https://twitter.com/sar5430">sar</a> - thanks to him for providing it to me afterwards and allowing me to host it here :)</p>
 <h1 id="1-clicky-click">1. Clicky click</h1>
 <p>if we run the binary it just produces this output and exits:</p>
 <pre tabindex="0"><code>C:\Users\me\Desktop&gt;illusion.exe

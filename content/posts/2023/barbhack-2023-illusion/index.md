@@ -12,7 +12,7 @@ tags:
 [BarbHack 2023](https://www.barbhack.fr/2023/en/) had some pretty cool reversing challenges.
 I could not attend the conf, so i solved them afterwards (not sure i would have time to solve this one during the CTF anyway).
 
-This writeup is about **illusion.exe**, a fun binary by [sar](https://twitter.com/sar5430) - thanks to him for providing these to me afterwards :)
+This writeup is about [illusion.exe](illusion.exe), a fun binary by [sar](https://twitter.com/sar5430) - thanks to him for providing it to me afterwards and allowing me to host it here :)
 
 # 1. Clicky click
 
