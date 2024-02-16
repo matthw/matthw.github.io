@@ -11,7 +11,7 @@ tags:
 
 These are two self-debugging ptrace (or nanomite, as you prefer) based challenges I made for 0xl4augh CTF.
 
-`ptrace` is a system call that allow a process to trace/debug another process, it is used by debuggers and tracing tools like `strace`.
+`ptrace` is a system call that allows a process to trace/debug another process, it is used by debuggers and tracing tools like `strace`.
 
 Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching.
 
@@ -25,7 +25,7 @@ It is unstripped, mainly to trick the reverser into some rabbit holes, the idea 
 
 ## 1.1 Obfuscation
 
-Opening the binary binary, we notice the main function doesn't make much sense:
+Opening the binary, we notice the main function doesn't make much sense:
 ![nano main](img/nano_main.png)
 
 This is due to a common obfuscation technique with JZ/JNZ to produce a non-conditionnal jump but still confuse the disassembler.
@@ -35,7 +35,7 @@ The method is well described in the great [Practical Malware Analysis](https://n
 
 ![JZ / JNZ](img/jzjnz.png)
 
-We can get rid of it by looking for the `JZ +3; JNZ +1; CALL` pattern and NOPing it:
+We can get rid of it by looking for the `JZ +5; JNZ +3; CALL` pattern and NOPing it:
 
 ```python
 data = open("nanolol", "rb").read()
@@ -54,7 +54,7 @@ This produces a new binary where the code actually decompiles fine:
 Since this is a CTF, we are first after the flag, we ignore the noise and jump into the `check` function:
 ![check()](img/nano_check.png)
 
-It is pretty straightforward: it goes over a 0x24 char input flag, xoring each char with a `KEY` and verifies that result is what is in the `flag` global variable.
+It is pretty straightforward: it goes over a 0x24 char input flag, xoring each char with a `KEY` and verifies that the result is what is in the `flag` global variable.
 
 We can extract both `KEY` and `flag`, xor them together and that should gives us the actual input flag:
 
@@ -66,7 +66,7 @@ We can extract both `KEY` and `flag`, xor them together and that should gives us
 b'watch : https://youtu.be/dQw4w9WgXcQ'
 ```
 
-clearly this is no the flag we're looking for:
+clearly this is not the flag we're looking for:
 
 ```
 % ./nano 'watch : https://youtu.be/dQw4w9WgXcQ'

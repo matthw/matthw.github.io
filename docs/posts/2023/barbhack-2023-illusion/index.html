@@ -102,7 +102,7 @@ Reading key...
 still confuse the disassembler.</p>
 <p>The method is well described in the great <a href="https://nostarch.com/malware">Practical Malware Analysis</a> book, which i highly recommend everyone to read.</p>
 <p><img src="jzjnz.png" alt="JZ / JNZ"></p>
-<p>We can get rid of it by looking for the <code>JZ +3; JNZ +1; CALL</code> pattern and NOPing it:</p>
+<p>We can get rid of it by looking for the <code>JZ +5; JNZ +3; CALL</code> pattern and NOPing it:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">dat</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;illusion.exe&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># nop the jz/jnz trick</span>

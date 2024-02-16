@@ -14,7 +14,7 @@
       <link>https://matth.dmz42.org/posts/2024/ptrace_based_self_debugging_binaries/</link>
       <pubDate>Fri, 16 Feb 2024 08:00:00 +0200</pubDate>
       <guid>https://matth.dmz42.org/posts/2024/ptrace_based_self_debugging_binaries/</guid>
-      <description>These are two self-debugging ptrace (or nanomite, as you prefer) based challenges I made for 0xl4augh CTF.&#xA;ptrace is a system call that allow a process to trace/debug another process, it is used by debuggers and tracing tools like strace.&#xA;Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching.</description>
+      <description>These are two self-debugging ptrace (or nanomite, as you prefer) based challenges I made for 0xl4augh CTF.&#xA;ptrace is a system call that allows a process to trace/debug another process, it is used by debuggers and tracing tools like strace.&#xA;Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching.</description>
     </item>
     <item>
       <title>BarbHack CTF 2023 - illusion</title>

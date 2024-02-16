@@ -16,23 +16,23 @@
 			
 			<guid>https://matth.dmz42.org/posts/2024/ptrace_based_self_debugging_binaries/</guid>
 			<description>These are two self-debugging ptrace (or nanomite, as you prefer) based challenges I made for 0xl4augh CTF.
-ptrace is a system call that allow a process to trace/debug another process, it is used by debuggers and tracing tools like strace.
+ptrace is a system call that allows a process to trace/debug another process, it is used by debuggers and tracing tools like strace.
 Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching.</description>
 			<content type="html"><![CDATA[<p>These are two self-debugging ptrace (or nanomite, as you prefer) based challenges I made for 0xl4augh CTF.</p>
-<p><code>ptrace</code> is a system call that allow a process to trace/debug another process, it is used by debuggers and tracing tools like <code>strace</code>.</p>
+<p><code>ptrace</code> is a system call that allows a process to trace/debug another process, it is used by debuggers and tracing tools like <code>strace</code>.</p>
 <p>Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching.</p>
 <p>Another <em>interesting</em> property of <code>ptrace</code> that often makes it used as an anti-debugging technique is that a process can only be traced by one and only one process.</p>
 <h1 id="1-nano">1. nano</h1>
 <p>This challenge is meant as an introduction to nanomites, there&rsquo;s also a bit of code obfuscation.
 It is unstripped, mainly to trick the reverser into some rabbit holes, the idea was to force people out of the decompiler and briefly look at the disassembly. There binary is <a href="nano">here</a> let&rsquo;s dive into it.</p>
 <h2 id="11-obfuscation">1.1 Obfuscation</h2>
-<p>Opening the binary binary, we notice the main function doesn&rsquo;t make much sense:
+<p>Opening the binary, we notice the main function doesn&rsquo;t make much sense:
 <img src="img/nano_main.png" alt="nano main"></p>
 <p>This is due to a common obfuscation technique with JZ/JNZ to produce a non-conditionnal jump but still confuse the disassembler.
 <img src="img/nano_obf.png" alt="obfuscation"></p>
 <p>The method is well described in the great <a href="https://nostarch.com/malware">Practical Malware Analysis</a> book, which i highly recommend everyone to read.</p>
 <p><img src="img/jzjnz.png" alt="JZ / JNZ"></p>
-<p>We can get rid of it by looking for the <code>JZ +3; JNZ +1; CALL</code> pattern and NOPing it:</p>
+<p>We can get rid of it by looking for the <code>JZ +5; JNZ +3; CALL</code> pattern and NOPing it:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;nanolol&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># nop patterns</span>
@@ -44,14 +44,14 @@ It is unstripped, mainly to trick the reverser into some rabbit holes, the idea 
 <h2 id="12-fake-flag">1.2 Fake Flag</h2>
 <p>Since this is a CTF, we are first after the flag, we ignore the noise and jump into the <code>check</code> function:
 <img src="img/nano_check.png" alt="check()"></p>
-<p>It is pretty straightforward: it goes over a 0x24 char input flag, xoring each char with a <code>KEY</code> and verifies that result is what is in the <code>flag</code> global variable.</p>
+<p>It is pretty straightforward: it goes over a 0x24 char input flag, xoring each char with a <code>KEY</code> and verifies that the result is what is in the <code>flag</code> global variable.</p>
 <p>We can extract both <code>KEY</code> and <code>flag</code>, xor them together and that should gives us the actual input flag:</p>
 <pre tabindex="0"><code>&gt;&gt;&gt; from pwn import xor
 &gt;&gt;&gt; KEY = b&#39;\x7b\x3d\x14\x43\x01\x43\x5e\x2f\x27\x6a\x47\x4a\x1b\x10\x53\xf6\xac\xbf\xbc\x93\xb6\xde\xde\xce\xb4\xb3\xc9\xfc\x9b\xc7\xc1\x10\x2e\x4e\x2a\x39&#39;
 &gt;&gt;&gt; flag = b&#39;\x0c\x5c\x60\x20\x69\x63\x64\x0f\x4f\x1e\x33\x3a\x68\x2a\x7c\xd9\xd5\xd0\xc9\xe7\xc3\xf0\xbc\xab\x9b\xd7\x98\x8b\xaf\xb0\xf8\x47\x49\x16\x49\x68&#39;
 &gt;&gt;&gt; xor(KEY, flag)
 b&#39;watch : https://youtu.be/dQw4w9WgXcQ&#39;
-</code></pre><p>clearly this is no the flag we&rsquo;re looking for:</p>
+</code></pre><p>clearly this is not the flag we&rsquo;re looking for:</p>
 <pre tabindex="0"><code>% ./nano &#39;watch : https://youtu.be/dQw4w9WgXcQ&#39;
 no
 </code></pre><h2 id="13-self-debugging">1.3 Self-Debugging</h2>
@@ -345,7 +345,7 @@ Reading key...
 still confuse the disassembler.</p>
 <p>The method is well described in the great <a href="https://nostarch.com/malware">Practical Malware Analysis</a> book, which i highly recommend everyone to read.</p>
 <p><img src="jzjnz.png" alt="JZ / JNZ"></p>
-<p>We can get rid of it by looking for the <code>JZ +3; JNZ +1; CALL</code> pattern and NOPing it:</p>
+<p>We can get rid of it by looking for the <code>JZ +5; JNZ +3; CALL</code> pattern and NOPing it:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">dat</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;illusion.exe&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># nop the jz/jnz trick</span>

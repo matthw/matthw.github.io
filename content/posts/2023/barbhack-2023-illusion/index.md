@@ -56,7 +56,7 @@ The method is well described in the great [Practical Malware Analysis](https://n
 
 ![JZ / JNZ](jzjnz.png)
 
-We can get rid of it by looking for the `JZ +3; JNZ +1; CALL` pattern and NOPing it:
+We can get rid of it by looking for the `JZ +5; JNZ +3; CALL` pattern and NOPing it:
 
 ```python
 dat = open("illusion.exe", "rb").read()
