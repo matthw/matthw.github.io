@@ -6,8 +6,307 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>en-us</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Mon, 04 Sep 2023 08:54:33 +0200</lastBuildDate>
+		<lastBuildDate>Fri, 16 Feb 2024 08:00:00 +0200</lastBuildDate>
 		<atom:link href="https://matth.dmz42.org/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>ptrace based self-debugging binaries</title>
+			<link>https://matth.dmz42.org/posts/2024/ptrace_based_self_debugging_binaries/</link>
+			<pubDate>Fri, 16 Feb 2024 08:00:00 +0200</pubDate>
+			
+			<guid>https://matth.dmz42.org/posts/2024/ptrace_based_self_debugging_binaries/</guid>
+			<description>These are two self-debugging ptrace (or nanomite, as you prefer) based challenges I made for 0xl4augh CTF.
+ptrace is a system call that allow a process to trace/debug another process, it is used by debuggers and tracing tools like strace.
+Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching.</description>
+			<content type="html"><![CDATA[<p>These are two self-debugging ptrace (or nanomite, as you prefer) based challenges I made for 0xl4augh CTF.</p>
+<p><code>ptrace</code> is a system call that allow a process to trace/debug another process, it is used by debuggers and tracing tools like <code>strace</code>.</p>
+<p>Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching.</p>
+<p>Another <em>interesting</em> property of <code>ptrace</code> that often makes it used as an anti-debugging technique is that a process can only be traced by one and only one process.</p>
+<h1 id="1-nano">1. nano</h1>
+<p>This challenge is meant as an introduction to nanomites, there&rsquo;s also a bit of code obfuscation.
+It is unstripped, mainly to trick the reverser into some rabbit holes, the idea was to force people out of the decompiler and briefly look at the disassembly. There binary is <a href="nano">here</a> let&rsquo;s dive into it.</p>
+<h2 id="11-obfuscation">1.1 Obfuscation</h2>
+<p>Opening the binary binary, we notice the main function doesn&rsquo;t make much sense:
+<img src="img/nano_main.png" alt="nano main"></p>
+<p>This is due to a common obfuscation technique with JZ/JNZ to produce a non-conditionnal jump but still confuse the disassembler.
+<img src="img/nano_obf.png" alt="obfuscation"></p>
+<p>The method is well described in the great <a href="https://nostarch.com/malware">Practical Malware Analysis</a> book, which i highly recommend everyone to read.</p>
+<p><img src="img/jzjnz.png" alt="JZ / JNZ"></p>
+<p>We can get rid of it by looking for the <code>JZ +3; JNZ +1; CALL</code> pattern and NOPing it:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;nanolol&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># nop patterns</span>
+</span></span><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;</span><span class="se">\x74\x03\x75\x01\xe8</span><span class="s2">&#34;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&#34;</span><span class="se">\x90\x90\x90\x90\x90</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">open</span><span class="p">(</span><span class="s2">&#34;nano_fixed&#34;</span><span class="p">,</span> <span class="s2">&#34;wb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></span></code></pre></div><p>This produces a new binary where the code actually decompiles fine:
+<img src="img/nano_main_ok.png" alt="nano main ok"></p>
+<h2 id="12-fake-flag">1.2 Fake Flag</h2>
+<p>Since this is a CTF, we are first after the flag, we ignore the noise and jump into the <code>check</code> function:
+<img src="img/nano_check.png" alt="check()"></p>
+<p>It is pretty straightforward: it goes over a 0x24 char input flag, xoring each char with a <code>KEY</code> and verifies that result is what is in the <code>flag</code> global variable.</p>
+<p>We can extract both <code>KEY</code> and <code>flag</code>, xor them together and that should gives us the actual input flag:</p>
+<pre tabindex="0"><code>&gt;&gt;&gt; from pwn import xor
+&gt;&gt;&gt; KEY = b&#39;\x7b\x3d\x14\x43\x01\x43\x5e\x2f\x27\x6a\x47\x4a\x1b\x10\x53\xf6\xac\xbf\xbc\x93\xb6\xde\xde\xce\xb4\xb3\xc9\xfc\x9b\xc7\xc1\x10\x2e\x4e\x2a\x39&#39;
+&gt;&gt;&gt; flag = b&#39;\x0c\x5c\x60\x20\x69\x63\x64\x0f\x4f\x1e\x33\x3a\x68\x2a\x7c\xd9\xd5\xd0\xc9\xe7\xc3\xf0\xbc\xab\x9b\xd7\x98\x8b\xaf\xb0\xf8\x47\x49\x16\x49\x68&#39;
+&gt;&gt;&gt; xor(KEY, flag)
+b&#39;watch : https://youtu.be/dQw4w9WgXcQ&#39;
+</code></pre><p>clearly this is no the flag we&rsquo;re looking for:</p>
+<pre tabindex="0"><code>% ./nano &#39;watch : https://youtu.be/dQw4w9WgXcQ&#39;
+no
+</code></pre><h2 id="13-self-debugging">1.3 Self-Debugging</h2>
+<p>Going back to <code>main</code>, the function <code>func_00101189</code>, turns out to be a wrapper around the <code>ptrace</code> syscall (syscall 0x65 is the sys_ptrace on x86_64 linux), we can rename it and
+apply proper typing:</p>
+<p><img src="img/nano_main_clean.png" alt="main clean"></p>
+<p>So what&rsquo;s happening is that the process will <code>fork</code> and the parent will attach the child with <code>ptrace</code>:</p>
+<pre tabindex="0"><code>         ┌──────────────────────────────────┐
+         │                                  │
+         │   Parent process                 │
+         │                                  │
+         └───────┬──────────────────────────┘
+                 │
+                 │
+         debug with ptrace
+                 │
+                 │
+                 │                ┌────────────────────────────────────┐
+                 │                │                                    │
+                 └───────────────►│       Child Process                │
+                                  │                                    │
+                                  └────────────────────────────────────┘
+</code></pre><p>then everytime the child segfaults, the parent will compute a byte value, update the child&rsquo;s registers and resume its execution:</p>
+<pre tabindex="0"><code>
+                                          Parent catches SIGSEGV
+        ┌──────────────────────────────────┐
+        │                                  │
+        │   Parent process                 │◄───────────────────┐
+        │                                  │                    │
+        └─────────┬────────────────────────┘                    │
+                  │                                             │
+                  │                                             │
+                  │                                             │
+                  │                                          SIGSEGV
+        Compute byte value and update                           │
+        Child&#39;s R12 register                                    │
+                  │                                             │
+                  │                                             │
+        Resume child execution                                  │
+                  │                                             │
+                  │                                             │
+                  │                                             │
+                  │              ┌──────────────────────────────┴─────┐
+                  │              │                                    │
+                  └─────────────►│       Child Process                │
+                                 │                                    │
+                                 └────────────────────────────────────┘
+</code></pre><p>Now we you look at the <code>check</code> disassembly, we can see that the XOR key is stored in register <code>R12</code> and that in the middle of the XOR loop, there&rsquo;s move from address 0.
+This triggers the segfault and the beauty is that the decompiler doesn&rsquo;t give any hint about it.</p>
+<p><img src="img/nano_crash.png" alt="nano crash"></p>
+<p>Clearly now, the child crashes in the middle of the XOR loop and the parent replaces the key before resuming execution.
+It does so by incrementing <code>RIP</code> by 8 before continuing, because the faulty instruction (<code>mov r11, qword ptr [0]</code>) is 8 bytes.</p>
+<h2 id="14-solving">1.4 Solving</h2>
+<p>We know how the parent computes the correct key so we can just do the same:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">flag</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x0c\x5c\x60\x20\x69\x63\x64\x0f\x4f\x1e\x33\x3a\x68\x2a\x7c\xd9\xd5\xd0\xc9\xe7\xc3\xf0\xbc\xab\x9b\xd7\x98\x8b\xaf\xb0\xf8\x47\x49\x16\x49\x68</span><span class="s1">&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">rnd</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">k</span> <span class="o">=</span> <span class="p">((</span><span class="n">rnd</span> <span class="o">*</span> <span class="mh">0x8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xff</span> <span class="o">^</span> <span class="mh">0xca</span> <span class="o">|</span> <span class="p">(</span><span class="n">rnd</span> <span class="o">&gt;&gt;</span> <span class="mi">5</span><span class="p">))</span> <span class="o">^</span> <span class="mh">0xfe</span>
+</span></span><span class="line"><span class="cl">    <span class="n">flag</span><span class="p">[</span><span class="n">rnd</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">^=</span> <span class="n">k</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+</span></span></code></pre></div><h2 id="15-solving-with-strace">1.5 Solving with strace</h2>
+<p>We&rsquo;ve mentionned earlier that <code>strace</code> uses <code>ptrace</code> and that a process can only be ptraced one.
+This mean that we cannot <code>strace</code> the child, but we can still <code>strace</code> the parent and use that to dump the <code>PTRACE_SETREGS</code> calls:</p>
+<pre tabindex="0"><code>% strace ./nano aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 2&gt;&amp;1 | grep PTRACE_SETREGS
+ptrace(PTRACE_SETREGS, 10574, {r15=0x7f2746a15000, r14=0x5604d7806dd8, r13=0x7ffcddf96000, r12=0x7ffc9286a83c, rbp=0x7ffcddf95db0, rbx=0x7ffcddf95fe8, r11=0x7f2746943200, r10=0x7f27467ed328, r9=0x7f27467db740, r8=0, rax=0x7b, rcx=0x7ffcddf97906, rdx=0x5604d78070a0, rsi=0, rdi=0xfffffffffffffffa, orig_rax=0xffffffffffffffff, rip=0x5604d7804225, cs=0x33, eflags=0x10206, rsp=0x7ffcddf95d80, ss=0x2b, fs_base=0x7f27467db740, gs_base=0, ds=0, es=0, fs=0, gs=0}) = 0
+ptrace(PTRACE_SETREGS, 10574, {r15=0x7f2746a15000, r14=0x5604d7806dd8, r13=0x7ffcddf96000, r12=0x7ffc9286a824, rbp=0x7ffcddf95db0, rbx=0x7ffcddf95fe8, r11=0x7f2746943200, r10=0x7f27467ed328, r9=0x7f27467db740, r8=0, rax=0x3d, rcx=0x7ffcddf97906, rdx=0x5604d78070a0, rsi=0, rdi=0xfffffffffffffffa, orig_rax=0xffffffffffffffff, rip=0x5604d7804225, cs=0x33, eflags=0x10202, rsp=0x7ffcddf95d80, ss=0x2b, fs_base=0x7f27467db740, gs_base=0, ds=0, es=0, fs=0, gs=0}) = 0
+ptrace(PTRACE_SETREGS, 10574, {r15=0x7f2746a15000, r14=0x5604d7806dd8, r13=0x7ffcddf96000, r12=0x7ffc9286a82c, rbp=0x7ffcddf95db0, rbx=0x7ffcddf95fe8, r11=0x7f2746943200, r10=0x7f27467ed328, r9=0x7f27467db740, r8=0, rax=0x14, rcx=0x7ffcddf97906, rdx=0x5604d78070a0, rsi=0, rdi=0xfffffffffffffffa, orig_rax=0xffffffffffffffff, rip=0x5604d7804225, cs=0x33, eflags=0x10206, rsp=0x7ffcddf95d80, ss=0x2b, fs_base=0x7f27467db740, gs_base=0, ds=0, es=0, fs=0, gs=0}) = 0
+ptrace(PTRACE_SETREGS, 10574, {r15=0x7f2746a15000, r14=0x5604d7806dd8, r13=0x7ffcddf96000, r12=0x7ffc9286a814, rbp=0x7ffcddf95db0, rbx=0x7ffcddf95fe8, r11=0x7f2746943200, r10=0x7f27467ed328, r9=0x7f27467db740, r8=0, rax=0x43, rcx=0x7ffcddf97906, rdx=0x5604d78070a0, rsi=0, rdi=0xfffffffffffffffa, orig_rax=0xffffffffffffffff, rip=0x5604d7804225, cs=0x33, eflags=0x10206, rsp=0x7ffcddf95d80, ss=0x2b, fs_base=0x7f27467db740, gs_base=0, ds=0, es=0, fs=0, gs=0}) = 0
+ptrace(PTRACE_SETREGS, 10574, {r15=0x7f2746a15000, r14=0x5604d7806dd8, r13=0x7ffcddf96000, r12=0x7ffc9286a81c, rbp=0x7ffcddf95db0, rbx=0x7ffcddf95fe8, r11=0x7f2746943200, r10=0x7f27467ed328, r9=0x7f27467db740, r8=0, rax=0x1, rcx=0x7ffcddf97906, rdx=0x5604d78070a0, rsi=0, rdi=0xfffffffffffffffa, orig_rax=0xffffffffffffffff, rip=0x5604d7804225, cs=0x33, eflags=0x10202, rsp=0x7ffcddf95d80, ss=0x2b, fs_base=0x7f27467db740, gs_base=0, ds=0, es=0, fs=0, gs=0}) = 0
+ptrace(PTRACE_SETREGS, 10574, {r15=0x7f2746a15000, r14=0x5604d7806dd8, r13=0x7ffcddf96000, r12=0x7ffc9286a804, rbp=0x7ffcddf95db0, rbx=0x7ffcddf95fe8, r11=0x7f2746943200, r10=0x7f27467ed328, r9=0x7f27467db740, r8=0, rax=0x43, rcx=0x7ffcddf97906, rdx=0x5604d78070a0, rsi=0, rdi=0xfffffffffffffffa, orig_rax=0xffffffffffffffff, rip=0x5604d7804225, cs=0x33, eflags=0x10212, rsp=0x7ffcddf95d80, ss=0x2b, fs_base=0x7f27467db740, gs_base=0, ds=0, es=0, fs=0, gs=0}) = 0
+[...]
+</code></pre><p>we just have to read the low byte of <code>r12</code> (the rest of the value is for confusion), and we have our key:</p>
+<pre tabindex="0"><code>% strace ./nano aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 2&gt;&amp;1 | grep PTRACE_SETREGS | sed &#39;s/^.*r12=[^ ]*\(..\), .*$/\1/&#39; | xargs
+3c 24 2c 14 1c 04 0c 74 7c 64 6c 54 5c 44 4c b4 bc a4 ac 94 9c 84 8c f4 fc e4 ec d4 dc c4 cc 35 3d 25 2d 15
+
+% python
+&gt;&gt;&gt; from pwn import xor
+&gt;&gt;&gt; xor(b&#39;\x0c\x5c\x60\x20\x69\x63\x64\x0f\x4f\x1e\x33\x3a\x68\x2a\x7c\xd9\xd5\xd0\xc9\xe7\xc3\xf0\xbc\xab\x9b\xd7\x98\x8b\xaf\xb0\xf8\x47\x49\x16\x49\x68&#39;, bytes.fromhex(&#34;3c 24 2c 14 1c 04 0c 74 7c 64 6c 54 5c 44 4c b4 bc a4 ac 94 9c 84 8c f4 fc e4 ec d4 dc c4 cc 35 3d 25 2d 15&#34;))
+b&#39;0xL4ugh{3z_n4n0mites_t0_g3t_st4rt3d}&#39;
+</code></pre><h1 id="2-dance">2. dance</h1>
+<p>The binary, sources and solve script for dance are available <a href="https://github.com/matthw/ctf/tree/main/2024-0xl4augh/dance">here</a>.
+It uses the same concept, but will use <code>ptrace</code> to modify the actual code of the child instead of registers.</p>
+<p>Again it starts by forking and attaching:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">undefined8</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">args</span><span class="p">,</span><span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uint</span> <span class="n">status</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">__pid_t</span> <span class="n">pid</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">args</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pid</span> <span class="o">=</span> <span class="nf">fork</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* child: do something */</span>
+</span></span><span class="line"><span class="cl">            <span class="nf">lets_go</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                   <span class="cm">/* parent: attach child */</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">ptrace</span><span class="p">(</span><span class="n">PTRACE_ATTACH</span><span class="p">,(</span><span class="kt">long</span><span class="p">)</span><span class="n">pid</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="nf">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">status</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">status</span> <span class="o">&amp;</span> <span class="mh">0x7f</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">status</span> <span class="o">!=</span> <span class="mh">0xffff</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">ptrace</span><span class="p">(</span><span class="n">PTRACE_CONT</span><span class="p">,(</span><span class="kt">long</span><span class="p">)</span><span class="n">pid</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;usage: %s &lt;flag&gt;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="o">*</span><span class="n">argv</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h2 id="21-lets_go-child">2.1 lets_go child</h2>
+<p><code>lets_go</code> will fork once more (so stracing the parent won&rsquo;t show anything relevant), decrypt a shared library using chacha20 and call the <code>dance_with_me</code> flag check function from this library, easy.</p>
+<p><img src="img/dance_child.png" alt="lets_go"></p>
+<p>we can extract the lib like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">ChaCha20</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">u64</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;dance&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># get libsize</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mh">0x40a0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">libsize</span> <span class="o">=</span> <span class="n">u64</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># lib data</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mh">0x40c0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">libdata_enc</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">libsize</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">c</span> <span class="o">=</span> <span class="n">ChaCha20</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s2">&#34;48656c6c6f2c2074686174206973206f6e65206b657920666f7220796f752e2e&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                 <span class="n">nonce</span><span class="o">=</span><span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s2">&#34;6e6963655f6d6f76655f3a29&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">libdata</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">libdata_enc</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">open</span><span class="p">(</span><span class="s2">&#34;lib.so&#34;</span><span class="p">,</span> <span class="s2">&#34;wb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">libdata</span><span class="p">)</span>
+</span></span></code></pre></div><p>and confirm that the lib is OK:</p>
+<pre tabindex="0"><code>% file lib.so
+lib.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=f05cef21094717d75fb2cf7bd3206c7c0e28949c, stripped
+</code></pre><p>however we can quickly notice that the shared library code has been replaced by interrupts:</p>
+<pre tabindex="0"><code>% objdump -M intel -d lib.so 
+
+lib.so:     file format elf64-x86-64
+
+[....]
+
+Disassembly of section .text:
+
+00000000000010a0 &lt;dance_with_me@@Base-0x3e4&gt;:
+    10a0:	cc                   	int3
+    10a1:	cc                   	int3
+    10a2:	cc                   	int3
+    10a3:	cc                   	int3
+    10a4:	cc                   	int3
+    10a5:	cc                   	int3
+    10a6:	cc                   	int3
+    10a7:	cc                   	int3
+    10a8:	cc                   	int3
+    10a9:	cc                   	int3
+    10aa:	cc                   	int3
+    10ab:	cc                   	int3
+    10ac:	cc                   	int3
+    10ad:	cc                   	int3
+    10ae:	cc                   	int3
+    10af:	cc                   	int3
+    10b0:	cc                   	int3
+    10b1:	cc                   	int3
+    10b2:	cc                   	int3
+    10b3:	cc                   	int3
+    10b4:	cc                   	int3
+    10b5:	cc                   	int3
+    10b6:	cc                   	int3
+    10b7:	cc                   	int3
+    10b8:	cc                   	int3
+    10b9:	cc                   	int3
+    10ba:	cc                   	int3
+    10bb:	cc                   	int3
+    10bc:	cc                   	int3
+    10bd:	cc                   	int3
+    10be:	cc                   	int3
+    10bf:	cc                   	int3
+    10c0:	cc                   	int3
+    10c1:	cc                   	int3
+</code></pre><p>bummer, back to <code>lets_go</code>&hellip;</p>
+<h2 id="22-lets_go-parent">2.2 lets_go parent</h2>
+<p>The parent will wait for the child to generate a SIGTRAP - which happens as soon as it loads the library
+Upon crash, it will get the low 3 bytes of the crash address, compute their crc32 and use that to lookup the original original opcodes to executes.</p>
+<p>The instruction table is an array of</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">crc32</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint8_t</span>  <span class="n">num_ins</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint8_t</span>  <span class="n">code</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">instruction</span><span class="p">;</span>
+</span></span></code></pre></div><p>Once found, it write the opcodes back to the child and resume execution.</p>
+<p>At the next crash, if will overwrite the previously written correct opcodes by a bunch of INT3 before looking for the next opcodes to execute, this is to prevent dumping the memory
+at the end of the execution and getting a fully decoded library.</p>
+<p><img src="img/dance_parent.png" alt="dance parent"></p>
+<p>If you look at the source code, the library is doing a checksum of the main binary&rsquo;s code between 2 NOP markers, this is to prevent patching: if you patch the binary to remove the double fork
+in order to use strace to dump the opcodes as they are written, the binary should quickly exit, before any actual flag checking.</p>
+<h2 id="23-reconstructing-the-library">2.3 Reconstructing the library</h2>
+<p>The library reconstruction process is quite easy, the crc32 is only done on the 3 low bytes of the address, so we can built a rainbow table and use that to put the opcodes back
+into place (full script <a href="https://github.com/matthw/ctf/blob/main/2024-0xl4augh/dance/solve/extract_lib.py">here</a>)</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_nano_table</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_struct</span> <span class="o">=</span> <span class="s2">&#34;&lt;IB19B&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_size</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">calcsize</span><span class="p">(</span><span class="n">_struct</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">nanomites</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">crc_table</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># build crc32 rainbow table of &#39;nanomited&#39; address space</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mh">0xfff</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">crc_table</span><span class="p">[</span><span class="n">crc32</span><span class="p">(</span><span class="n">p32</span><span class="p">(</span><span class="n">i</span><span class="p">))]</span> <span class="o">=</span> <span class="n">i</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># nanomite table</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mh">0x78a0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_v</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">_struct</span><span class="p">,</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">_size</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="n">crc</span> <span class="o">=</span> <span class="n">_v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sz</span>  <span class="o">=</span> <span class="n">_v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ops</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">_v</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># end</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">crc</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">sz</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">break</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># build table for reconstruction</span>
+</span></span><span class="line"><span class="cl">            <span class="n">nanomites</span><span class="p">[</span><span class="n">crc_table</span><span class="p">[</span><span class="n">crc</span><span class="p">]]</span> <span class="o">=</span> <span class="n">ops</span><span class="p">[:</span><span class="n">sz</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">nanomites</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data</span> <span class="o">=</span> <span class="n">get_lib</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;raw_lib.so&#34;</span><span class="p">,</span> <span class="s2">&#34;wb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">nanomites</span> <span class="o">=</span> <span class="n">get_nano_table</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># reconstruction</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data_fp</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">addr</span><span class="p">,</span> <span class="n">ops</span> <span class="ow">in</span> <span class="n">nanomites</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">        <span class="n">data_fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mh">0x1000</span> <span class="o">+</span> <span class="n">addr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">data_fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">ops</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;reconstructed_lib.so&#34;</span><span class="p">,</span> <span class="s2">&#34;wb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data_fp</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+</span></span></code></pre></div><p>After that it&rsquo;s just another round of ChaCha20 to get the flag, the challenge was about getting the lib, not sweating some more after getting it:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">ChaCha20</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">key</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;l{</span><span class="se">\xb1\xee\n</span><span class="s1">LG</span><span class="se">\x9d\xed\xd7</span><span class="s1">[</span><span class="se">\xbc\xd2</span><span class="s1">C</span><span class="se">\xdd</span><span class="s1">@</span><span class="se">\x1d\xb2</span><span class="s1">w</span><span class="se">\xb8</span><span class="s1">5nYK</span><span class="se">\xf8</span><span class="s1">c&amp;</span><span class="se">\xd7\xe2</span><span class="s1">P</span><span class="se">\xed\xdb</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">nonce</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x96\xbf\xeb\xca\x8e</span><span class="s1">|</span><span class="se">\xfb\xbc\xd9</span><span class="s1">r</span><span class="se">\xa8</span><span class="s1">S&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">message</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xb7\xe0</span><span class="s1">]</span><span class="se">\xe8</span><span class="s1">f</span><span class="se">\xae\xae</span><span class="s1">j</span><span class="se">\xd9\x0f</span><span class="s1">:WW</span><span class="se">\xcb\xb7</span><span class="s1">{</span><span class="se">\xfe</span><span class="s1">F</span><span class="se">\x9a\n\xf8</span><span class="s1">/</span><span class="se">\xf8</span><span class="s1">c</span><span class="se">\\</span><span class="s1">^</span><span class="se">\xbc\x8b\xf6</span><span class="s1">t</span><span class="se">\xf5</span><span class="s1">fa</span><span class="se">\x97\xf1\x11\xc5</span><span class="s1">il</span><span class="se">\xd5\xdb\xdd</span><span class="s1"> $6</span><span class="se">\x8a</span><span class="s1">l/</span><span class="se">\xfe</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">c</span> <span class="o">=</span> <span class="n">ChaCha20</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">nonce</span><span class="o">=</span><span class="n">nonce</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
+</span></span></code></pre></div><pre tabindex="0"><code>% python dec.py
+b&#39;0xL4ugh{i_h0p3_you_l1k3d_ptr4c3_and_lat1n_danc3s}&#39;
+</code></pre>]]></content>
+		</item>
 		
 		<item>
 			<title>BarbHack CTF 2023 - illusion</title>
@@ -959,20 +1258,20 @@ and dirty road:</p>
 </span></span><span class="line"><span class="cl">            <span class="n">op</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">mnemonic</span>
 </span></span><span class="line"><span class="cl">            <span class="n">dat</span> <span class="o">=</span>  <span class="n">i</span><span class="o">.</span><span class="n">op_str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&#34;,&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">            <span class="c1">#print(op, dat)</span>
-</span></span><span class="line"><span class="cl">            <span class="n">match</span> <span class="n">i</span><span class="o">.</span><span class="n">mnemonic</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;mov&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">match</span> <span class="n">i</span><span class="o">.</span><span class="n">mnemonic</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;mov&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&#34;0x&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;movabs&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;movabs&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&#34;0x&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;sub&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;sub&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">-=</span> <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">&amp;=</span> <span class="mh">0xffffffff</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;add&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;add&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">&amp;=</span> <span class="mh">0xffffffff</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;xor&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;xor&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">^=</span> <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;or&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;or&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">|=</span> <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 </span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;r12&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                        <span class="c1"># r12 persist and must be 0 for last check to pass</span>
@@ -983,12 +1282,12 @@ and dirty road:</p>
 </span></span><span class="line"><span class="cl">                        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="mi">0</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">                        <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
 </span></span><span class="line"><span class="cl">                        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;lea&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;lea&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="c1"># load flag</span>
 </span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">16488</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;load flag&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">                        <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flag</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;movzx&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;movzx&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="c1"># load flag chr index</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">o1</span> <span class="o">=</span> <span class="n">dat</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">o2</span> <span class="o">=</span> <span class="n">dat</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
@@ -2377,7 +2676,7 @@ uh-oh, math is too correct...
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;patched_anode.tmpl&#34;</span><span class="p">,</span> <span class="s2">&#34;r&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fp</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&#34;^ +b\[&#34;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="k">match</span><span class="p">(</span><span class="s2">&#34;^ +b\[&#34;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
 </span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="n">fix_line</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">            <span class="k">pass</span>
@@ -2727,7 +3026,7 @@ having issues with some samples where the embedded PE file seemed corrupt:</p>
 </span></span></span><span class="line"><span class="cl"><span class="s2">                    $instr
 </span></span></span><span class="line"><span class="cl"><span class="s2">            }&#34;&#34;&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">yara_matches</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">yara_matches</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="k">match</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">yara_matches</span><span class="p">):</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">[]</span>
@@ -2912,7 +3211,7 @@ step2: find function │        │     etc...                                 �
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="c1"># get matching offsets</span>
-</span></span><span class="line"><span class="cl">        <span class="n">yara_matches</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">yara_matches</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="k">match</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
 </span></span></code></pre></div><p>Then we just need to fix the offsets - which are relative to the start of <code>.text</code>, so they match the virtual address:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl">        <span class="n">offsets</span> <span class="o">=</span> <span class="p">[]</span>
 </span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">offset</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">yara_matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strings</span><span class="p">:</span>
@@ -4086,21 +4385,21 @@ u51Ng
          0029f72a [8]            0h, 61h,  Ah,  0h
          0029f72e [12]           Bh,  0h, 1Dh,  Ah
 </code></pre><p>export the <code>Class</code> binary blob and safe it to a file, then use <a href="https://github.com/skylot/jadx">jadx</a> or so to decompile it:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.util.stream.IntStream</span><span class="o">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="cm">/* renamed from: Checker */</span>
-</span></span><span class="line"><span class="cl"><span class="cm">/* loaded from: java.class */</span>
-</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Checker</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">hello_java</span><span class="o">(</span><span class="n">String</span> <span class="n">str</span><span class="o">)</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span><span class="o">[]</span> <span class="n">iArr</span> <span class="o">=</span> <span class="o">{</span><span class="n">219</span><span class="o">,</span> <span class="n">227</span><span class="o">,</span> <span class="n">209</span><span class="o">,</span> <span class="n">154</span><span class="o">,</span> <span class="n">104</span><span class="o">,</span> <span class="n">97</span><span class="o">,</span> <span class="n">158</span><span class="o">,</span> <span class="n">163</span><span class="o">};</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">IntStream</span><span class="o">.</span><span class="na">range</span><span class="o">(</span><span class="n">0</span><span class="o">,</span> <span class="n">str</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="n">1</span><span class="o">).</span><span class="na">mapToObj</span><span class="o">(</span><span class="n">i</span> <span class="o">-&gt;</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[]{</span><span class="n">Integer</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">i</span><span class="o">),</span> <span class="n">Integer</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">str</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)),</span> <span class="n">Integer</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">str</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">1</span><span class="o">))};</span>
-</span></span><span class="line"><span class="cl">        <span class="o">}).</span><span class="na">filter</span><span class="o">(</span><span class="n">objArr</span> <span class="o">-&gt;</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="o">((</span><span class="n">Integer</span><span class="o">)</span> <span class="n">objArr</span><span class="o">[</span><span class="n">1</span><span class="o">]).</span><span class="na">intValue</span><span class="o">()</span> <span class="o">+</span> <span class="o">((</span><span class="n">Integer</span><span class="o">)</span> <span class="n">objArr</span><span class="o">[</span><span class="n">2</span><span class="o">]).</span><span class="na">intValue</span><span class="o">()</span> <span class="o">==</span> <span class="n">iArr</span><span class="o">[((</span><span class="n">Integer</span><span class="o">)</span> <span class="n">objArr</span><span class="o">[</span><span class="n">0</span><span class="o">]).</span><span class="na">intValue</span><span class="o">()];</span>
-</span></span><span class="line"><span class="cl">        <span class="o">}).</span><span class="na">count</span><span class="o">()</span> <span class="o">==</span> <span class="o">((</span><span class="kt">long</span><span class="o">)</span> <span class="o">(</span><span class="n">str</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="n">1</span><span class="o">));</span>
-</span></span><span class="line"><span class="cl">    <span class="o">}</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span></code></pre></div><p>what it does is, if you input the string <code>ABC</code>, it build an array like</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.stream.IntStream</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cm">/* renamed from: Checker */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cm">/* loaded from: java.class */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Checker</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">hello_java</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">str</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">iArr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">219</span><span class="p">,</span><span class="w"> </span><span class="n">227</span><span class="p">,</span><span class="w"> </span><span class="n">209</span><span class="p">,</span><span class="w"> </span><span class="n">154</span><span class="p">,</span><span class="w"> </span><span class="n">104</span><span class="p">,</span><span class="w"> </span><span class="n">97</span><span class="p">,</span><span class="w"> </span><span class="n">158</span><span class="p">,</span><span class="w"> </span><span class="n">163</span><span class="p">};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">IntStream</span><span class="p">.</span><span class="na">range</span><span class="p">(</span><span class="n">0</span><span class="p">,</span><span class="w"> </span><span class="n">str</span><span class="p">.</span><span class="na">length</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">1</span><span class="p">).</span><span class="na">mapToObj</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Object</span><span class="o">[]</span><span class="p">{</span><span class="n">Integer</span><span class="p">.</span><span class="na">valueOf</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">Integer</span><span class="p">.</span><span class="na">valueOf</span><span class="p">(</span><span class="n">str</span><span class="p">.</span><span class="na">charAt</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span><span class="w"> </span><span class="n">Integer</span><span class="p">.</span><span class="na">valueOf</span><span class="p">(</span><span class="n">str</span><span class="p">.</span><span class="na">charAt</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">1</span><span class="p">))};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}).</span><span class="na">filter</span><span class="p">(</span><span class="n">objArr</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="p">((</span><span class="n">Integer</span><span class="p">)</span><span class="w"> </span><span class="n">objArr</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="p">).</span><span class="na">intValue</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">((</span><span class="n">Integer</span><span class="p">)</span><span class="w"> </span><span class="n">objArr</span><span class="o">[</span><span class="n">2</span><span class="o">]</span><span class="p">).</span><span class="na">intValue</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">iArr</span><span class="o">[</span><span class="p">((</span><span class="n">Integer</span><span class="p">)</span><span class="w"> </span><span class="n">objArr</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="p">).</span><span class="na">intValue</span><span class="p">()</span><span class="o">]</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}).</span><span class="na">count</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">((</span><span class="kt">long</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">str</span><span class="p">.</span><span class="na">length</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">1</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>what it does is, if you input the string <code>ABC</code>, it build an array like</p>
 <pre tabindex="0"><code>[
  [0, 0x41 /* A */, 0x42 /* B */]
  [1, 0x42 /* B */, 0x43 /* C */]

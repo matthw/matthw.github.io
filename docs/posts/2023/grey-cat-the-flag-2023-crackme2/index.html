@@ -23,8 +23,8 @@ You can grab the original file here. A fixed version was later released fixed, b
 <meta property="og:url" content="https://matth.dmz42.org/posts/2023/grey-cat-the-flag-2023-crackme2/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-05-24T08:54:33+02:00" />
 <meta property="article:modified_time" content="2023-05-24T08:54:33+02:00" />
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Grey Cat the Flag CTF 2023 - Crackme2"/>
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Grey Cat the Flag CTF 2023 - Crackme2"/>
 <meta name="twitter:description" content="Grey Cat The Flag CTF 2023 had some nice reversing challenges, this one was very nice and i think deserves a small writeup.
 You can grab the original file here. A fixed version was later released fixed, but i used the original binary.
 1. Quick Recon it&rsquo;s a 64 bits ELF that takes the flag as input
@@ -451,20 +451,20 @@ and dirty road:</p>
 </span></span><span class="line"><span class="cl">            <span class="n">op</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">mnemonic</span>
 </span></span><span class="line"><span class="cl">            <span class="n">dat</span> <span class="o">=</span>  <span class="n">i</span><span class="o">.</span><span class="n">op_str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&#34;,&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">            <span class="c1">#print(op, dat)</span>
-</span></span><span class="line"><span class="cl">            <span class="n">match</span> <span class="n">i</span><span class="o">.</span><span class="n">mnemonic</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;mov&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">match</span> <span class="n">i</span><span class="o">.</span><span class="n">mnemonic</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;mov&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&#34;0x&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;movabs&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;movabs&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&#34;0x&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;sub&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;sub&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">-=</span> <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">&amp;=</span> <span class="mh">0xffffffff</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;add&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;add&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">&amp;=</span> <span class="mh">0xffffffff</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;xor&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;xor&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">^=</span> <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;or&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;or&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">|=</span> <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 </span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;r12&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                        <span class="c1"># r12 persist and must be 0 for last check to pass</span>
@@ -475,12 +475,12 @@ and dirty road:</p>
 </span></span><span class="line"><span class="cl">                        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="mi">0</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">                        <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
 </span></span><span class="line"><span class="cl">                        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;lea&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;lea&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="c1"># load flag</span>
 </span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">16488</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;load flag&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">                        <span class="n">st</span><span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flag</span>
-</span></span><span class="line"><span class="cl">                <span class="n">case</span> <span class="s1">&#39;movzx&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="s1">&#39;movzx&#39;</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">                    <span class="c1"># load flag chr index</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">o1</span> <span class="o">=</span> <span class="n">dat</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">o2</span> <span class="o">=</span> <span class="n">dat</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
@@ -583,9 +583,10 @@ bloc: 0x3f84   0xd25edc37
 	</main>
 
 	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
-		<p>&copy; 2023 <a href="https://matth.dmz42.org">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>&copy; 2024 <a href="https://matth.dmz42.org">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
 		<p>
-			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://matth.dmz42.org/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a>
+		    &#183; <a href="https://matth.dmz42.org/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
 		</p>
 	</footer>
 
