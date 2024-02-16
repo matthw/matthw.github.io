@@ -38,7 +38,7 @@ The method is well described in the great [Practical Malware Analysis](https://n
 We can get rid of it by looking for the `JZ +5; JNZ +3; CALL` pattern and NOPing it:
 
 ```python
-data = open("nanolol", "rb").read()
+data = open("nano", "rb").read()
 
 # nop patterns
 data = data.replace(b"\x74\x03\x75\x01\xe8", b"\x90\x90\x90\x90\x90")
@@ -56,7 +56,7 @@ Since this is a CTF, we are first after the flag, we ignore the noise and jump i
 
 It is pretty straightforward: it goes over a 0x24 char input flag, xoring each char with a `KEY` and verifies that the result is what is in the `flag` global variable.
 
-We can extract both `KEY` and `flag`, xor them together and that should gives us the actual input flag:
+We can extract both `KEY` and `flag`, xor them together and that should give us the actual input flag:
 
 ```
 >>> from pwn import xor
@@ -130,7 +130,7 @@ then everytime the child segfaults, the parent will compute a byte value, update
 
 ```
 
-Now we you look at the `check` disassembly, we can see that the XOR key is stored in register `R12` and that in the middle of the XOR loop, there's move from address 0.
+Now if we you look at the `check` disassembly, we can see that the XOR key is stored in register `R12` and that in the middle of the XOR loop, there's a move from address 0.
 This triggers the segfault and the beauty is that the decompiler doesn't give any hint about it.
 
 ![nano crash](img/nano_crash.png)
@@ -251,14 +251,14 @@ and confirm that the lib is OK:
 lib.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=f05cef21094717d75fb2cf7bd3206c7c0e28949c, stripped
 ```
 
-however we can quickly notice that the shared library code has been replaced by interrupts:
+however we can quickly notice that the shared library code has been replaced by `INT3`:
 
 ```
 % objdump -M intel -d lib.so 
 
 lib.so:     file format elf64-x86-64
 
-[....]
+[...]
 
 Disassembly of section .text:
 
@@ -297,17 +297,17 @@ Disassembly of section .text:
     10bf:	cc                   	int3
     10c0:	cc                   	int3
     10c1:	cc                   	int3
-
+[...]
 ```
 
 bummer, back to `lets_go`...
 
 ## 2.2 lets_go parent
 
-The parent will wait for the child to generate a SIGTRAP - which happens as soon as it loads the library
-Upon crash, it will get the low 3 bytes of the crash address, compute their crc32 and use that to lookup the original original opcodes to executes.
+The parent will wait for the child to generate a SIGTRAP - which happens as soon as it loads the library.
+Upon crash, it will get the low 3 bytes of the crash address, compute their crc32 and use that to lookup the original original opcodes to execute.
 
-The instruction table is an array of 
+The instructions table is an array of 
 ```C
 typedef struct {
     uint32_t crc32;
@@ -316,7 +316,7 @@ typedef struct {
 } instruction;
 ```
 
-Once found, it write the opcodes back to the child and resume execution.
+Once found, it writes the opcodes back to the child and resume execution.
 
 At the next crash, if will overwrite the previously written correct opcodes by a bunch of INT3 before looking for the next opcodes to execute, this is to prevent dumping the memory
 at the end of the execution and getting a fully decoded library.
@@ -325,6 +325,8 @@ at the end of the execution and getting a fully decoded library.
 
 If you look at the source code, the library is doing a checksum of the main binary's code between 2 NOP markers, this is to prevent patching: if you patch the binary to remove the double fork
 in order to use strace to dump the opcodes as they are written, the binary should quickly exit, before any actual flag checking.
+
+It's also using ptrace and exit as syscalls instead of libc functions to prevent hooking with LD_PRELOAD.
 
 ## 2.3 Reconstructing the library
 

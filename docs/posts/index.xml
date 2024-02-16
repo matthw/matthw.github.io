@@ -33,7 +33,7 @@ It is unstripped, mainly to trick the reverser into some rabbit holes, the idea 
 <p>The method is well described in the great <a href="https://nostarch.com/malware">Practical Malware Analysis</a> book, which i highly recommend everyone to read.</p>
 <p><img src="img/jzjnz.png" alt="JZ / JNZ"></p>
 <p>We can get rid of it by looking for the <code>JZ +5; JNZ +3; CALL</code> pattern and NOPing it:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;nanolol&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;nano&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># nop patterns</span>
 </span></span><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;</span><span class="se">\x74\x03\x75\x01\xe8</span><span class="s2">&#34;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&#34;</span><span class="se">\x90\x90\x90\x90\x90</span><span class="s2">&#34;</span><span class="p">)</span>
@@ -45,7 +45,7 @@ It is unstripped, mainly to trick the reverser into some rabbit holes, the idea 
 <p>Since this is a CTF, we are first after the flag, we ignore the noise and jump into the <code>check</code> function:
 <img src="img/nano_check.png" alt="check()"></p>
 <p>It is pretty straightforward: it goes over a 0x24 char input flag, xoring each char with a <code>KEY</code> and verifies that the result is what is in the <code>flag</code> global variable.</p>
-<p>We can extract both <code>KEY</code> and <code>flag</code>, xor them together and that should gives us the actual input flag:</p>
+<p>We can extract both <code>KEY</code> and <code>flag</code>, xor them together and that should give us the actual input flag:</p>
 <pre tabindex="0"><code>&gt;&gt;&gt; from pwn import xor
 &gt;&gt;&gt; KEY = b&#39;\x7b\x3d\x14\x43\x01\x43\x5e\x2f\x27\x6a\x47\x4a\x1b\x10\x53\xf6\xac\xbf\xbc\x93\xb6\xde\xde\xce\xb4\xb3\xc9\xfc\x9b\xc7\xc1\x10\x2e\x4e\x2a\x39&#39;
 &gt;&gt;&gt; flag = b&#39;\x0c\x5c\x60\x20\x69\x63\x64\x0f\x4f\x1e\x33\x3a\x68\x2a\x7c\xd9\xd5\xd0\xc9\xe7\xc3\xf0\xbc\xab\x9b\xd7\x98\x8b\xaf\xb0\xf8\x47\x49\x16\x49\x68&#39;
@@ -99,7 +99,7 @@ apply proper typing:</p>
                   └─────────────►│       Child Process                │
                                  │                                    │
                                  └────────────────────────────────────┘
-</code></pre><p>Now we you look at the <code>check</code> disassembly, we can see that the XOR key is stored in register <code>R12</code> and that in the middle of the XOR loop, there&rsquo;s move from address 0.
+</code></pre><p>Now if we you look at the <code>check</code> disassembly, we can see that the XOR key is stored in register <code>R12</code> and that in the middle of the XOR loop, there&rsquo;s a move from address 0.
 This triggers the segfault and the beauty is that the decompiler doesn&rsquo;t give any hint about it.</p>
 <p><img src="img/nano_crash.png" alt="nano crash"></p>
 <p>Clearly now, the child crashes in the middle of the XOR loop and the parent replaces the key before resuming execution.
@@ -185,12 +185,12 @@ It uses the same concept, but will use <code>ptrace</code> to modify the actual 
 </span></span></code></pre></div><p>and confirm that the lib is OK:</p>
 <pre tabindex="0"><code>% file lib.so
 lib.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=f05cef21094717d75fb2cf7bd3206c7c0e28949c, stripped
-</code></pre><p>however we can quickly notice that the shared library code has been replaced by interrupts:</p>
+</code></pre><p>however we can quickly notice that the shared library code has been replaced by <code>INT3</code>:</p>
 <pre tabindex="0"><code>% objdump -M intel -d lib.so 
 
 lib.so:     file format elf64-x86-64
 
-[....]
+[...]
 
 Disassembly of section .text:
 
@@ -229,22 +229,24 @@ Disassembly of section .text:
     10bf:	cc                   	int3
     10c0:	cc                   	int3
     10c1:	cc                   	int3
+[...]
 </code></pre><p>bummer, back to <code>lets_go</code>&hellip;</p>
 <h2 id="22-lets_go-parent">2.2 lets_go parent</h2>
-<p>The parent will wait for the child to generate a SIGTRAP - which happens as soon as it loads the library
-Upon crash, it will get the low 3 bytes of the crash address, compute their crc32 and use that to lookup the original original opcodes to executes.</p>
-<p>The instruction table is an array of</p>
+<p>The parent will wait for the child to generate a SIGTRAP - which happens as soon as it loads the library.
+Upon crash, it will get the low 3 bytes of the crash address, compute their crc32 and use that to lookup the original original opcodes to execute.</p>
+<p>The instructions table is an array of</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">crc32</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">uint8_t</span>  <span class="n">num_ins</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">uint8_t</span>  <span class="n">code</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">instruction</span><span class="p">;</span>
-</span></span></code></pre></div><p>Once found, it write the opcodes back to the child and resume execution.</p>
+</span></span></code></pre></div><p>Once found, it writes the opcodes back to the child and resume execution.</p>
 <p>At the next crash, if will overwrite the previously written correct opcodes by a bunch of INT3 before looking for the next opcodes to execute, this is to prevent dumping the memory
 at the end of the execution and getting a fully decoded library.</p>
 <p><img src="img/dance_parent.png" alt="dance parent"></p>
 <p>If you look at the source code, the library is doing a checksum of the main binary&rsquo;s code between 2 NOP markers, this is to prevent patching: if you patch the binary to remove the double fork
 in order to use strace to dump the opcodes as they are written, the binary should quickly exit, before any actual flag checking.</p>
+<p>It&rsquo;s also using ptrace and exit as syscalls instead of libc functions to prevent hooking with LD_PRELOAD.</p>
 <h2 id="23-reconstructing-the-library">2.3 Reconstructing the library</h2>
 <p>The library reconstruction process is quite easy, the crc32 is only done on the 3 low bytes of the address, so we can built a rainbow table and use that to put the opcodes back
 into place (full script <a href="https://github.com/matthw/ctf/blob/main/2024-0xl4augh/dance/solve/extract_lib.py">here</a>)</p>
