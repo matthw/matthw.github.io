@@ -22,9 +22,11 @@ Since it can be used to read/write the memory and the CPU context of another pro
 <p><code>ptrace</code> is a system call that allows a process to trace/debug another process, it is used by debuggers and tracing tools like <code>strace</code>.</p>
 <p>Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching.</p>
 <p>Another <em>interesting</em> property of <code>ptrace</code> that often makes it used as an anti-debugging technique is that a process can only be traced by one and only one process.</p>
+<p>It can do a whole lot of things, I recommend reading the <a href="https://man7.org/linux/man-pages/man2/ptrace.2.html">ptrace(2) manpage</a>.</p>
 <h1 id="1-nano">1. nano</h1>
 <p>This challenge is meant as an introduction to nanomites, there&rsquo;s also a bit of code obfuscation.
-It is unstripped, mainly to trick the reverser into some rabbit holes, the idea was to force people out of the decompiler and briefly look at the disassembly. There binary is <a href="nano">here</a> let&rsquo;s dive into it.</p>
+It is unstripped, mainly to trick the reverser into some rabbit holes, the idea was to force people out of the decompiler and briefly look at the disassembly.</p>
+<p>The source and binary are available <a href="https://github.com/matthw/ctf/blob/main/2024-0xl4augh/nano/">here</a>, let&rsquo;s dive into it.</p>
 <h2 id="11-obfuscation">1.1 Obfuscation</h2>
 <p>Opening the binary, we notice the main function doesn&rsquo;t make much sense:
 <img src="img/nano_main.png" alt="nano main"></p>
@@ -99,7 +101,40 @@ apply proper typing:</p>
                   └─────────────►│       Child Process                │
                                  │                                    │
                                  └────────────────────────────────────┘
-</code></pre><p>Now if we you look at the <code>check</code> disassembly, we can see that the XOR key is stored in register <code>R12</code> and that in the middle of the XOR loop, there&rsquo;s a move from address 0.
+</code></pre><p>The parent uses <code>PTRACE_GETREGS</code> to read the child&rsquo;s registers into a <code>user_regs_struct</code> structure and then <code>PTRACE_SETREGS</code> to set the child&rsquo;s registers.</p>
+<p>The structure is defined as such in <a href="https://sites.uclouvain.be/SystInfo/usr/include/sys/user.h.html">sys/user.h</a>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">user_regs_struct</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r15</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r14</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r13</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r12</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rbp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rbx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r11</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r10</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r9</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r8</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rax</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rcx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rdx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rsi</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rdi</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">orig_rax</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rip</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">cs</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">eflags</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rsp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">ss</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">fs_base</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">gs_base</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">ds</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">es</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">fs</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">gs</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>You can refer to <a href="https://github.com/matthw/ctf/blob/main/2024-0xl4augh/nano/src/nano.c">nano.c</a> to see the full parent debugging loop.</p>
+<p>Now if we you look at the <code>check</code> disassembly, we can see that the XOR key is stored in register <code>R12</code> and that in the middle of the XOR loop, there&rsquo;s a move from address 0.
 This triggers the segfault and the beauty is that the decompiler doesn&rsquo;t give any hint about it.</p>
 <p><img src="img/nano_crash.png" alt="nano crash"></p>
 <p>Clearly now, the child crashes in the middle of the XOR loop and the parent replaces the key before resuming execution.

@@ -12,7 +12,7 @@
 ptrace is a system call that allows a process to trace/debug another process, it is used by debuggers and tracing tools like strace.
 Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching."><meta itemprop="datePublished" content="2024-02-16T08:00:00+02:00" />
 <meta itemprop="dateModified" content="2024-02-16T08:00:00+02:00" />
-<meta itemprop="wordCount" content="1767">
+<meta itemprop="wordCount" content="1991">
 <meta itemprop="keywords" content="reverse,ctf," /><meta property="og:title" content="ptrace based self-debugging binaries" />
 <meta property="og:description" content="These are two self-debugging ptrace (or nanomite, as you prefer) based challenges I made for 0xl4augh CTF.
 ptrace is a system call that allows a process to trace/debug another process, it is used by debuggers and tracing tools like strace.
@@ -78,9 +78,11 @@ Since it can be used to read/write the memory and the CPU context of another pro
 <p><code>ptrace</code> is a system call that allows a process to trace/debug another process, it is used by debuggers and tracing tools like <code>strace</code>.</p>
 <p>Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching.</p>
 <p>Another <em>interesting</em> property of <code>ptrace</code> that often makes it used as an anti-debugging technique is that a process can only be traced by one and only one process.</p>
+<p>It can do a whole lot of things, I recommend reading the <a href="https://man7.org/linux/man-pages/man2/ptrace.2.html">ptrace(2) manpage</a>.</p>
 <h1 id="1-nano">1. nano<a href="#1-nano" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
 <p>This challenge is meant as an introduction to nanomites, there&rsquo;s also a bit of code obfuscation.
-It is unstripped, mainly to trick the reverser into some rabbit holes, the idea was to force people out of the decompiler and briefly look at the disassembly. There binary is <a href="nano">here</a> let&rsquo;s dive into it.</p>
+It is unstripped, mainly to trick the reverser into some rabbit holes, the idea was to force people out of the decompiler and briefly look at the disassembly.</p>
+<p>The source and binary are available <a href="https://github.com/matthw/ctf/blob/main/2024-0xl4augh/nano/">here</a>, let&rsquo;s dive into it.</p>
 <h2 id="11-obfuscation">1.1 Obfuscation<a href="#11-obfuscation" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <p>Opening the binary, we notice the main function doesn&rsquo;t make much sense:
 <img src="img/nano_main.png" alt="nano main"></p>
@@ -155,7 +157,40 @@ apply proper typing:</p>
                   └─────────────►│       Child Process                │
                                  │                                    │
                                  └────────────────────────────────────┘
-</code></pre><p>Now if we you look at the <code>check</code> disassembly, we can see that the XOR key is stored in register <code>R12</code> and that in the middle of the XOR loop, there&rsquo;s a move from address 0.
+</code></pre><p>The parent uses <code>PTRACE_GETREGS</code> to read the child&rsquo;s registers into a <code>user_regs_struct</code> structure and then <code>PTRACE_SETREGS</code> to set the child&rsquo;s registers.</p>
+<p>The structure is defined as such in <a href="https://sites.uclouvain.be/SystInfo/usr/include/sys/user.h.html">sys/user.h</a>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">user_regs_struct</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r15</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r14</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r13</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r12</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rbp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rbx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r11</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r10</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r9</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">r8</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rax</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rcx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rdx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rsi</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rdi</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">orig_rax</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rip</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">cs</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">eflags</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">rsp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">ss</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">fs_base</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">gs_base</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">ds</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">es</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">fs</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">__extension__</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">gs</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>You can refer to <a href="https://github.com/matthw/ctf/blob/main/2024-0xl4augh/nano/src/nano.c">nano.c</a> to see the full parent debugging loop.</p>
+<p>Now if we you look at the <code>check</code> disassembly, we can see that the XOR key is stored in register <code>R12</code> and that in the middle of the XOR loop, there&rsquo;s a move from address 0.
 This triggers the segfault and the beauty is that the decompiler doesn&rsquo;t give any hint about it.</p>
 <p><img src="img/nano_crash.png" alt="nano crash"></p>
 <p>Clearly now, the child crashes in the middle of the XOR loop and the parent replaces the key before resuming execution.
@@ -370,7 +405,7 @@ b&#39;0xL4ugh{i_h0p3_you_l1k3d_ptr4c3_and_lat1n_danc3s}&#39;
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://matth.dmz42.org/tags/reverse">reverse</a></span><span class="tag"><a href="https://matth.dmz42.org/tags/ctf">ctf</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1767 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1991 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2024-02-16 07:00 &#43;0100</p>
 			</footer>
 		</article>

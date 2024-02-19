@@ -17,11 +17,15 @@ Since it can be used to read/write the memory and the CPU context of another pro
 
 Another *interesting* property of `ptrace` that often makes it used as an anti-debugging technique is that a process can only be traced by one and only one process.
 
+It can do a whole lot of things, I recommend reading the [ptrace(2) manpage](https://man7.org/linux/man-pages/man2/ptrace.2.html).
+
 
 # 1. nano
 
 This challenge is meant as an introduction to nanomites, there's also a bit of code obfuscation.
-It is unstripped, mainly to trick the reverser into some rabbit holes, the idea was to force people out of the decompiler and briefly look at the disassembly. There binary is [here](nano) let's dive into it.
+It is unstripped, mainly to trick the reverser into some rabbit holes, the idea was to force people out of the decompiler and briefly look at the disassembly.
+
+The source and binary are available [here](https://github.com/matthw/ctf/blob/main/2024-0xl4augh/nano/), let's dive into it.
 
 ## 1.1 Obfuscation
 
@@ -129,6 +133,47 @@ then everytime the child segfaults, the parent will compute a byte value, update
                                  └────────────────────────────────────┘
 
 ```
+
+
+The parent uses `PTRACE_GETREGS` to read the child's registers into a `user_regs_struct` structure and then `PTRACE_SETREGS` to set the child's registers.
+
+
+The structure is defined as such in [sys/user.h](https://sites.uclouvain.be/SystInfo/usr/include/sys/user.h.html):
+
+```C
+struct user_regs_struct
+{
+  __extension__ unsigned long long int r15;
+  __extension__ unsigned long long int r14;
+  __extension__ unsigned long long int r13;
+  __extension__ unsigned long long int r12;
+  __extension__ unsigned long long int rbp;
+  __extension__ unsigned long long int rbx;
+  __extension__ unsigned long long int r11;
+  __extension__ unsigned long long int r10;
+  __extension__ unsigned long long int r9;
+  __extension__ unsigned long long int r8;
+  __extension__ unsigned long long int rax;
+  __extension__ unsigned long long int rcx;
+  __extension__ unsigned long long int rdx;
+  __extension__ unsigned long long int rsi;
+  __extension__ unsigned long long int rdi;
+  __extension__ unsigned long long int orig_rax;
+  __extension__ unsigned long long int rip;
+  __extension__ unsigned long long int cs;
+  __extension__ unsigned long long int eflags;
+  __extension__ unsigned long long int rsp;
+  __extension__ unsigned long long int ss;
+  __extension__ unsigned long long int fs_base;
+  __extension__ unsigned long long int gs_base;
+  __extension__ unsigned long long int ds;
+  __extension__ unsigned long long int es;
+  __extension__ unsigned long long int fs;
+  __extension__ unsigned long long int gs;
+};
+```
+
+You can refer to [nano.c](https://github.com/matthw/ctf/blob/main/2024-0xl4augh/nano/src/nano.c) to see the full parent debugging loop.
 
 Now if we you look at the `check` disassembly, we can see that the XOR key is stored in register `R12` and that in the middle of the XOR loop, there's a move from address 0.
 This triggers the segfault and the beauty is that the decompiler doesn't give any hint about it.
