@@ -443,7 +443,7 @@ pwndbg> x/gx $rbp - 0x48
 0x7fffffffe3a8:	0x4444444443434343
 ```
 
-we controll the value of ```buffer[0]``` and this value is dereferencedu before writting our input to it... so we can write anywhere.
+we control the value of ```buffer[0]``` and this value is dereferenced before writting our input to it... so we can write anywhere.
 
 hidden option 69 ```free(buffer[0]); return```
 
