@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+
+  <meta itemprop="name" content="Flare-On 11 - #9 serpentine">
+  <meta itemprop="description" content="“serpentine” was the 9th and penultimate challenge from Google/FLARE’s Flare-On 2024 - and arguably the hardest challenge of these past couple of years (at least in my opinion).
+Some information may be presented in a simplistic or incomplete way, as I tried to stay focused on the main points for this challenge. However, it’s very possible I got something slightly wrong or made a mistake, so feel free to point it out.">
+  <meta itemprop="datePublished" content="2024-11-09T06:00:00+02:00">
+  <meta itemprop="dateModified" content="2024-11-09T06:00:00+02:00">
+  <meta itemprop="wordCount" content="6332">
+  <meta itemprop="keywords" content="Reverse,Ctf"><meta property="og:url" content="https://matth.dmz42.org/posts/2024/flare-on_11_9_serpentine/">
+  <meta property="og:site_name" content="# matth.dmz42.org">
+  <meta property="og:title" content="Flare-On 11 - #9 serpentine">
+  <meta property="og:description" content="“serpentine” was the 9th and penultimate challenge from Google/FLARE’s Flare-On 2024 - and arguably the hardest challenge of these past couple of years (at least in my opinion).
+Some information may be presented in a simplistic or incomplete way, as I tried to stay focused on the main points for this challenge. However, it’s very possible I got something slightly wrong or made a mistake, so feel free to point it out.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-11-09T06:00:00+02:00">
+    <meta property="article:modified_time" content="2024-11-09T06:00:00+02:00">
+    <meta property="article:tag" content="Reverse">
+    <meta property="article:tag" content="Ctf">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Flare-On 11 - #9 serpentine">
+  <meta name="twitter:description" content="“serpentine” was the 9th and penultimate challenge from Google/FLARE’s Flare-On 2024 - and arguably the hardest challenge of these past couple of years (at least in my opinion).
+Some information may be presented in a simplistic or incomplete way, as I tried to stay focused on the main points for this challenge. However, it’s very possible I got something slightly wrong or made a mistake, so feel free to point it out.">
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Flare-On 11 - #9 serpentine</title>
+	<link rel="stylesheet" href="https://matth.dmz42.org/css/style.min.037b6ee8f8c1baab6a3d0a9da11c3ff18a7552471f16c59fd98538d5ce99208b.css" integrity="sha256-A3tu6PjBuqtqPQqdoRw/8Yp1UkcfFsWf2YU41c6ZIIs=" crossorigin="anonymous">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://matth.dmz42.org/"># matth.dmz42.org</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://matth.dmz42.org/posts/">Posts</a>
+				<a href="https://matth.dmz42.org/tags/">Tags</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://twitter.com/matth_walter" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/matthw" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://www.linkedin.com/in/mwalter/" target="_blank" rel="noopener me" title="Linkedin"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://matth.dmz42.org/posts/">Posts</a></li>
+			<li><a href="https://matth.dmz42.org/tags/">Tags</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Nov 9, 2024</span></div>
+				<h1>Flare-On 11 - #9 serpentine</h1>
+			</header>
+			<div class="content">
+				<p>&ldquo;serpentine&rdquo; was the 9th and penultimate challenge from Google/FLARE&rsquo;s <a href="https://flare-on.com/">Flare-On</a> 2024 - and arguably the hardest challenge of these past couple of years (at least in my opinion).</p>
+<p>Some information may be presented in a simplistic or incomplete way, as I tried to stay focused on the main points for this challenge. However, it’s very possible I got something slightly wrong or made a mistake, so feel free to point it out.</p>
+<h1 id="1-untangling-the-spaghetti">1. Untangling The Spaghetti<a href="#1-untangling-the-spaghetti" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<h2 id="11-quick-peek">1.1 Quick Peek<a href="#11-quick-peek" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>The program expects a 32 bytes key as parameter, it is copied at address <code>0x14089b8e8</code> (that i labelled <code>INPUT_KEY</code>), execution is then transfered it some code region.</p>
+<p><img src="img/000-main.png" alt="main"></p>
+<p>Providing the wrong key prints the message <code>Wrong Key</code>, we can follow string references up to that function, next to which we find the <code>show_flag</code> function:</p>
+<p><img src="img/001-win.png" alt="wrong and win functions"></p>
+<p>The <code>EXEC_CODE</code> pointer is initialized within the first TLS callback:</p>
+<p><img src="img/005-tls0.png" alt="tls callback 0"></p>
+<p>We now know its source (<code>0x140097af0</code>) and size (<code>0x800000</code>) - and it welcomes us with a nice <code>HLT</code> instruction&hellip;</p>
+<p><img src="img/007-hlt.png" alt="source code"></p>
+<p>Debugging confirms that code execution is correctly transfered to the allocated buffer and that the <code>HLT</code> instruction triggers an exception, as expected, meaning that we&rsquo;ll probably have to deal with some
+kind of exception based obfuscation.</p>
+<h2 id="12-exception-handling">1.2 Exception Handling<a href="#12-exception-handling" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>The <code>main</code> function does a call to <code>SetUnhandledExceptionFilter</code>, sadly for us, the referenced handler doesn&rsquo;t do much:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">mw</span><span class="o">::</span><span class="nf">Unhandled_Exception_Filter</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="nf">puts</span><span class="p">(</span><span class="s">&#34;Unexpected exception occurred.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>We&rsquo;ll find some luck in <code>__scrt_common_main_seh()</code> calling <code>_initterm()</code>, which will loop around a list of function pointers and call them before <code>main()</code>.</p>
+<p>The last 2 functions are the interesting ones:</p>
+<p><img src="img/010-initterm.png" alt="initterm"></p>
+<p>The first one will initialize a global pointer to <code>RtlInstallFunctionTableCallback</code> (easier done through debugging than by following the code&hellip; :):</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">((((</span><span class="o">*</span><span class="n">exportName</span> <span class="o">==</span> <span class="sc">&#39;R&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">exportName</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;I&#39;</span><span class="p">))</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">exportName</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;F&#39;</span><span class="p">))</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">           <span class="p">((</span><span class="n">exportName</span><span class="p">[</span><span class="mh">0x12</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;T&#39;</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">exportName</span><span class="p">[</span><span class="mh">0x17</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;C&#39;</span><span class="p">))))</span> <span class="k">break</span><span class="p">;</span>
+</span></span></code></pre></div><p>The 2nd one will call <code>RtlInstallFunctionTableCallback</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">undefined8</span> <span class="n">mw</span><span class="o">::</span><span class="n">constructor</span><span class="o">::</span><span class="nf">install_function_table_callback</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">RtlInstallFunctionTableCallback</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="cm">/* NTSYSAPI BOOLEAN RtlInstallFunctionTableCallback(
+</span></span></span><span class="line"><span class="cl"><span class="cm">                         [in] DWORD64                        TableIdentifier,
+</span></span></span><span class="line"><span class="cl"><span class="cm">                         [in] DWORD64                        BaseAddress,
+</span></span></span><span class="line"><span class="cl"><span class="cm">                         [in] DWORD                          Length,
+</span></span></span><span class="line"><span class="cl"><span class="cm">                         [in] PGET_RUNTIME_FUNCTION_CALLBACK Callback,
+</span></span></span><span class="line"><span class="cl"><span class="cm">                         [in] PVOID                          Context,
+</span></span></span><span class="line"><span class="cl"><span class="cm">                         [in] PCWSTR                         OutOfProcessCallbackDll
+</span></span></span><span class="line"><span class="cl"><span class="cm">                       ); */</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="o">*</span><span class="n">RtlInstallFunctionTableCallback</span><span class="p">)(</span><span class="n">EXEC_CODE</span> <span class="o">|</span> <span class="mi">3</span><span class="p">,</span><span class="n">EXEC_CODE</span><span class="p">,</span><span class="mh">0x2e4d26</span><span class="p">,</span><span class="n">PTR_callback_handler_1400245b0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>If like me you never encountered <code>RtlInstallFunctionTableCallback</code>, the <a href="https://learn.microsoft.com/en-us/windows/win32/api/winnt/nf-winnt-rtlinstallfunctiontablecallback">MSDN</a> is very clear:</p>
+<pre tabindex="0"><code>Adds a dynamic function table to the dynamic function table list.
+</code></pre><p>Thank you, very helpful :-)</p>
+<p>Hopefully the <a href="https://learn.microsoft.com/en-us/windows/win32/api/winnt/nf-winnt-rtlinstallfunctiontablecallback#remarks">remarks</a> section gives more information and we can start being scared:</p>
+<pre tabindex="0"><code>Function tables are used on 64-bit Windows to determine how to unwind or walk the stack.
+These tables are usually generated by the compiler and stored as part of the image.
+However, applications must provide the function table for dynamically generated code.
+For more information about function tables, see the architecture guide for your system.
+
+This function is useful for very dynamic code. 
+The application specifies the memory range for the generated code, but does not need to generate a table
+until it is needed by an unwind request. At that time, the system calls the callback function with the 
+Context and the control address. The callback function must return the runtime function entry for 
+the specified address.
+</code></pre><p>This hints us towards the fact the exceptions will not be handled by a single static handler and that we&rsquo;ll have to put in some work.</p>
+<h2 id="13-callback">1.3 Callback<a href="#13-callback" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>The <code>Callback</code> parameter of <code>RtlInstallFunctionTableCallback()</code> is a pointer to a <code>GET_RUNTIME_FUNCTION_CALLBACK</code> whose definition looks like</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">PRUNTIME_FUNCTION</span> <span class="nf">GET_RUNTIME_FUNCTION_CALLBACK</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_In_</span> <span class="n">DWORD64</span> <span class="n">ControlPc</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_In_opt_</span> <span class="n">PVOID</span> <span class="n">Context</span>
+</span></span><span class="line"><span class="cl">    <span class="p">);</span>
+</span></span></code></pre></div><p>This function will be called for any exception happening between the <code>BaseAddress</code> and <code>BaseAddress + Size</code> parameters of <code>RtlInstallFunctionTableCallback</code>, namely any exception happening between <code>0x14089b8e0</code> and <code>0x14089b8e0</code> + <code>0x2e4d26</code> and will return a pointer to a <a href="https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-runtime_function">RUNTIME_FUNCTION</a> structure of the form:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_IMAGE_RUNTIME_FUNCTION_ENTRY</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">DWORD</span> <span class="n">BeginAddress</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">DWORD</span> <span class="n">EndAddress</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">union</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DWORD</span> <span class="n">UnwindInfoAddress</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DWORD</span> <span class="n">UnwindData</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="n">DUMMYUNIONNAME</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">RUNTIME_FUNCTION</span><span class="p">,</span> <span class="o">*</span><span class="n">PRUNTIME_FUNCTION</span><span class="p">,</span> <span class="n">_IMAGE_RUNTIME_FUNCTION_ENTRY</span><span class="p">,</span> <span class="o">*</span><span class="n">_PIMAGE_RUNTIME_FUNCTION_ENTRY</span><span class="p">;</span>
+</span></span></code></pre></div><p>It has a single mandatory argument <code>ControlPC</code> which is the address where the exception happened.</p>
+<p>Our callback function dynamically creates a <code>RUNTIME_FUNCTION</code> struct and populates its fields based on the address of the crash:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* BeginAddress = crash offset in shellcode
+</span></span></span><span class="line"><span class="cl"><span class="cm">   EndAddress = crash offset in shellcode + 1
+</span></span></span><span class="line"><span class="cl"><span class="cm">   UnwindData = EndAddress + 1 + byte [crash_rip + 1] */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">PRUNTIME_FUNCTION</span> <span class="n">mw</span><span class="o">::</span><span class="nf">callback_handler</span><span class="p">(</span><span class="n">longlong</span> <span class="n">exception_RIP</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">PRUNTIME_FUNCTION</span> <span class="n">runtime_func</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uint</span> <span class="n">alignment</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">runtime_func</span> <span class="o">=</span> <span class="p">(</span><span class="n">PRUNTIME_FUNCTION</span><span class="p">)</span><span class="nf">operator_new</span><span class="p">(</span><span class="mh">0xc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">runtime_func</span><span class="o">-&gt;</span><span class="n">BeginAddress</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">exception_RIP</span> <span class="o">-</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">EXEC_CODE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">runtime_func</span><span class="o">-&gt;</span><span class="n">EndAddress</span> <span class="o">=</span> <span class="n">runtime_func</span><span class="o">-&gt;</span><span class="n">BeginAddress</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">runtime_func</span><span class="o">-&gt;</span><span class="n">UnwindData</span> <span class="o">=</span> <span class="n">runtime_func</span><span class="o">-&gt;</span><span class="n">EndAddress</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">byte</span> <span class="o">*</span><span class="p">)(</span><span class="n">exception_RIP</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">alignment</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint</span><span class="p">)((</span><span class="n">runtime_func</span><span class="o">-&gt;</span><span class="n">UnwindData</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">runtime_func</span><span class="o">-&gt;</span><span class="n">UnwindData</span> <span class="o">=</span> <span class="n">runtime_func</span><span class="o">-&gt;</span><span class="n">UnwindData</span> <span class="o">+</span> <span class="n">alignment</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">runtime_func</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>From the above function, we can infer the following structure in the code:</p>
+<pre tabindex="0"><code>[     HLT     ]    HLT instruction, trigger an exception
+[  JUNK_SIZE  ]    One byte indicating the number of junk bytes
+[    JUNK     ]   -+
+[    JUNK     ]    |
+      ...          | JUNK_SIZE bytes of junk
+[    JUNK     ]   -+
+[ UNWIND_INFO ]    UNWIND_INFO structure
+</code></pre><p><img src="img/012-runtime_func.png" alt="runtime"></p>
+<p>At this stage, reading the <a href="https://learn.microsoft.com/en-us/cpp/build/exception-handling-x64?view=msvc-170">x64 exception handling documentation</a> is a must - even though my initial thought was something like &ldquo;baaah screw this, we don&rsquo;t need it&rdquo;.</p>
+<p>Well, yes we need it.</p>
+<h2 id="14-unwinding">1.4 Unwinding<a href="#14-unwinding" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>All of this is nice but we still dont know what code will be executed after the instruction triggers. If we put a breakpoint in <code>KiUserExceptionDispatcher</code> and trace it far enough, we see that eventually the flow is transfered back to our code region of interest. We need to understand where and how, and for this we need to keep digging and understand what this <code>UNWIND_INFO</code> structure is.</p>
+<p>The structure is documented <a href="https://learn.microsoft.com/en-us/cpp/build/exception-handling-x64?view=msvc-170#struct-unwind_info">here</a> and can be a bit tricky to parse.</p>
+<p><img src="img/015-unwind_info.png" alt="unwind_info"></p>
+<p>Its size depends on the <code>Count of unwind codes</code> field and what they are not saying is that while each unwind code is a <code>USHORT</code>, the array size should be <code>DWORD</code> aligned. In simpler terms, if the struct says there&rsquo;s 3 unwind codes, the array size will be of 4 unwind codes, the latest one being to be discarded.</p>
+<p>Luckily for us the first <code>UNWIND_INFO</code> struct we encounter has 0 unwind code, so we dont have to deal with it now.</p>
+<p>The last <code>DWORD</code> of the structure is the offset of the actual exception handler that needs to be executed, and just like that we know where code execution continues after the execution.</p>
+<p><img src="img/017-exception_handler.png" alt="exception"></p>
+<p><em>// bear in mind that 0x140097af0 is considered offset 0</em></p>
+<p>The exception handler is an <code>EXCEPTION_ROUTINE</code> as documented <a href="https://learn.microsoft.com/en-us/cpp/build/exception-handling-x64?view=msvc-170#language-specific-handler">here</a>, whose prototype is</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="nf">EXCEPTION_DISPOSITION</span> <span class="p">(</span><span class="o">*</span><span class="n">PEXCEPTION_ROUTINE</span><span class="p">)</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">IN</span> <span class="n">PEXCEPTION_RECORD</span> <span class="n">ExceptionRecord</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">IN</span> <span class="n">ULONG64</span> <span class="n">EstablisherFrame</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">IN</span> <span class="n">OUT</span> <span class="n">PCONTEXT</span> <span class="n">ContextRecord</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">IN</span> <span class="n">OUT</span> <span class="n">PDISPATCHER_CONTEXT</span> <span class="n">DispatcherContext</span>
+</span></span><span class="line"><span class="cl"><span class="p">);</span>
+</span></span></code></pre></div><p>At this stage, I started to draft my plan:</p>
+<ul>
+<li>shove all the code to the <a href="https://www.unicorn-engine.org/">unicorn</a> emulator</li>
+<li><code>HOOK_CODE</code> to catch the <code>HLT</code> instructions</li>
+<li>get the <code>UNWIND_INFO</code> address</li>
+<li>parse it to grab the exception handler address</li>
+<li>set <code>RIP</code> to that address</li>
+<li>continue execution</li>
+<li>profit (maybe ?)</li>
+</ul>
+<p>that should give me a trace (that i was unable to get with x64dbg - because of skill issues, not the tool), from which i may be able to understand what&rsquo;s the code actually doing.</p>
+<p>I worked until it didn&rsquo;t, and that was fairly quickly :-)</p>
+<p>The actual code is scattered around exceptions handlers, and it turned out we actually <em>need</em> to do something with the unwind codes.</p>
+<h2 id="15-unwinding-for-real">1.5 Unwinding (For Real)<a href="#15-unwinding-for-real" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>So what is unwinding ?</p>
+<p><em>Stack unwinding is the process in programming where the runtime system reverses (or &ldquo;unwinds&rdquo;) the call stack to clean up resources and execute any necessary destructors or exception handlers after an
+exception is thrown. This happens sequentially from the point of the exception back through each previous function call, releasing resources at each level until a suitable catch block is found or the
+program terminates.</em> (thank you ChatGPT).</p>
+<p>Unwinding is the process of undoing the changes that have been made to the stack by any function call.</p>
+<p>Unwind codes describe what needs to be done in order to undo those changes.</p>
+<p>The <code>UNWIND_CODE</code> structure:
+<img src="img/020-unwind_code.png" alt="UNWIND_CODE"></p>
+<p>In our case, we&rsquo;re only interested in a limited number of <em>Unwind operation codes</em>:</p>
+<ul>
+<li><code>UWOP_PUSH_MACHFRAME</code></li>
+<li><code>UWOP_PUSH_NONVOL</code></li>
+<li><code>UWOP_ALLOC_LARGE</code></li>
+<li><code>UWOP_ALLOC_SMALL</code></li>
+<li><code>UWOP_SET_FPREG</code></li>
+</ul>
+<p>They are all documented <a href="https://learn.microsoft.com/en-us/cpp/build/exception-handling-x64?view=msvc-170#unwind-operation-code">here</a>.</p>
+<p>For example, <code>UWOP_PUSH_NONVOL</code>:</p>
+<pre tabindex="0"><code>Push a nonvolatile integer register, decrementing RSP by 8. The operation info is the number of the register.
+</code></pre><p>In order to reverse that we have to pop that register off the stack and increment RSP by 8, easy, but what wasn&rsquo;t clear to me is that these operations are <strong>not done on actual registers, but within a <code>CONTEXT</code> struct that is created when the exception occured</strong> in order to save the CPU context (makes sense).</p>
+<p>After reading <a href="https://doxygen.reactos.org/d8/d2f/unwind_8c_source.html">reactos source code</a>, <a href="https://github.com/google/orbit/blob/02f72c7311ed08e6418ecbfab4a457db67aa38d9/third_party/libunwindstack/PeCoffUnwindInfoUnwinderX86_64.cpp">libunwindstack</a> and crawling the <a href="https://github.com/azakharchenko-msol/wine/commit/400520192284c34e5b34b52b657cd3dda084403f">depth of github</a>, each opcode can be implemented as follow (in the more or less pythonic pseudocode):</p>
+<h3 id="151-uwop_push_machframe">1.5.1 UWOP_PUSH_MACHFRAME<a href="#151-uwop_push_machframe" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">offset</span> <span class="o">=</span> <span class="mh">0x20</span> <span class="k">if</span> <span class="n">unwind_op_info</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="mh">0x18</span>
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">RSP</span><span class="p">]</span> <span class="o">=</span> <span class="n">mem_read_qword</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">RSP</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span>
+</span></span></code></pre></div><h3 id="152-uwop_push_nonvol">1.5.2 UWOP_PUSH_NONVOL<a href="#152-uwop_push_nonvol" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">reg</span> <span class="o">=</span> <span class="n">REGS</span><span class="p">(</span><span class="n">unwind_op_info</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">v</span> <span class="o">=</span> <span class="n">mem_read_qword</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">RSP</span><span class="p">])</span>   <span class="c1"># v = [rsp]</span>
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">reg</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>                   <span class="c1"># regX = v</span>
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">RSP</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">8</span>                  <span class="c1"># rsp += 8</span>
+</span></span></code></pre></div><h3 id="153-uwop_alloc_large">1.5.3 UWOP_ALLOC_LARGE<a href="#153-uwop_alloc_large" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>This one requires 2 or 3 slots depending on the OpInfo field</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># alloc size = next slot * 8</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">unwind_op_info</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size</span> <span class="o">=</span> <span class="n">USHORT</span><span class="p">(</span><span class="n">unwind_codes</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="mi">8</span>
+</span></span><span class="line"><span class="cl">    <span class="n">node</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># alloc size = next 2 slot</span>
+</span></span><span class="line"><span class="cl"><span class="k">elif</span> <span class="n">unwind_op_info</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size</span> <span class="o">=</span> <span class="n">UINT</span><span class="p">(</span><span class="n">unwind_codes</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">node</span> <span class="o">+=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">RSP</span><span class="p">]</span> <span class="o">+=</span> <span class="n">size</span>
+</span></span></code></pre></div><h3 id="154-uwop_alloc_small">1.5.4 UWOP_ALLOC_SMALL<a href="#154-uwop_alloc_small" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">size</span> <span class="o">=</span> <span class="n">unwind_op_info</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">8</span>
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">RSP</span><span class="p">]</span> <span class="o">+=</span> <span class="n">size</span>
+</span></span></code></pre></div><h3 id="155-uwop_set_fpreg">1.5.5 UWOP_SET_FPREG<a href="#155-uwop_set_fpreg" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">context</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">RSP</span><span class="p">]</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">REGS</span><span class="p">(</span><span class="n">frame_reg</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl"><span class="n">context</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">RSP</span><span class="p">]</span> <span class="o">-=</span> <span class="n">frame_offset</span> <span class="o">*</span> <span class="mi">16</span>
+</span></span></code></pre></div><h2 id="16-context">1.6 CONTEXT<a href="#16-context" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>We already mentionned that a <a href="https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-context"><code>CONTEXT</code> struct</a> is saved whenever an exception occurs and that the unwinding takes place within that structure.</p>
+<p>It is important because the code that interests us is using that <code>CONTEXT</code> struct to pass information between the different exception handlers.</p>
+<p>When tracing the code we can see things like this, which in this specific case is loading the saved r13 register from the saved context to rdi.</p>
+<pre tabindex="0"><code>&gt;&gt;  0x600001a7  mov     rbp, qword ptr [r9 + 0x28]      ; DISPATCHER_CONTEXT-&gt;ContextRecord
+[...]
+&gt;&gt;  0x602e4e8c  mov     rdi, qword ptr [rbp + 0xe0]     ; ContextRecord.R13
+</code></pre><p><code>r9</code> holds the fourth argument to our <code>EXCEPTION_ROUTINE</code>, which is a pointer to a <code>DISPATCHER_CONTEXT</code> structure.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_DISPATCHER_CONTEXT</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ULONG64</span> <span class="n">ControlPc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ULONG64</span> <span class="n">ImageBase</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">PRUNTIME_FUNCTION</span> <span class="n">FunctionEntry</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ULONG64</span> <span class="n">EstablisherFrame</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ULONG64</span> <span class="n">TargetIp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">PCONTEXT</span> <span class="n">ContextRecord</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">PEXCEPTION_ROUTINE</span> <span class="n">LanguageHandler</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">PVOID</span> <span class="n">HandlerData</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">DISPATCHER_CONTEXT</span><span class="p">,</span> <span class="o">*</span><span class="n">PDISPATCHER_CONTEXT</span><span class="p">;</span>
+</span></span></code></pre></div><h2 id="17-stitching-it-all-together">1.7 Stitching It All Together<a href="#17-stitching-it-all-together" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>Turned out our emulator needs to do a little bit more than initially expected.</p>
+<p>Whenever we encounter a <code>HLT</code> instruction we need to:</p>
+<ol>
+<li>Save a <code>CONTEXT</code> structure with the current CPU state</li>
+<li>Compute the address of <code>RUNTIME_FUNCTION.UnwindData</code> for our crash location</li>
+<li>Parse the <code>UNWIND_INFO</code> structure at that location</li>
+<li>Apply all the <code>UNWIND_OPCODE</code> to our saved <code>CONTEXT</code> struct</li>
+<li>Save that <code>CONTEXT</code> struct to memory and make sure the <code>EXCEPTION_ROUTINE</code> handler can access it (we need R9 = DISPATCHER_CONTEXT address and R9+0x28 = CONTEXT address)</li>
+</ol>
+<p>When running the <a href="src/emu_v4.py">emulator</a> with the input key <code>AAAABBBBCCCCDDDDaaaabbbbccccdddd</code> we can see something like (<a href="data/emu_v4_trace.txt">full trace here</a>):</p>
+<pre tabindex="0"><code>mapping .text @ 0x140001000 (sz: 0x16000)
+mapping .rdata @ 0x140017000 (sz: 0xb000)
+mapping .data @ 0x140022000 (sz: 0x885000)
+mapping .pdata @ 0x1408a7000 (sz: 0x2000)
+mapping .rsrc @ 0x1408a9000 (sz: 0x1000)
+&gt;&gt;  0x140001642 lea rcx, [rip + 0x89a29f]
+&gt;&gt;  0x140001649 call    qword ptr [rip + 0x89a291]
+&gt;&gt;  0x60000000  hlt
+saving context...
+CTX  rax: 0x0000000000000000 rcx: 0x000000014089b8e8 rdx: 0x0000000000000000 rbx: 0x0000000000000000
+CTX  rsp: 0x00000000067ffea8 rbp: 0x0000000000000000 rsi: 0x0000000000000000 rdi: 0x0000000000000000
+CTX  r8:  0x0000000000000000 r9:  0x0000000000000000 r10: 0x0000000000000000 r11: 0x0000000000000000
+CTX  r12: 0x0000000000000000 r13: 0x0000000000000000 r14: 0x0000000000000000 r15: 0x0000000000000000
+CTX: rip: 0x0000000060000000 mxcsr: 0x00000000
+flag: 1 / opcodes: 0
+exception_handler: 0x98
+CTX  rax: 0x0000000000000000 rcx: 0x000000014089b8e8 rdx: 0x0000000000000000 rbx: 0x0000000000000000
+CTX  rsp: 0x00000000067ffea8 rbp: 0x0000000000000000 rsi: 0x0000000000000000 rdi: 0x0000000000000000
+CTX  r8:  0x0000000000000000 r9:  0x0000000000000000 r10: 0x0000000000000000 r11: 0x0000000000000000
+CTX  r12: 0x0000000000000000 r13: 0x0000000000000000 r14: 0x0000000000000000 r15: 0x0000000000000000
+CTX: rip: 0x0000000060000000 mxcsr: 0x00000000
+HANDLER ADDR: 0x60000098
+context to mem...
+&gt;&gt;  0x60000098  call    0x602e4d27
+&gt;&gt;  0x602e4d27  pop qword ptr [rip + 0x33]
+&gt;&gt;  0x602e4d27  pop qword ptr [rip + 0x33]
+&gt;&gt;  0x602e4d2d  push    rax
+&gt;&gt;  0x602e4d2e  mov rax, 0
+&gt;&gt;  0x602e4d35  mov ah, byte ptr [rip - 0x15]
+&gt;&gt;  0x602e4d3b  lea eax, [eax + 0x7f497049]
+&gt;&gt;  0x602e4d42  mov dword ptr [rip + 1], eax
+&gt;&gt;  0x602e4d42  mov dword ptr [rip + 1], eax
+&gt;&gt;  0x602e4d48  pop rax
+&gt;&gt;  0x602e4d49  movabs  r11, 0x10add7f49
+&gt;&gt;  0x602e4d53  mov dword ptr [rip - 0x14], 0x676742dd
+&gt;&gt;  0x602e4d53  mov dword ptr [rip - 0x14], 0x676742dd
+&gt;&gt;  0x602e4d5d  push    rax
+&gt;&gt;  0x602e4d5e  movabs  rax, 0x6000009d
+&gt;&gt;  0x602e4d68  lea rax, [rax + 5]
+&gt;&gt;  0x602e4d6c  xchg    qword ptr [rsp], rax
+&gt;&gt;  0x602e4d70  ret
+&gt;&gt;  0x600000a2  push    r11
+&gt;&gt;  0x600000a4  push    0x73775436
+&gt;&gt;  0x600000a9  push    0x68a04c43
+&gt;&gt;  0x600000ae  push    0x12917ff9
+&gt;&gt;  0x600000b3  call    0x602e4d96
+&gt;&gt;  0x602e4d96  pop qword ptr [rip + 0x32]
+&gt;&gt;  0x602e4d9c  push    rax
+&gt;&gt;  0x602e4d9d  mov rax, 0
+&gt;&gt;  0x602e4da4  mov ah, byte ptr [rip - 0x4a]
+&gt;&gt;  0x602e4daa  lea eax, [eax + 0x2443e448]
+&gt;&gt;  0x602e4db1  mov dword ptr [rip + 1], eax
+&gt;&gt;  0x602e4db1  mov dword ptr [rip + 1], eax
+&gt;&gt;  0x602e4db7  pop rax
+&gt;&gt;  0x602e4db8  add qword ptr [rsp + 0x18], 0x35ac399f
+&gt;&gt;  0x602e4dc1  mov dword ptr [rip - 0x13], 0x62cf7984
+&gt;&gt;  0x602e4dc1  mov dword ptr [rip - 0x13], 0x62cf7984
+&gt;&gt;  0x602e4dcb  push    rax
+&gt;&gt;  0x602e4dcc  movabs  rax, 0x600000b8
+&gt;&gt;  0x602e4dd6  lea rax, [rax + 4]
+&gt;&gt;  0x602e4dda  xchg    qword ptr [rsp], rax
+&gt;&gt;  0x602e4dde  ret
+&gt;&gt;  0x600000bc  call    0x602e4dff
+&gt;&gt;  0x602e4dff  pop qword ptr [rip + 0x2e]
+&gt;&gt;  0x602e4dff  pop qword ptr [rip + 0x2e]
+&gt;&gt;  0x602e4e05  push    rax
+&gt;&gt;  0x602e4e06  mov rax, 0
+&gt;&gt;  0x602e4e0d  mov ah, byte ptr [rip - 0x45]
+&gt;&gt;  0x602e4e13  lea eax, [eax - 0x2e4dd617]
+&gt;&gt;  0x602e4e1a  mov dword ptr [rip + 1], eax
+&gt;&gt;  0x602e4e1a  mov dword ptr [rip + 1], eax
+&gt;&gt;  0x602e4e20  pop rax
+&gt;&gt;  0x602e4e21  jmp 0x60000107
+&gt;&gt;  0x60000107  hlt
+saving context...
+CTX  rax: 0x0000000060000098 rcx: 0x0000000000000000 rdx: 0x0000000000000000 rbx: 0x0000000000000000
+CTX  rsp: 0x00000000067ffe88 rbp: 0x0000000000000000 rsi: 0x0000000000000000 rdi: 0x0000000000000000
+CTX  r8:  0x0000000000000000 r9:  0x0000000090000000 r10: 0x0000000000000000 r11: 0x000000010add7f49
+CTX  r12: 0x0000000000000000 r13: 0x0000000000000000 r14: 0x0000000000000000 r15: 0x0000000000000000
+CTX: rip: 0x0000000060000107 mxcsr: 0x00000000
+flag: 1 / opcodes: 5
+exception_handler: 0x1a7
+unwind_op_code: &lt;UWND_CODE.UWOP_PUSH_MACHFRAME: 10&gt;
+unwind_op_info: 0
+ setting rsp to 0x14089b8e8
+CTX  rax: 0x0000000060000098 rcx: 0x0000000000000000 rdx: 0x0000000000000000 rbx: 0x0000000000000000
+CTX  rsp: 0x000000014089b8e8 rbp: 0x0000000000000000 rsi: 0x0000000000000000 rdi: 0x0000000000000000
+CTX  r8:  0x0000000000000000 r9:  0x0000000090000000 r10: 0x0000000000000000 r11: 0x000000010add7f49
+CTX  r12: 0x0000000000000000 r13: 0x0000000000000000 r14: 0x0000000000000000 r15: 0x0000000000000000
+CTX: rip: 0x0000000060000107 mxcsr: 0x00000000
+unwind_op_code: &lt;UWND_CODE.UWOP_ALLOC_LARGE: 1&gt;
+unwind_op_info: 1
+ ALLOC 4
+CTX  rax: 0x0000000060000098 rcx: 0x0000000000000000 rdx: 0x0000000000000000 rbx: 0x0000000000000000
+CTX  rsp: 0x000000014089b8ec rbp: 0x0000000000000000 rsi: 0x0000000000000000 rdi: 0x0000000000000000
+CTX  r8:  0x0000000000000000 r9:  0x0000000090000000 r10: 0x0000000000000000 r11: 0x000000010add7f49
+CTX  r12: 0x0000000000000000 r13: 0x0000000000000000 r14: 0x0000000000000000 r15: 0x0000000000000000
+CTX: rip: 0x0000000060000107 mxcsr: 0x00000000
+unwind_op_code: &lt;UWND_CODE.UWOP_PUSH_NONVOL: 0&gt;
+unwind_op_info: 13
+ reading 8 bytes of input @ offset 4 into 0
+ PUSH &lt;REGS.R13: 13&gt; = 0x4343434342424242 (from: rsp=0x14089b8ec)
+CTX  rax: 0x0000000060000098 rcx: 0x0000000000000000 rdx: 0x0000000000000000 rbx: 0x0000000000000000
+CTX  rsp: 0x000000014089b8f4 rbp: 0x0000000000000000 rsi: 0x0000000000000000 rdi: 0x0000000000000000
+CTX  r8:  0x0000000000000000 r9:  0x0000000090000000 r10: 0x0000000000000000 r11: 0x000000010add7f49
+CTX  r12: 0x0000000000000000 r13: 0x4343434342424242 r14: 0x0000000000000000 r15: 0x0000000000000000
+CTX: rip: 0x0000000060000107 mxcsr: 0x00000000
+HANDLER ADDR: 0x600001a7
+context to mem...
+&gt;&gt;  0x600001a7  mov rbp, qword ptr [r9 + 0x28]
+&gt;&gt;  0x600001ab  call    0x602e4e6a
+&gt;&gt;  0x602e4e6a  pop qword ptr [rip + 0x30]
+&gt;&gt;  0x602e4e70  push    rax
+&gt;&gt;  0x602e4e71  mov rax, 0
+&gt;&gt;  0x602e4e78  mov ah, byte ptr [rip - 0x4b]
+&gt;&gt;  0x602e4e7e  lea eax, [eax - 0x1f4335b8]
+&gt;&gt;  0x602e4e85  mov dword ptr [rip + 1], eax
+&gt;&gt;  0x602e4e85  mov dword ptr [rip + 1], eax
+&gt;&gt;  0x602e4e8b  pop rax
+&gt;&gt;  0x602e4e8c  mov rdi, qword ptr [rbp + 0xe0]
+&gt;&gt;  0x602e4e93  mov dword ptr [rip - 0x11], 0xd6279bce
+&gt;&gt;  0x602e4e93  mov dword ptr [rip - 0x11], 0xd6279bce
+&gt;&gt;  0x602e4e9d  push    rax
+&gt;&gt;  0x602e4e9e  movabs  rax, 0x600001b0
+&gt;&gt;  0x602e4ea8  lea rax, [rax + 2]
+&gt;&gt;  0x602e4eac  xchg    qword ptr [rsp], rax
+&gt;&gt;  0x602e4eb0  ret
+&gt;&gt;  0x600001b2  movzx   rdi, dil
+&gt;&gt;  0x600001b6  call    0x602e4ed0
+&gt;&gt;  0x602e4ed0  pop qword ptr [rip + 0x2e]
+&gt;&gt;  0x602e4ed6  push    rax
+&gt;&gt;  0x602e4ed7  mov rax, 0
+&gt;&gt;  0x602e4ede  mov ah, byte ptr [rip - 0x44]
+&gt;&gt;  0x602e4ee4  lea eax, [eax - 0x2e4d9c17]
+&gt;&gt;  0x602e4eeb  mov dword ptr [rip + 1], eax
+&gt;&gt;  0x602e4eeb  mov dword ptr [rip + 1], eax
+&gt;&gt;  0x602e4ef1  pop rax
+&gt;&gt;  0x602e4ef2  jmp 0x6000020a
+&gt;&gt;  0x6000020a  hlt
+</code></pre><p>There&rsquo;s a number of interesting things we can notice:</p>
+<ul>
+<li>It looks like there&rsquo;s a second layer of obfuscation besides the exception flow:
+<ul>
+<li>the RIP relative moves with short offsets (<code>mov dword ptr [rip + 1], eax</code>) indicate self modifying code</li>
+<li>the return address of the call is computed like <code>...; xchg    qword ptr [rsp], rax; ret</code></li>
+</ul>
+</li>
+<li>The 2nd unwind loads 4 bytes of the input key into the <code>Context.R13</code> register using a <code>UWOP_PUSH_NONVOL</code> opcode</li>
+</ul>
+<pre tabindex="0"><code>unwind_op_code: &lt;UWND_CODE.UWOP_PUSH_NONVOL: 0&gt;
+unwind_op_info: 13
+ reading 8 bytes of input @ offset 4 into 0
+ PUSH &lt;REGS.R13: 13&gt; = 0x4343434342424242 (from: rsp=0x14089b8ec)
+CTX  rax: 0x0000000060000098 rcx: 0x0000000000000000 rdx: 0x0000000000000000 rbx: 0x0000000000000000
+CTX  rsp: 0x000000014089b8f4 rbp: 0x0000000000000000 rsi: 0x0000000000000000 rdi: 0x0000000000000000
+CTX  r8:  0x0000000000000000 r9:  0x0000000090000000 r10: 0x0000000000000000 r11: 0x000000010add7f49
+CTX  r12: 0x0000000000000000 r13: 0x4343434342424242 r14: 0x0000000000000000 r15: 0x0000000000000000
+CTX: rip: 0x0000000060000107 mxcsr: 0x00000000
+</code></pre><ul>
+<li>The <code>Context.R13</code> register is then accessed by the 2nd exception handler:</li>
+</ul>
+<pre tabindex="0"><code>&gt;&gt;  0x600001a7  mov     rbp, qword ptr [r9 + 0x28]      ; DISPATCHER_CONTEXT-&gt;ContextRecord
+&gt;&gt;  0x602e4e8c  mov     rdi, qword ptr [rbp + 0xe0]     ; ContextRecord-&gt;R13
+</code></pre><p>confirming that the unwinding process plays a crucial role in the problem we&rsquo;re trying to solve.</p>
+<p>If we examine the full emulator log, we see there&rsquo;s only a single conditionnal instruction at the end, in the form of a <code>test</code> + <code>cmovne</code> combo.</p>
+<pre tabindex="0"><code>&gt;&gt;  0x600179fd  test    r14, r14
+[...]
+&gt;&gt;  0x60017a07  cmovne  r12, r15
+&gt;&gt;  0x60017a0b  jmp r12
+&gt;&gt;  0x1400011f0 mov qword ptr [rsp + 0x20], r9
+&gt;&gt;  0x1400011f5 mov qword ptr [rsp + 0x18], r8
+</code></pre><p>In this case, we failed the test, and it jumped to <code>0x1400011f0</code>: the address of the <code>wrong_key</code> function.</p>
+<p>In order to pass the test, we need <code>R14</code> to be zero at the time of the <code>test</code>, if we trick the emulator, we discover there&rsquo;s 32 blocks ending with a <code>test/cmovne</code> combo&hellip;</p>
+<p>We can also notice the code uses the <code>MXCSR</code> register, via the <code>ldmxcsr</code> instruction:</p>
+<pre tabindex="0"><code>% grep ldmxcsr /tmp/trace.txt
+&gt;&gt;  0x602e5440	ldmxcsr	dword ptr [r15 + 0x90]
+&gt;&gt;  0x600007e2	ldmxcsr	dword ptr [rdx + 0x34]
+&gt;&gt;  0x602e5e76	ldmxcsr	dword ptr [r14 + 0x90]
+&gt;&gt;  0x60000e3e	ldmxcsr	dword ptr [r9 + 0x34]
+&gt;&gt;  0x602e67f2	ldmxcsr	dword ptr [r15 + 0xf0]
+...
+</code></pre><p>but also via the context struct:</p>
+<pre tabindex="0"><code>0x600008e0  mov rbx, qword ptr [r9 + 0x28]      ; rbx  = DISPATCHER_CONTEXT-&gt;ContextRecord
+...
+0x600008eb  mov r11d, dword ptr [rbx + 0x34]    ; r11d = ContextRecord.MxCsr
+</code></pre><h2 id="18-intermediate-summary">1.8 Intermediate Summary<a href="#18-intermediate-summary" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>The call to <code>RtlInstallFunctionTableCallback</code> installs a handler reponsible for returning a pointer to a <code>RUNTIME_FUNCTION</code> for exceptions happening between the <code>EXEC_CODE</code> and <code>EXEC_CODE + 0x2e4d26</code> boundaries.</p>
+<p><img src="img/025-install_handler.png" alt="handler installation"></p>
+<p>This <code>RUNTIME_FUNCTION</code> structure has an <code>UnwindData</code> field pointing to an <code>UNWIND_INFO</code> structure.</p>
+<p>The <code>UNWIND_INFO</code> structure may contain unwind opcodes describing unwind operations to be applied to the <code>CONTEXT</code>struct, and holds the address of the exception handler where execution must be transfered to.</p>
+<p>The overall flow when an exception triggers inside that code region looks like this:</p>
+<ul>
+<li>a <code>CONTEXT</code> structure created to save the current CPU context.</li>
+<li><code>KiUserExceptionDispatcher</code> is called as per the usual exception handling process
+<ul>
+<li>the installed function table callback is called</li>
+<li>it returns a <code>RUNTIME_FUNCTION</code> pointer</li>
+<li>unwinding happens, potentially modifying the saved <code>CONTEXT</code></li>
+<li>the address of the exception handler is computed</li>
+</ul>
+</li>
+<li>exception handler is executed</li>
+<li>rinse and repeat</li>
+</ul>
+<p><img src="img/027-exception_flow.png" alt="exception flow"></p>
+<p>Each conditional block follows this structure, with every exception handler using the <code>CONTEXT</code> struct to pass data.</p>
+<p>The first conditional block contains 364 <code>HLT</code> instructions&hellip;</p>
+<p><img src="img/030-intra_block.png" alt="conditionnal block"></p>
+<p>There are 32 conditionnal blocks that we need to validate in order to win:</p>
+<p><img src="img/032-inter_block.png" alt="inter blocks"></p>
+<h1 id="2-meal-prep">2. Meal Prep<a href="#2-meal-prep" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>Even though we can now emulate and understand the general flow of the beast, we still have no idea what we actually need to do in order to find the key.</p>
+<p>Taking into account that first conditionnal block alone has 364 handlers, that there&rsquo;s 32 conditionnal blocks and that the code of the handlers is obfuscated, we&rsquo;re not going to do that by hand. In other
+words we need some tooling.</p>
+<p>Disassemblers and decompilers like ghidra, binary ninja or IDA are <em>sometimes</em> pretty powerful at simplifying code and expressions out of the box, so our first goal would be to feed a conditionnal block to one of these and see what happens.</p>
+<p>While emulating we can dump raw opcodes to a file as we disassemble instructions, so that will not be a problem.</p>
+<p>However, there&rsquo;s several issues that needs to be overcome in the hope to get any meaningful result:</p>
+<ul>
+<li>there&rsquo;s a <code>CONTEXT</code> struct passing data between each exception handlers: we need to somewhat reproduce that, otherwise the data flow will be wrong</li>
+<li>the unwinding process can modify that <code>CONTEXT</code> struct between each exception handlers: we need to generate code which reproduce that</li>
+<li>the code is obfuscated with calls, self modifications and stack (ab)uses, we may want to clean that a bit upfront too&hellip;</li>
+</ul>
+<h2 id="21-flattening-the-dough-or-getting-rid-of-the-exceptions">2.1 Flattening The Dough (or getting rid of the exceptions)<a href="#21-flattening-the-dough-or-getting-rid-of-the-exceptions" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>We need to make our code &ldquo;flat&rdquo; and self contained, in the sense that it should not rely anymore on external mechanisms like an actual context struct, the unwinding process or exception handling in
+general.</p>
+<h3 id="211-context-simulation">2.1.1 Context Simulation<a href="#211-context-simulation" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>An easy way to get rid of the <code>CONTEXT</code> struct is to actually not get rid of it :-)</p>
+<p>Each time we run through a <code>HLT</code> instruction, we can save the registers ourselves somewhere.
+I arbitrarily chosed the following addresses:</p>
+<ul>
+<li>0x1000:    <code>DISPATCHER_CONTEXT</code>   (that&rsquo;s the structure passed to the exception handlers via <code>r9</code>)</li>
+<li>0x1100:    <code>CONTEXT</code></li>
+</ul>
+<p>We start by setting up the <code>DISPATCHER_CONTEXT-&gt;ContextRecord</code> pointer:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">rcx</span><span class="p">,</span> <span class="mi">0x1100</span>                     <span class="c1">; address of CONTEXT
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x1028</span><span class="p">],</span> <span class="no">rcx</span>         <span class="c1">; DISPATCHER_CONTEXT-&gt;ContextRecord = CONTEXT
+</span></span></span></code></pre></div><p>then, in place of every exceptions, we emit the follow code to fill in a basic <code>CONTEXT</code> struct with the info we need:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">movabs</span>  <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x1178</span><span class="p">],</span> <span class="no">rax</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x1180</span><span class="p">],</span> <span class="no">rcx</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x1188</span><span class="p">],</span> <span class="no">rdx</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x1190</span><span class="p">],</span> <span class="no">rbx</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x1198</span><span class="p">],</span> <span class="no">rsp</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x11a0</span><span class="p">],</span> <span class="no">rbp</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x11a8</span><span class="p">],</span> <span class="no">rsi</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x11b0</span><span class="p">],</span> <span class="no">rdi</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x11b8</span><span class="p">],</span> <span class="no">r8</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x11c0</span><span class="p">],</span> <span class="no">r9</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x11c8</span><span class="p">],</span> <span class="no">r10</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x11d0</span><span class="p">],</span> <span class="no">r11</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x11d8</span><span class="p">],</span> <span class="no">r12</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x11e0</span><span class="p">],</span> <span class="no">r13</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x11e8</span><span class="p">],</span> <span class="no">r14</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span>     <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x11f0</span><span class="p">],</span> <span class="no">r15</span>
+</span></span><span class="line"><span class="cl"><span class="nf">stmxcsr</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="mi">0x1134</span><span class="p">]</span>              <span class="c1">; save MXCSR
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">mov</span>     <span class="no">r9</span><span class="p">,</span> <span class="mi">0x1000</span>                      <span class="c1">; R9 = 3rd exception handler arg
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                                        <span class="c1">; must point to DISPATCHER_CONTEXT
+</span></span></span></code></pre></div><p>that&rsquo;s already one problem solved.</p>
+<h3 id="212-jit-the-unwind">2.1.2 JIT The Unwind<a href="#212-jit-the-unwind" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>The 2nd thing we need to solve to have an accurate data flow between the exception handlers, is to convert the unwind operations to code.
+We have pythonic code already for each opcode, the operations are pretty simple.</p>
+<h4 id="2121-uwop_push_machframe">2.1.2.1 UWOP_PUSH_MACHFRAME<a href="#2121-uwop_push_machframe" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># python</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># </span>
+</span></span><span class="line"><span class="cl"><span class="n">offset</span> <span class="o">=</span> <span class="mh">0x20</span> <span class="k">if</span> <span class="n">unwind_op_info</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="mh">0x18</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">REGS</span><span class="o">.</span><span class="n">RSP</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mem_read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">REGS</span><span class="o">.</span><span class="n">RSP</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># emit assembly</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="n">rsp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">get_reg_addr</span><span class="p">(</span><span class="s2">&#34;rsp&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;push rax&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov rax, [0x</span><span class="si">%x</span><span class="s2">]&#34;</span><span class="o">%</span><span class="n">rsp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;add rax, </span><span class="si">%d</span><span class="s2">&#34;</span><span class="o">%</span><span class="n">offset</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov rax, [rax]&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov [0x</span><span class="si">%x</span><span class="s2">], rax&#34;</span><span class="o">%</span><span class="n">rsp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;pop rax&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><h4 id="2122-uwop_push_nonvol">2.1.2.2 UWOP_PUSH_NONVOL<a href="#2122-uwop_push_nonvol" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># python</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="n">reg</span> <span class="o">=</span> <span class="n">REGS</span><span class="p">(</span><span class="n">unwind_op_info</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mem_read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">REGS</span><span class="o">.</span><span class="n">RSP</span><span class="p">])</span>   <span class="c1"># v = [rsp]</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">reg</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>                       <span class="c1"># regX = v</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">REGS</span><span class="o">.</span><span class="n">RSP</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">8</span>                 <span class="c1"># rsp += 8</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># emit assembly</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="n">rsp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">get_reg_addr</span><span class="p">(</span><span class="s2">&#34;rsp&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">get_reg_addr</span><span class="p">(</span><span class="n">ASM_REGS</span><span class="p">[</span><span class="n">reg</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;push rax&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov rax, [0x</span><span class="si">%x</span><span class="s2">]&#34;</span><span class="o">%</span><span class="n">rsp</span><span class="p">)</span>       <span class="c1"># v = rsp</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov rax, [rax]&#34;</span><span class="p">)</span>            <span class="c1"># regX = [v]</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov [0x</span><span class="si">%x</span><span class="s2">], rax&#34;</span><span class="o">%</span><span class="n">r</span><span class="p">)</span>         <span class="c1"># regX = [v]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># add rsp, 8</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov rax, [0x</span><span class="si">%x</span><span class="s2">]&#34;</span><span class="o">%</span><span class="n">rsp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;add rax, 8&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov [0x</span><span class="si">%x</span><span class="s2">], rax&#34;</span><span class="o">%</span><span class="n">rsp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;pop rax&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><h4 id="2123-uwop_alloc_large">2.1.2.3 UWOP_ALLOC_LARGE<a href="#2123-uwop_alloc_large" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># python</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># alloc size = next slot * 8</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">unwind_op_info</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size</span> <span class="o">=</span> <span class="n">u16</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="mi">8</span>
+</span></span><span class="line"><span class="cl">    <span class="n">node</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># alloc size = next 2 slot</span>
+</span></span><span class="line"><span class="cl"><span class="k">elif</span> <span class="n">unwind_op_info</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size</span> <span class="o">=</span> <span class="n">u32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">node</span> <span class="o">+=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">REGS</span><span class="o">.</span><span class="n">RSP</span><span class="p">]</span> <span class="o">+=</span> <span class="n">size</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># emit assembly</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="n">rsp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">get_reg_addr</span><span class="p">(</span><span class="s2">&#34;rsp&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;push rax&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov rax, [0x</span><span class="si">%x</span><span class="s2">]&#34;</span><span class="o">%</span><span class="n">rsp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;add rax, </span><span class="si">%d</span><span class="s2">&#34;</span><span class="o">%</span><span class="n">size</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov [0x</span><span class="si">%x</span><span class="s2">], rax&#34;</span><span class="o">%</span><span class="n">rsp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;pop rax&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><h4 id="2124-uwop_alloc_small">2.1.2.4 UWOP_ALLOC_SMALL<a href="#2124-uwop_alloc_small" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># python</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="n">size</span> <span class="o">=</span> <span class="n">unwind_op_info</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">8</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">REGS</span><span class="o">.</span><span class="n">RSP</span><span class="p">]</span> <span class="o">+=</span> <span class="n">size</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># emit assembly</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="n">rsp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">get_reg_addr</span><span class="p">(</span><span class="s2">&#34;rsp&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;push rax&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov rax, [0x</span><span class="si">%x</span><span class="s2">]&#34;</span><span class="o">%</span><span class="n">rsp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;add rax, </span><span class="si">%d</span><span class="s2">&#34;</span><span class="o">%</span><span class="n">size</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov [0x</span><span class="si">%x</span><span class="s2">], rax&#34;</span><span class="o">%</span><span class="n">rsp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;pop rax&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><h4 id="2125-uwop_set_fpreg">2.1.2.5 UWOP_SET_FPREG<a href="#2125-uwop_set_fpreg" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># python</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">REGS</span><span class="o">.</span><span class="n">RSP</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">REGS</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_reg</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">REGS</span><span class="o">.</span><span class="n">RSP</span><span class="p">]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_offset</span> <span class="o">*</span> <span class="mi">16</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># emit assembly</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="n">reg</span> <span class="o">=</span> <span class="n">REGS</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_reg</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">rsp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">get_reg_addr</span><span class="p">(</span><span class="s2">&#34;rsp&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="o">.</span><span class="n">get_reg_addr</span><span class="p">(</span><span class="n">ASM_REGS</span><span class="p">[</span><span class="n">reg</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;push rax&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov rax, [0x</span><span class="si">%x</span><span class="s2">]&#34;</span><span class="o">%</span><span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;sub rax, </span><span class="si">%d</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_offset</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov [0x</span><span class="si">%x</span><span class="s2">], rax&#34;</span><span class="o">%</span><span class="n">rsp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ANAL</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;pop rax&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><p>and &ldquo;just&rdquo; like that we got rid of the exception process.</p>
+<h2 id="22-sorting-the-ingredients-or-deobfuscation">2.2 Sorting The Ingredients (or deobfuscation)<a href="#22-sorting-the-ingredients-or-deobfuscation" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>The code obfuscator always follows the same scheme:</p>
+<ul>
+<li><strong>inside function calls</strong>, the only instructions we care about are directly located after a <code>pop rax</code> instruction. The rest is either useless self modifying code for confusion, or return address computation.</li>
+<li><strong>outside function calls</strong>, everything&rsquo;s good to keep</li>
+</ul>
+<p>Using the first handler as an example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="err">0</span><span class="nf">x60000098</span>  <span class="no">call</span>    <span class="mi">0x602e4d27</span>                        <span class="c1">; crap - call = enter obfuscated code
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d27</span>  <span class="no">pop</span> <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="err">+</span> <span class="mi">0x33</span><span class="p">]</span>                <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d27</span>  <span class="no">pop</span> <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="err">+</span> <span class="mi">0x33</span><span class="p">]</span>                <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d2d</span>  <span class="no">push</span>    <span class="no">rax</span>                               <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d2e</span>  <span class="no">mov</span> <span class="no">rax</span><span class="p">,</span> <span class="mi">0</span>                                <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d35</span>  <span class="no">mov</span> <span class="no">ah</span><span class="p">,</span> <span class="no">byte</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="p">-</span> <span class="mi">0x15</span><span class="p">]</span>             <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d3b</span>  <span class="no">lea</span> <span class="no">eax</span><span class="p">,</span> <span class="p">[</span><span class="no">eax</span> <span class="err">+</span> <span class="mi">0x7f497049</span><span class="p">]</span>               <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d42</span>  <span class="no">mov</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="err">+</span> <span class="mi">1</span><span class="p">],</span> <span class="no">eax</span>              <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d42</span>  <span class="no">mov</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="err">+</span> <span class="mi">1</span><span class="p">],</span> <span class="no">eax</span>              <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d48</span>  <span class="no">pop</span> <span class="no">rax</span>                                   <span class="c1">; crap pop rax: next instruction is good
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d49</span>  <span class="no">movabs</span>  <span class="no">r11</span><span class="p">,</span> <span class="mi">0x10add7f49</span>                    <span class="c1">; YES
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d53</span>  <span class="no">mov</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="p">-</span> <span class="mi">0x14</span><span class="p">],</span> <span class="mi">0x676742dd</span>    <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d53</span>  <span class="no">mov</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="p">-</span> <span class="mi">0x14</span><span class="p">],</span> <span class="mi">0x676742dd</span>    <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d5d</span>  <span class="no">push</span>    <span class="no">rax</span>                               <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d5e</span>  <span class="no">movabs</span>  <span class="no">rax</span><span class="p">,</span> <span class="mi">0x6000009d</span>                   <span class="c1">; crap - compute return address
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d68</span>  <span class="no">lea</span> <span class="no">rax</span><span class="p">,</span> <span class="p">[</span><span class="no">rax</span> <span class="err">+</span> <span class="mi">5</span><span class="p">]</span>                        <span class="c1">; crap - compute return address
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d6c</span>  <span class="no">xchg</span>    <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rsp</span><span class="p">],</span> <span class="no">rax</span>              <span class="c1">; crap - push return address
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d70</span>  <span class="no">ret</span>                                       <span class="c1">; crap - ret
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x600000a2</span>  <span class="no">push</span>    <span class="no">r11</span>                                 <span class="c1">; YES
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x600000a4</span>  <span class="no">push</span>    <span class="mi">0x73775436</span>                          <span class="c1">; YES
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x600000a9</span>  <span class="no">push</span>    <span class="mi">0x68a04c43</span>                          <span class="c1">; YES
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x600000ae</span>  <span class="no">push</span>    <span class="mi">0x12917ff9</span>                          <span class="c1">; YES
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x600000b3</span>  <span class="no">call</span>    <span class="mi">0x602e4d96</span>                        <span class="c1">; crap - call == enter obfuscated code
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d96</span>  <span class="no">pop</span> <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="err">+</span> <span class="mi">0x32</span><span class="p">]</span>                <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d9c</span>  <span class="no">push</span>    <span class="no">rax</span>                               <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4d9d</span>  <span class="no">mov</span> <span class="no">rax</span><span class="p">,</span> <span class="mi">0</span>                                <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4da4</span>  <span class="no">mov</span> <span class="no">ah</span><span class="p">,</span> <span class="no">byte</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="p">-</span> <span class="mi">0x4a</span><span class="p">]</span>             <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4daa</span>  <span class="no">lea</span> <span class="no">eax</span><span class="p">,</span> <span class="p">[</span><span class="no">eax</span> <span class="err">+</span> <span class="mi">0x2443e448</span><span class="p">]</span>               <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4db1</span>  <span class="no">mov</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="err">+</span> <span class="mi">1</span><span class="p">],</span> <span class="no">eax</span>              <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4db1</span>  <span class="no">mov</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="err">+</span> <span class="mi">1</span><span class="p">],</span> <span class="no">eax</span>              <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4db7</span>  <span class="no">pop</span> <span class="no">rax</span>                                   <span class="c1">; crap - pop rax: next instruction is good
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4db8</span>  <span class="no">add</span> <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rsp</span> <span class="err">+</span> <span class="mi">0x18</span><span class="p">],</span> <span class="mi">0x35ac399f</span>      <span class="c1">; YES
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4dc1</span>  <span class="no">mov</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="p">-</span> <span class="mi">0x13</span><span class="p">],</span> <span class="mi">0x62cf7984</span>    <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4dc1</span>  <span class="no">mov</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="p">-</span> <span class="mi">0x13</span><span class="p">],</span> <span class="mi">0x62cf7984</span>    <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4dcb</span>  <span class="no">push</span>    <span class="no">rax</span>                               <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4dcc</span>  <span class="no">movabs</span>  <span class="no">rax</span><span class="p">,</span> <span class="mi">0x600000b8</span>                   <span class="c1">; crap - compute return address
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4dd6</span>  <span class="no">lea</span> <span class="no">rax</span><span class="p">,</span> <span class="p">[</span><span class="no">rax</span> <span class="err">+</span> <span class="mi">4</span><span class="p">]</span>                        <span class="c1">; crap - compute return address
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4dda</span>  <span class="no">xchg</span>    <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rsp</span><span class="p">],</span> <span class="no">rax</span>              <span class="c1">; crap - push return address
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4dde</span>  <span class="no">ret</span>                                       <span class="c1">; crap - ret
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x600000bc</span>  <span class="no">call</span>    <span class="mi">0x602e4dff</span>                        <span class="c1">; crap - call == enter obfuscated code
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4dff</span>  <span class="no">pop</span> <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="err">+</span> <span class="mi">0x2e</span><span class="p">]</span>                <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4dff</span>  <span class="no">pop</span> <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="err">+</span> <span class="mi">0x2e</span><span class="p">]</span>                <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4e05</span>  <span class="no">push</span>    <span class="no">rax</span>                               <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4e06</span>  <span class="no">mov</span> <span class="no">rax</span><span class="p">,</span> <span class="mi">0</span>                                <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4e0d</span>  <span class="no">mov</span> <span class="no">ah</span><span class="p">,</span> <span class="no">byte</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="p">-</span> <span class="mi">0x45</span><span class="p">]</span>             <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4e13</span>  <span class="no">lea</span> <span class="no">eax</span><span class="p">,</span> <span class="p">[</span><span class="no">eax</span> <span class="p">-</span> <span class="mi">0x2e4dd617</span><span class="p">]</span>               <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4e1a</span>  <span class="no">mov</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="err">+</span> <span class="mi">1</span><span class="p">],</span> <span class="no">eax</span>              <span class="c1">; crap    
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4e1a</span>  <span class="no">mov</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rip</span> <span class="err">+</span> <span class="mi">1</span><span class="p">],</span> <span class="no">eax</span>              <span class="c1">; crap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4e20</span>  <span class="no">pop</span> <span class="no">rax</span>                                   <span class="c1">; crap - pop rax: next instruction is good
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4e21</span>  <span class="no">jmp</span> <span class="mi">0x60000107</span>                              <span class="c1">; YES / but we shouldn&#39;t re-emit
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x60000107</span>  <span class="no">hlt</span>                                         <span class="c1">; YES / but we shouldn&#39;t re-emit
+</span></span></span></code></pre></div><p>Considering that we should not re-emit <code>jmp</code> and <code>hlt</code>  instructions (unless we want an unreadable, useless output&hellip;), that leaves us with following instructions:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="err">0</span><span class="nf">x602e4d49</span>  <span class="no">movabs</span>  <span class="no">r11</span><span class="p">,</span> <span class="mi">0x10add7f49</span>                    <span class="c1">; YES
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x600000a2</span>  <span class="no">push</span>    <span class="no">r11</span>                                 <span class="c1">; YES
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x600000a4</span>  <span class="no">push</span>    <span class="mi">0x73775436</span>                          <span class="c1">; YES
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x600000a9</span>  <span class="no">push</span>    <span class="mi">0x68a04c43</span>                          <span class="c1">; YES
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x600000ae</span>  <span class="no">push</span>    <span class="mi">0x12917ff9</span>                          <span class="c1">; YES
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">0</span><span class="nf">x602e4db8</span>  <span class="no">add</span> <span class="no">qword</span> <span class="no">ptr</span> <span class="p">[</span><span class="no">rsp</span> <span class="err">+</span> <span class="mi">0x18</span><span class="p">],</span> <span class="mi">0x35ac399f</span>      <span class="c1">; YES
+</span></span></span></code></pre></div><p>This is pretty easy to implement programmatically.</p>
+<p>Of course, eveytime we apply a modification to the original code (like flattening the exception handling or deobfuscating), we have to emulate the output code and compare it to the original run to make sure the result is semantically identical&hellip;</p>
+<p>&hellip; and this how awful it looked in ghidra:</p>
+<p><img src="img/035-awful_decomp.png" alt="awful decomp"></p>
+<p>There&rsquo;s something the decompiler doesn&rsquo;t like (and i don&rsquo;t know what): it&rsquo;s not showing half the operations, it&rsquo;s not showing that our input is used, &hellip; even though the code executes the same.</p>
+<p>Anyway, if it&rsquo;s not readable, it should be solvable using symbolic execution:</p>
+<ul>
+<li>we know how to setup the initial context (input key and stuff)</li>
+<li>we know where we should or shouldn&rsquo;t land in the code (win/fail functions) and even where we need to push some path constraints (test instructions)</li>
+</ul>
+<p>but&hellip; <a href="https://angr.io/">angr</a> hung (hangr&hellip;) and <a href="https://triton-library.github.io/">Triton</a> wasn&rsquo;t happy either (as in returning wrong results). Could have been a skill issue in both cases (and
+probably was to be fair), but after looking carefully, we can a see a lot of tables lookups (underligned in red), with some of these lookups being &ldquo;input dependant&rdquo;.</p>
+<p>That&rsquo;s what symbolic execution and underlying SMT solvers do not like (probably, i&rsquo;m not an expert), so let&rsquo;s see what we can do about it.</p>
+<h2 id="22-at-the-table-">2.2 At The Table !<a href="#22-at-the-table-" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>Now comes what I think was the trickiest part of the whole challenge&hellip;</p>
+<h3 id="221-tables-tables-everywhere">2.2.1 Tables&hellip; Tables Everywhere<a href="#221-tables-tables-everywhere" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>Starting at offset <code>0x1400942c0</code> are a bunch of pointers, each of them pointing to a 256 bytes array</p>
+<p><img src="img/037-pointers.png" alt="pointers"></p>
+<p>we can dump them using a simple script:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="n">u64</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">start</span> <span class="o">=</span> <span class="mh">0x1400942c0</span>
+</span></span><span class="line"><span class="cl"><span class="n">end</span> <span class="o">=</span> <span class="mh">0x140097ac0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">tbls</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">addr</span> <span class="o">=</span> <span class="n">start</span>
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;serpentine.exe&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="n">addr</span> <span class="o">&lt;=</span> <span class="n">end</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">addr</span> <span class="o">-</span> <span class="mh">0x140001c00</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ptr</span> <span class="o">=</span> <span class="n">u64</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">tbls</span><span class="p">[</span><span class="n">addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">ptr</span>
+</span></span><span class="line"><span class="cl">        <span class="n">addr</span> <span class="o">+=</span> <span class="mi">8</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">addr</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">ptr</span> <span class="ow">in</span> <span class="n">tbls</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">ptr</span> <span class="o">-</span> <span class="mh">0x140001c00</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">data</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">256</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;off_</span><span class="si">%s</span><span class="s2"> = </span><span class="si">%r</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">ptr</span><span class="p">)[</span><span class="mi">2</span><span class="p">:],</span> <span class="n">data</span><span class="p">))</span>
+</span></span></code></pre></div><p>All these tables are flattened output of simple byte functions (thank you <a href="https://x.com/maciekkotowicz">mak</a> !). There&rsquo;s a total of 3586 tables, which gives us 14 (3586/256) different operations (maybe).</p>
+<p>For example, the table at offset <code>0x14002a5c0</code> is</p>
+<pre tabindex="0"><code>% python dump_tbl_2.py | grep 14002a5c0
+off_14002a5c0 = [
+    14, 15, 12, 13, 10, 11, 8, 9, 6, 7, 4, 5, 2, 3, 0, 1, 30, 31, 28, 29, 26, 27, 24, 25, 22, 23, 20, 21, 
+    18, 19, 16, 17, 46, 47, 44, 45, 42, 43, 40, 41, 38, 39, 36, 37, 34, 35, 32, 33, 62, 63, 60, 61, 58, 59,
+    56, 57, 54, 55, 52, 53, 50, 51, 48, 49, 78, 79, 76, 77, 74, 75, 72, 73, 70, 71, 68, 69, 66, 67, 64, 65,
+    94, 95, 92, 93, 90, 91, 88, 89, 86, 87, 84, 85, 82, 83, 80, 81, 110, 111, 108, 109, 106, 107, 104, 105, 
+    102, 103, 100, 101, 98, 99, 96, 97, 126, 127, 124, 125, 122, 123, 120, 121, 118, 119, 116, 117, 114, 115, 
+    112, 113, 142, 143, 140, 141, 138, 139, 136, 137, 134, 135, 132, 133, 130, 131, 128, 129, 158, 159, 156, 
+    157, 154, 155, 152, 153, 150, 151, 148, 149, 146, 147, 144, 145, 174, 175, 172, 173, 170, 171, 168, 169,
+    166, 167, 164, 165, 162, 163, 160, 161, 190, 191, 188, 189, 186, 187, 184, 185, 182, 183, 180, 181, 178,
+    179, 176, 177, 206, 207, 204, 205, 202, 203, 200, 201, 198, 199, 196, 197, 194, 195, 192, 193, 222, 223,
+    220, 221, 218, 219, 216, 217, 214, 215, 212, 213, 210, 211, 208, 209, 238, 239, 236, 237, 234, 235, 232,
+    233, 230, 231, 228, 229, 226, 227, 224, 225, 254, 255, 252, 253, 250, 251, 248, 249, 246, 247, 244, 245,
+    242, 243, 240, 241
+]
+</code></pre><p>and corresponds to a <strong>xor 14</strong>: <code>off_14002a5c0[X] == X ^ 14</code></p>
+<p>Based on the emulated code, we can track down the required functions to 5 operations:</p>
+<ul>
+<li>x + y</li>
+<li>x ^ y</li>
+<li>x &amp; 0</li>
+<li>x &gt; y</li>
+<li>x &lt;= y</li>
+<li>x &raquo; y</li>
+<li>y &raquo; x</li>
+</ul>
+<p>We can start to manually identify the operations: once we know the operation it&rsquo;s easy to find the other tables for that operation (by bruteforcing).</p>
+<p>Eventually we end up with something like <a href="src/tables.py">tables.py</a>&hellip;</p>
+<h3 id="222-removing-the-tables">2.2.2 Removing The Tables<a href="#222-removing-the-tables" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<p>Now that we have the tables identified, we need to find a way to remove them by replacing them by equivalent assembly instructions.</p>
+<p>There&rsquo;s 2 instruction patterns used to perform those table lookups and the register holding the end result is always a 8 bits register:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">table</span><span class="p">,</span> <span class="no">table_base</span>
+</span></span><span class="line"><span class="cl"><span class="nf">add</span> <span class="no">table</span><span class="p">,</span> <span class="no">v</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">res.8b</span><span class="p">,</span> <span class="p">[</span><span class="no">table</span><span class="p">]</span>
+</span></span></code></pre></div><p>and</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">reg.8b</span><span class="p">,</span> <span class="no">v</span>
+</span></span><span class="line"><span class="cl"><span class="nf">add</span> <span class="no">reg</span><span class="p">,</span> <span class="no">table_base</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">res.8b</span><span class="p">,</span> <span class="p">[</span><span class="no">reg</span><span class="p">]</span>
+</span></span></code></pre></div><p>for example:</p>
+<pre tabindex="0"><code>050        600005bd 4d 8b b6 68 04 00 00         MOV                     R14,qword ptr [R14 + 0x468]=&gt;PTR_140096728 = NaP
+050        600005c4 4d 03 b7 90 00 00 00         ADD                     R14,qword ptr [R15 + 0x90]=&gt;C_RBX
+050        600005cb 41 8a 36                     MOV                     SIL,byte ptr [R14]
+</code></pre><p>scanning for that pattern is fairly easy, the issue is to know what&rsquo;s the table base address and what&rsquo;s the index register.</p>
+<p>The loosy strat I came up with is:</p>
+<ul>
+<li>detect every <code>mov</code> instruction with a <strong>8 bits destination register</strong></li>
+<li>if the <strong>2 previous instructions</strong> are <code>add</code> and <code>mov</code> then
+<ul>
+<li>if the first <code>mov</code> destination operand is a 8 bits register:
+<ul>
+<li>then the source register is the <code>index</code> register</li>
+<li>and the right <code>add</code> operand is the <code>table base</code> register</li>
+</ul>
+</li>
+<li>else:
+<ul>
+<li>source register of the <code>mov</code> instruction is the <code>table base</code></li>
+<li>right <code>add</code> operand is the <code>index</code> register</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>using the computed address by the last <code>mov</code> we can find in which table we&rsquo;re in:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="n">addr</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">TABLES</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">addr</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">256</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">TABLES</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&#34;unknown table 0x</span><span class="si">%x</span><span class="s2">&#34;</span><span class="o">%</span><span class="n">addr</span><span class="p">)</span>
+</span></span></code></pre></div><ul>
+<li>emit assembly code in place of the table lookup:</li>
+</ul>
+<p><code>add</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov </span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">,</span> <span class="n">var</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;add </span><span class="si">%s</span><span class="s2">, </span><span class="si">%d</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span> 
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;and </span><span class="si">%s</span><span class="s2">, 0xff&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">out_reg</span><span class="p">,</span> <span class="n">regs_32_to_64</span><span class="p">[</span><span class="n">tmp_reg</span><span class="p">]))</span>
+</span></span></code></pre></div><p><code>and</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov </span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">,</span> <span class="n">var</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;and </span><span class="si">%s</span><span class="s2">, </span><span class="si">%d</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">out_reg</span><span class="p">,</span> <span class="n">regs_32_to_64</span><span class="p">[</span><span class="n">tmp_reg</span><span class="p">]))</span>
+</span></span></code></pre></div><p><code>xor</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov </span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">,</span> <span class="n">var</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;xor </span><span class="si">%s</span><span class="s2">, </span><span class="si">%d</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">out_reg</span><span class="p">,</span> <span class="n">regs_32_to_64</span><span class="p">[</span><span class="n">tmp_reg</span><span class="p">]))</span>
+</span></span></code></pre></div><p><code>rshift_x</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov </span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">,</span> <span class="n">var</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;shr </span><span class="si">%s</span><span class="s2">, </span><span class="si">%d</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">out_reg</span><span class="p">,</span> <span class="n">regs_32_to_64</span><span class="p">[</span><span class="n">tmp_reg</span><span class="p">]))</span>
+</span></span></code></pre></div><p><code>rshift_y</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">assert</span> <span class="n">v</span> <span class="o">==</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">,</span> <span class="n">var</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;or </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">,</span> <span class="n">tmp_reg</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;setz </span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">to_8bit_reg</span><span class="p">[</span><span class="n">tmp_reg</span><span class="p">]))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;movzx </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">out_reg</span><span class="p">,</span> <span class="n">to_8bit_reg</span><span class="p">[</span><span class="n">tmp_reg</span><span class="p">]))</span>
+</span></span></code></pre></div><p><code>cmp_gt</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov </span><span class="si">%s</span><span class="s2">, </span><span class="si">%d</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;sub </span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">,</span> <span class="n">var</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;shr </span><span class="si">%s</span><span class="s2">, 8&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;and </span><span class="si">%s</span><span class="s2">, 1&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">out_reg</span><span class="p">,</span> <span class="n">tmp_reg</span><span class="p">))</span>
+</span></span></code></pre></div><p><code>cmp_le</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov </span><span class="si">%s</span><span class="s2">, </span><span class="si">%d</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;sub </span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">,</span> <span class="n">var</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;shr </span><span class="si">%s</span><span class="s2">, 8&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;and </span><span class="si">%s</span><span class="s2">, 1&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;xor </span><span class="si">%s</span><span class="s2">, 1&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">tmp_reg</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&#34;mov </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">out_reg</span><span class="p">,</span> <span class="n">tmp_reg</span><span class="p">))</span>
+</span></span></code></pre></div><p>The full code can be seen in <a href="src/emu_v7.py">emu_v7.py</a> - this is an abomination, I know&hellip; (and it requires <a href="src/tables.py">tables.py</a>)</p>
+<p>Running it will spit out 32 binary blobs in a &ldquo;stages/&rdquo; folder.</p>
+<h1 id="3-dessert-time">3. Dessert Time<a href="#3-dessert-time" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>Now we can use Triton to solve it.</p>
+<p>If you dont want to compile Triton, here&rsquo;s what you have to do (at the time of the writeup):</p>
+<ul>
+<li>run python 3.11 (the version is important)</li>
+<li>pip install triton-library</li>
+</ul>
+<p>The idea is to symbolize the user input and have Triton execute the reconstructed shellcode, while we push path constraints every time we hit a <code>test</code> instruction.</p>
+<p><a href="src/triton_solver.py">The script</a> is pretty simple but it took me some time to get things right (skill issue): I was trying to solve the conditionnal blocks one by one, getting a model after each one.
+The time required to solve them looked like exponential, requiring more than 20 minutes only to solve the first 4, and i had to restart from scratch everytime.</p>
+<p>In the end i figured out that sending everything, only pushing path constraints and getting a model at then end only was the way to go (takes ~30s to solve on my computer).</p>
+<p>Triton is a special beast i&rsquo;m yet to tame, sometimes things work some way and i dont understand why, sometimes they work another way and i dont understand either, but i find its API more staightforward
+than angr and it can also easily be used as a sort of unicorn replacement too.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="ch">#!/usr/bin/env python</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">triton</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># random addresses</span>
+</span></span><span class="line"><span class="cl"><span class="n">BASE_ARGV</span>  <span class="o">=</span> <span class="mh">0x20000000</span>
+</span></span><span class="line"><span class="cl"><span class="n">BASE_STACK</span> <span class="o">=</span> <span class="mh">0x9ffffff0</span>
+</span></span><span class="line"><span class="cl"><span class="n">BASE_CODE</span>  <span class="o">=</span> <span class="mh">0x600000</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># not random stuff</span>
+</span></span><span class="line"><span class="cl"><span class="n">FLAG_ADDR</span> <span class="o">=</span> <span class="mh">0x14089b8e8</span>
+</span></span><span class="line"><span class="cl"><span class="n">FLAG_LEN</span> <span class="o">=</span> <span class="mh">0x20</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">emulate</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">pc</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">test_count</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="n">pc</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">opcode</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">getConcreteMemoryAreaValue</span><span class="p">(</span><span class="n">pc</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">instruction</span> <span class="o">=</span> <span class="n">Instruction</span><span class="p">(</span><span class="n">pc</span><span class="p">,</span> <span class="n">opcode</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">addr</span> <span class="o">=</span> <span class="n">instruction</span><span class="o">.</span><span class="n">getAddress</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">ctx</span><span class="o">.</span><span class="n">processing</span><span class="p">(</span><span class="n">instruction</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#print(instruction)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># test instruction</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">instruction</span><span class="o">.</span><span class="n">getType</span><span class="p">()</span> <span class="o">==</span> <span class="n">OPCODE</span><span class="o">.</span><span class="n">X86</span><span class="o">.</span><span class="n">TEST</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">test_count</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">register</span> <span class="o">=</span> <span class="n">instruction</span><span class="o">.</span><span class="n">getOperands</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;testing </span><span class="si">%s</span><span class="s2"> @ 0x</span><span class="si">%x</span><span class="s2">&#34;</span><span class="o">%</span><span class="p">(</span><span class="n">register</span><span class="o">.</span><span class="n">getName</span><span class="p">(),</span> <span class="n">addr</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="n">r</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">getSymbolicRegister</span><span class="p">(</span><span class="n">register</span><span class="p">)</span><span class="o">.</span><span class="n">getAst</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># we want that register to be 0</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ctx</span><span class="o">.</span><span class="n">pushPathConstraint</span><span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">        <span class="c1"># got enough &#34;test&#34;, get model</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">test_count</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">mod</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">getModel</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">getPathPredicate</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ctx</span><span class="o">.</span><span class="n">setConcreteVariableValue</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">getSymbolicVariable</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">getId</span><span class="p">()),</span> <span class="n">v</span><span class="o">.</span><span class="n">getValue</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">flag</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">FLAG_LEN</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">getConcreteMemoryValue</span><span class="p">(</span><span class="n">FLAG_ADDR</span> <span class="o">+</span> <span class="n">x</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;flag: </span><span class="si">%s</span><span class="s2">@flare-on.com&#34;</span><span class="o">%</span><span class="n">flag</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># set rip</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pc</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">getConcreteRegisterValue</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">rip</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ctx</span> <span class="o">=</span> <span class="n">TritonContext</span><span class="p">(</span><span class="n">ARCH</span><span class="o">.</span><span class="n">X86_64</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Set a symbolic optimization mode</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ctx</span><span class="o">.</span><span class="n">setMode</span><span class="p">(</span><span class="n">MODE</span><span class="o">.</span><span class="n">ALIGNED_MEMORY</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ctx</span><span class="o">.</span><span class="n">setMode</span><span class="p">(</span><span class="n">MODE</span><span class="o">.</span><span class="n">ONLY_ON_SYMBOLIZED</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ctx</span><span class="o">.</span><span class="n">setSolver</span><span class="p">(</span><span class="n">SOLVER</span><span class="o">.</span><span class="n">BITWUZLA</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">ast</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">getAstContext</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># load code</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ctx</span><span class="o">.</span><span class="n">setConcreteMemoryAreaValue</span><span class="p">(</span><span class="n">BASE_CODE</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;stages/full.bin&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># setup key</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;********************************&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ctx</span><span class="o">.</span><span class="n">setConcreteMemoryAreaValue</span><span class="p">(</span><span class="n">FLAG_ADDR</span><span class="p">,</span> <span class="n">key</span> <span class="o">+</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># symbolize key</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">var</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">symbolizeMemory</span><span class="p">(</span><span class="n">MemoryAccess</span><span class="p">(</span><span class="n">FLAG_ADDR</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">CPUSIZE</span><span class="o">.</span><span class="n">BYTE</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#vast = ast.variable(var)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#ctx.pushPathConstraint(ast.land([vast &gt;= ord(b&#39; &#39;), vast &lt;= ord(b&#39;~&#39;)]))</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># stack</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ctx</span><span class="o">.</span><span class="n">setConcreteRegisterValue</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">rbp</span><span class="p">,</span> <span class="n">BASE_STACK</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ctx</span><span class="o">.</span><span class="n">setConcreteRegisterValue</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">registers</span><span class="o">.</span><span class="n">rsp</span><span class="p">,</span> <span class="n">BASE_STACK</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># fire</span>
+</span></span><span class="line"><span class="cl">    <span class="n">emulate</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">BASE_CODE</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">main</span><span class="p">()</span>
+</span></span></code></pre></div><p>and this is how it goes:</p>
+<pre tabindex="0"><code>% mkdir stages
+% python emu_v7.py
+% cat stages/shellcode_??.bin &gt; stages/full.bin     # concat all blocks to a big blob
+% python triton_solver.py
+testing r14 @ 0x6136b1
+testing rbx @ 0x626c9e
+testing r12 @ 0x63aaec
+testing rsi @ 0x64caf9
+testing r15 @ 0x65e091
+testing r14 @ 0x670cfc
+testing r15 @ 0x68455a
+testing rdi @ 0x6972ac
+testing r13 @ 0x6ab683
+testing rbx @ 0x6be963
+testing rdi @ 0x6d1fcd
+testing rbx @ 0x6e4e72
+testing r14 @ 0x6f7821
+testing rdi @ 0x70af3d
+testing r14 @ 0x7208dd
+testing r15 @ 0x73472a
+testing r13 @ 0x7495eb
+testing r12 @ 0x75aede
+testing r12 @ 0x76db6e
+testing r12 @ 0x78243c
+testing rbp @ 0x795969
+testing r13 @ 0x7a9d35
+testing rbp @ 0x7bbfa7
+testing rbp @ 0x7cc746
+testing r13 @ 0x7dd64e
+testing rbx @ 0x7efa70
+testing rbp @ 0x800a9d
+testing rbp @ 0x813a32
+testing r12 @ 0x827e35
+testing rsi @ 0x83b742
+testing rbx @ 0x84e950
+testing rbx @ 0x86205f
+flag: $$_4lway5_k3ep_mov1ng_and_m0ving@flare-on.com
+</code></pre><h1 id="4-conclusion">4. Conclusion<a href="#4-conclusion" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<p>Learning more about exception handling, unwinding and crafting a working emulator was the highlight of this year&rsquo;s Flare-On.</p>
+<p>It was really an iterative process, requiring several version of the emulator as features were added, and a lot of testing to make sure it wouldn&rsquo;t introduce issues or semantic differences.</p>
+<p>But in the end&hellip; after sweating, swearing and tweaking&hellip; it finally worked.</p>
+<h1 id="5-resources">5. Resources<a href="#5-resources" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<ul>
+<li><strong>MSDN:</strong> <a href="https://learn.microsoft.com/en-us/cpp/build/exception-handling-x64?view=msvc-170">https://learn.microsoft.com/en-us/cpp/build/exception-handling-x64?view=msvc-170</a></li>
+<li><strong>MSDN:</strong> <a href="https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-context">https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-context</a></li>
+<li><strong>Android&rsquo;s libunwindstack:</strong> <a href="https://github.com/google/orbit/blob/02f72c7311ed08e6418ecbfab4a457db67aa38d9/third_party/libunwindstack/PeCoffUnwindInfoUnwinderX86_64.cpp">https://github.com/google/orbit/blob/02f72c7311ed08e6418ecbfab4a457db67aa38d9/third_party/libunwindstack/PeCoffUnwindInfoUnwinderX86_64.cpp</a></li>
+<li><strong>Wine&rsquo;s dbghelp:</strong> <a href="https://github.com/azakharchenko-msol/wine/blob/master/dlls/dbghelp/cpu_x86_64.c#L530">https://github.com/azakharchenko-msol/wine/blob/master/dlls/dbghelp/cpu_x86_64.c#L530</a></li>
+<li><strong><a href="https://x.com/momo5502">Maurice Heumann</a>&rsquo;s blog:</strong> <a href="https://momo5502.com/posts/2024-09-07-a-journey-through-kiuserexceptiondispatcher/">https://momo5502.com/posts/2024-09-07-a-journey-through-kiuserexceptiondispatcher/</a></li>
+<li><strong>ReactOS:</strong>: <a href="https://doxygen.reactos.org/d8/d2f/unwind_8c_source.html">https://doxygen.reactos.org/d8/d2f/unwind_8c_source.html</a></li>
+</ul>
+<h1 id="6-files">6. Files<a href="#6-files" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<ul>
+<li><strong>Challege file:</strong>: <a href="data/serpentine.7z">serpentine.7z</a> (password: <code>flare</code>)</li>
+<li><strong>Simple emulator:</strong> <a href="src/emu_v4.py">emu_v4.py</a></li>
+<li><strong>Trace for the first conditionnal block:</strong> <a href="data/emu_v4_trace.txt">emu_v4_trace.txt</a></li>
+<li><strong>Full blown emulator/deobfuscator:</strong> <a href="src/emu_v7.py">emu_v7.py</a> + <a href="src/tables.py">tables.py</a></li>
+<li><strong>Triton solver:</strong> <a href="src/triton_solver.py">triton_solver.py</a></li>
+</ul>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://matth.dmz42.org/tags/reverse">reverse</a></span><span class="tag"><a href="https://matth.dmz42.org/tags/ctf">ctf</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>6332 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2024-11-09 05:00 &#43;0100</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://matth.dmz42.org/posts/2024/ptrace_based_self_debugging_binaries/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>ptrace based self-debugging binaries</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2024 <a href="https://matth.dmz42.org/">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a>
+		    &#183; <a href="https://matth.dmz42.org/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+
+	<script src="https://matth.dmz42.org/js/bundle.min.580988ed2982bcbb74a1773c7abea97b43e4c43b9324e10cda0813ec6ec4bb67.js" integrity="sha256-WAmI7SmCvLt0oXc8er6pe0PkxDuTJOEM2ggT7G7Eu2c=" crossorigin="anonymous"></script>
+	
+</body>
+
+</html>

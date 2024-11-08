@@ -7,25 +7,33 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<meta name="theme-color" content="#494f5c">
 	<meta name="msapplication-TileColor" content="#494f5c">
-<meta itemprop="name" content="BarbHack CTF 2023 - illusion">
-<meta itemprop="description" content="BarbHack 2023 had some pretty cool reversing challenges. I could not attend the conf, so i solved them afterwards (not sure i would have time to solve this one during the CTF anyway).
-This writeup is about illusion.exe, a fun binary by sar - thanks to him for providing it to me afterwards and allowing me to host it here :)
-1. Clicky click if we run the binary it just produces this output and exits:"><meta itemprop="datePublished" content="2023-09-04T08:54:33+02:00" />
-<meta itemprop="dateModified" content="2023-09-04T08:54:33+02:00" />
-<meta itemprop="wordCount" content="2231">
-<meta itemprop="keywords" content="reverse,ctf," /><meta property="og:title" content="BarbHack CTF 2023 - illusion" />
-<meta property="og:description" content="BarbHack 2023 had some pretty cool reversing challenges. I could not attend the conf, so i solved them afterwards (not sure i would have time to solve this one during the CTF anyway).
-This writeup is about illusion.exe, a fun binary by sar - thanks to him for providing it to me afterwards and allowing me to host it here :)
-1. Clicky click if we run the binary it just produces this output and exits:" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://matth.dmz42.org/posts/2023/barbhack-2023-illusion/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2023-09-04T08:54:33+02:00" />
-<meta property="article:modified_time" content="2023-09-04T08:54:33+02:00" />
 
-<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="BarbHack CTF 2023 - illusion"/>
-<meta name="twitter:description" content="BarbHack 2023 had some pretty cool reversing challenges. I could not attend the conf, so i solved them afterwards (not sure i would have time to solve this one during the CTF anyway).
+  <meta itemprop="name" content="BarbHack CTF 2023 - illusion">
+  <meta itemprop="description" content="BarbHack 2023 had some pretty cool reversing challenges. I could not attend the conf, so i solved them afterwards (not sure i would have time to solve this one during the CTF anyway).
 This writeup is about illusion.exe, a fun binary by sar - thanks to him for providing it to me afterwards and allowing me to host it here :)
-1. Clicky click if we run the binary it just produces this output and exits:"/>
+1. Clicky click if we run the binary it just produces this output and exits:">
+  <meta itemprop="datePublished" content="2023-09-04T08:54:33+02:00">
+  <meta itemprop="dateModified" content="2023-09-04T08:54:33+02:00">
+  <meta itemprop="wordCount" content="2231">
+  <meta itemprop="keywords" content="Reverse,Ctf"><meta property="og:url" content="https://matth.dmz42.org/posts/2023/barbhack-2023-illusion/">
+  <meta property="og:site_name" content="# matth.dmz42.org">
+  <meta property="og:title" content="BarbHack CTF 2023 - illusion">
+  <meta property="og:description" content="BarbHack 2023 had some pretty cool reversing challenges. I could not attend the conf, so i solved them afterwards (not sure i would have time to solve this one during the CTF anyway).
+This writeup is about illusion.exe, a fun binary by sar - thanks to him for providing it to me afterwards and allowing me to host it here :)
+1. Clicky click if we run the binary it just produces this output and exits:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-09-04T08:54:33+02:00">
+    <meta property="article:modified_time" content="2023-09-04T08:54:33+02:00">
+    <meta property="article:tag" content="Reverse">
+    <meta property="article:tag" content="Ctf">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="BarbHack CTF 2023 - illusion">
+  <meta name="twitter:description" content="BarbHack 2023 had some pretty cool reversing challenges. I could not attend the conf, so i solved them afterwards (not sure i would have time to solve this one during the CTF anyway).
+This writeup is about illusion.exe, a fun binary by sar - thanks to him for providing it to me afterwards and allowing me to host it here :)
+1. Clicky click if we run the binary it just produces this output and exits:">
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -45,7 +53,7 @@ This writeup is about illusion.exe, a fun binary by sar - thanks to him for prov
 		<div class="hdr-wrapper section-inner">
 			<div class="hdr-left">
 				<div class="site-branding">
-					<a href="https://matth.dmz42.org"># matth.dmz42.org</a>
+					<a href="https://matth.dmz42.org/"># matth.dmz42.org</a>
 				</div>
 				<nav class="site-nav hide-in-mobile">
 					
@@ -652,7 +660,7 @@ Congratz!! brb{Im_having_illusions_all_this_confusion_is_driving_me_mad_inside}
 	</main>
 
 	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
-		<p>&copy; 2024 <a href="https://matth.dmz42.org">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>&copy; 2024 <a href="https://matth.dmz42.org/">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
 		<p>
 			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a>
 		    &#183; <a href="https://matth.dmz42.org/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
@@ -663,7 +671,6 @@ Congratz!! brb{Im_having_illusions_all_this_confusion_is_driving_me_mad_inside}
 
 	<script src="https://matth.dmz42.org/js/bundle.min.580988ed2982bcbb74a1773c7abea97b43e4c43b9324e10cda0813ec6ec4bb67.js" integrity="sha256-WAmI7SmCvLt0oXc8er6pe0PkxDuTJOEM2ggT7G7Eu2c=" crossorigin="anonymous"></script>
 	
-
 </body>
 
 </html>

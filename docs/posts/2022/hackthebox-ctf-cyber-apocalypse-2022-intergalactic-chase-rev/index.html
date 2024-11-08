@@ -7,46 +7,53 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<meta name="theme-color" content="#494f5c">
 	<meta name="msapplication-TileColor" content="#494f5c">
-<meta itemprop="name" content="HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (Reverse)">
-<meta itemprop="description" content="Hack The Box was hosting a CTF event and we played together with some friends.
-Here are some writeups for some of the reversing challenges i solved.
-There&rsquo;s often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun&hellip;
-0. TOC Without A Trace (413 solves)
-Teleport (307 solves)
-Rebuilding (463 solves)
-Nuts and Bolts (60 solves)
-Shuffleme (28 solves)
-Snake Code (281 solves)
-Freaky Forum Interception (32 solves)"><meta itemprop="datePublished" content="2022-05-21T21:15:40+02:00" />
-<meta itemprop="dateModified" content="2022-05-21T21:15:40+02:00" />
-<meta itemprop="wordCount" content="5876">
-<meta itemprop="keywords" content="ctf," /><meta property="og:title" content="HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (Reverse)" />
-<meta property="og:description" content="Hack The Box was hosting a CTF event and we played together with some friends.
-Here are some writeups for some of the reversing challenges i solved.
-There&rsquo;s often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun&hellip;
-0. TOC Without A Trace (413 solves)
-Teleport (307 solves)
-Rebuilding (463 solves)
-Nuts and Bolts (60 solves)
-Shuffleme (28 solves)
-Snake Code (281 solves)
-Freaky Forum Interception (32 solves)" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://matth.dmz42.org/posts/2022/hackthebox-ctf-cyber-apocalypse-2022-intergalactic-chase-rev/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-05-21T21:15:40+02:00" />
-<meta property="article:modified_time" content="2022-05-21T21:15:40+02:00" />
 
-<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (Reverse)"/>
-<meta name="twitter:description" content="Hack The Box was hosting a CTF event and we played together with some friends.
+  <meta itemprop="name" content="HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (Reverse)">
+  <meta itemprop="description" content="Hack The Box was hosting a CTF event and we played together with some friends.
 Here are some writeups for some of the reversing challenges i solved.
-There&rsquo;s often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun&hellip;
+There’s often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun…
 0. TOC Without A Trace (413 solves)
 Teleport (307 solves)
 Rebuilding (463 solves)
 Nuts and Bolts (60 solves)
 Shuffleme (28 solves)
 Snake Code (281 solves)
-Freaky Forum Interception (32 solves)"/>
+Freaky Forum Interception (32 solves)">
+  <meta itemprop="datePublished" content="2022-05-21T21:15:40+02:00">
+  <meta itemprop="dateModified" content="2022-05-21T21:15:40+02:00">
+  <meta itemprop="wordCount" content="5876">
+  <meta itemprop="keywords" content="Ctf"><meta property="og:url" content="https://matth.dmz42.org/posts/2022/hackthebox-ctf-cyber-apocalypse-2022-intergalactic-chase-rev/">
+  <meta property="og:site_name" content="# matth.dmz42.org">
+  <meta property="og:title" content="HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (Reverse)">
+  <meta property="og:description" content="Hack The Box was hosting a CTF event and we played together with some friends.
+Here are some writeups for some of the reversing challenges i solved.
+There’s often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun…
+0. TOC Without A Trace (413 solves)
+Teleport (307 solves)
+Rebuilding (463 solves)
+Nuts and Bolts (60 solves)
+Shuffleme (28 solves)
+Snake Code (281 solves)
+Freaky Forum Interception (32 solves)">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2022-05-21T21:15:40+02:00">
+    <meta property="article:modified_time" content="2022-05-21T21:15:40+02:00">
+    <meta property="article:tag" content="Ctf">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="HackTheBox CTF Cyber Apocalypse 2022: Intergalactic Chase (Reverse)">
+  <meta name="twitter:description" content="Hack The Box was hosting a CTF event and we played together with some friends.
+Here are some writeups for some of the reversing challenges i solved.
+There’s often shortcuts taken and (un)educated guesses involved, some ugly Z3 and angr for additionnal fun…
+0. TOC Without A Trace (413 solves)
+Teleport (307 solves)
+Rebuilding (463 solves)
+Nuts and Bolts (60 solves)
+Shuffleme (28 solves)
+Snake Code (281 solves)
+Freaky Forum Interception (32 solves)">
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -66,7 +73,7 @@ Freaky Forum Interception (32 solves)"/>
 		<div class="hdr-wrapper section-inner">
 			<div class="hdr-left">
 				<div class="site-branding">
-					<a href="https://matth.dmz42.org"># matth.dmz42.org</a>
+					<a href="https://matth.dmz42.org/"># matth.dmz42.org</a>
 				</div>
 				<nav class="site-nav hide-in-mobile">
 					
@@ -1410,7 +1417,7 @@ b&#39;At 3730 Galactic Time, we will convene at our outpost the Phey forest, 4 m
 	</main>
 
 	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
-		<p>&copy; 2024 <a href="https://matth.dmz42.org">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>&copy; 2024 <a href="https://matth.dmz42.org/">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
 		<p>
 			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a>
 		    &#183; <a href="https://matth.dmz42.org/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
@@ -1421,7 +1428,6 @@ b&#39;At 3730 Galactic Time, we will convene at our outpost the Phey forest, 4 m
 
 	<script src="https://matth.dmz42.org/js/bundle.min.580988ed2982bcbb74a1773c7abea97b43e4c43b9324e10cda0813ec6ec4bb67.js" integrity="sha256-WAmI7SmCvLt0oXc8er6pe0PkxDuTJOEM2ggT7G7Eu2c=" crossorigin="anonymous"></script>
 	
-
 </body>
 
 </html>

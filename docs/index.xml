@@ -4,11 +4,18 @@
     <title># matth.dmz42.org</title>
     <link>https://matth.dmz42.org/</link>
     <description>Recent content on # matth.dmz42.org</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Fri, 16 Feb 2024 08:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 09 Nov 2024 06:00:00 +0200</lastBuildDate>
     <atom:link href="https://matth.dmz42.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Flare-On 11 - #9 serpentine</title>
+      <link>https://matth.dmz42.org/posts/2024/flare-on_11_9_serpentine/</link>
+      <pubDate>Sat, 09 Nov 2024 06:00:00 +0200</pubDate>
+      <guid>https://matth.dmz42.org/posts/2024/flare-on_11_9_serpentine/</guid>
+      <description>&amp;ldquo;serpentine&amp;rdquo; was the 9th and penultimate challenge from Google/FLARE&amp;rsquo;s Flare-On 2024 - and arguably the hardest challenge of these past couple of years (at least in my opinion).&#xA;Some information may be presented in a simplistic or incomplete way, as I tried to stay focused on the main points for this challenge. However, it’s very possible I got something slightly wrong or made a mistake, so feel free to point it out.</description>
+    </item>
     <item>
       <title>ptrace based self-debugging binaries</title>
       <link>https://matth.dmz42.org/posts/2024/ptrace_based_self_debugging_binaries/</link>
@@ -71,13 +78,6 @@
       <pubDate>Fri, 20 May 2022 10:01:40 +0200</pubDate>
       <guid>https://matth.dmz42.org/posts/2022/hackthebox-ctf-cyber-apocalypse-2022-intergalactic-chase-pwn/</guid>
       <description>Hack The Box was hosting a CTF event and we played together with some friends.&#xA;Here are some writeups for some of the PWN challenges i solved.&#xA;Any code you can find here is very low ctf quality :)&#xA;0. TOC Space pirate: Retribution&#xA;Vault Breaker&#xA;Fleet Management&#xA;Hellbound&#xA;Trick Or Deal&#xA;1. Space pirate: Retribution Original files are here.&#xA;Arch: amd64-64-little RELRO: Full RELRO Stack: No canary found NX: NX enabled PIE: PIE enabled RUNPATH: b&amp;#39;.</description>
-    </item>
-    <item>
-      <title>Reversing Firmwares from FS and BDCOM Switches</title>
-      <link>https://matth.dmz42.org/posts/2022/reversing-firmwares-from-fs-and-bdcom-switches/</link>
-      <pubDate>Tue, 11 Jan 2022 15:24:31 +0100</pubDate>
-      <guid>https://matth.dmz42.org/posts/2022/reversing-firmwares-from-fs-and-bdcom-switches/</guid>
-      <description>I recently had to buy a new 24x1G fanless switch for my home network. I had a mikrotik switch for years (which i was happy with but suffered a power surge) and wanted to try something new so I ended up with a FS S3700-24T4F.&#xA;Their CLI is close to Cisco&amp;rsquo;s IOS, it&amp;rsquo;s overall a fun device for home network and not too expensive. Found few small bugs here and there without really looking for them but in the end nothing too annoying in my context.</description>
     </item>
   </channel>
 </rss>

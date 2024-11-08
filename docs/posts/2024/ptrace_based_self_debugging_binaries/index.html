@@ -7,25 +7,33 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<meta name="theme-color" content="#494f5c">
 	<meta name="msapplication-TileColor" content="#494f5c">
-<meta itemprop="name" content="ptrace based self-debugging binaries">
-<meta itemprop="description" content="These are two self-debugging ptrace (or nanomite, as you prefer) based challenges I made for 0xl4augh CTF.
-ptrace is a system call that allows a process to trace/debug another process, it is used by debuggers and tracing tools like strace.
-Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching."><meta itemprop="datePublished" content="2024-02-16T08:00:00+02:00" />
-<meta itemprop="dateModified" content="2024-02-16T08:00:00+02:00" />
-<meta itemprop="wordCount" content="1991">
-<meta itemprop="keywords" content="reverse,ctf," /><meta property="og:title" content="ptrace based self-debugging binaries" />
-<meta property="og:description" content="These are two self-debugging ptrace (or nanomite, as you prefer) based challenges I made for 0xl4augh CTF.
-ptrace is a system call that allows a process to trace/debug another process, it is used by debuggers and tracing tools like strace.
-Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://matth.dmz42.org/posts/2024/ptrace_based_self_debugging_binaries/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2024-02-16T08:00:00+02:00" />
-<meta property="article:modified_time" content="2024-02-16T08:00:00+02:00" />
 
-<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="ptrace based self-debugging binaries"/>
-<meta name="twitter:description" content="These are two self-debugging ptrace (or nanomite, as you prefer) based challenges I made for 0xl4augh CTF.
+  <meta itemprop="name" content="ptrace based self-debugging binaries">
+  <meta itemprop="description" content="These are two self-debugging ptrace (or nanomite, as you prefer) based challenges I made for 0xl4augh CTF.
 ptrace is a system call that allows a process to trace/debug another process, it is used by debuggers and tracing tools like strace.
-Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching."/>
+Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching.">
+  <meta itemprop="datePublished" content="2024-02-16T08:00:00+02:00">
+  <meta itemprop="dateModified" content="2024-02-16T08:00:00+02:00">
+  <meta itemprop="wordCount" content="1991">
+  <meta itemprop="keywords" content="Reverse,Ctf"><meta property="og:url" content="https://matth.dmz42.org/posts/2024/ptrace_based_self_debugging_binaries/">
+  <meta property="og:site_name" content="# matth.dmz42.org">
+  <meta property="og:title" content="ptrace based self-debugging binaries">
+  <meta property="og:description" content="These are two self-debugging ptrace (or nanomite, as you prefer) based challenges I made for 0xl4augh CTF.
+ptrace is a system call that allows a process to trace/debug another process, it is used by debuggers and tracing tools like strace.
+Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-02-16T08:00:00+02:00">
+    <meta property="article:modified_time" content="2024-02-16T08:00:00+02:00">
+    <meta property="article:tag" content="Reverse">
+    <meta property="article:tag" content="Ctf">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ptrace based self-debugging binaries">
+  <meta name="twitter:description" content="These are two self-debugging ptrace (or nanomite, as you prefer) based challenges I made for 0xl4augh CTF.
+ptrace is a system call that allows a process to trace/debug another process, it is used by debuggers and tracing tools like strace.
+Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching.">
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -45,7 +53,7 @@ Since it can be used to read/write the memory and the CPU context of another pro
 		<div class="hdr-wrapper section-inner">
 			<div class="hdr-left">
 				<div class="site-branding">
-					<a href="https://matth.dmz42.org"># matth.dmz42.org</a>
+					<a href="https://matth.dmz42.org/"># matth.dmz42.org</a>
 				</div>
 				<nav class="site-nav hide-in-mobile">
 					
@@ -410,6 +418,9 @@ b&#39;0xL4ugh{i_h0p3_you_l1k3d_ptr4c3_and_lat1n_danc3s}&#39;
 			</footer>
 		</article>
 		<div class="post-nav thin">
+			<a class="next-post" href="https://matth.dmz42.org/posts/2024/flare-on_11_9_serpentine/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>Flare-On 11 - #9 serpentine</span>
+			</a>
 			<a class="prev-post" href="https://matth.dmz42.org/posts/2023/barbhack-2023-illusion/">
 				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>BarbHack CTF 2023 - illusion</span>
 			</a>
@@ -419,7 +430,7 @@ b&#39;0xL4ugh{i_h0p3_you_l1k3d_ptr4c3_and_lat1n_danc3s}&#39;
 	</main>
 
 	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
-		<p>&copy; 2024 <a href="https://matth.dmz42.org">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>&copy; 2024 <a href="https://matth.dmz42.org/">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
 		<p>
 			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a>
 		    &#183; <a href="https://matth.dmz42.org/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
@@ -430,7 +441,6 @@ b&#39;0xL4ugh{i_h0p3_you_l1k3d_ptr4c3_and_lat1n_danc3s}&#39;
 
 	<script src="https://matth.dmz42.org/js/bundle.min.580988ed2982bcbb74a1773c7abea97b43e4c43b9324e10cda0813ec6ec4bb67.js" integrity="sha256-WAmI7SmCvLt0oXc8er6pe0PkxDuTJOEM2ggT7G7Eu2c=" crossorigin="anonymous"></script>
 	
-
 </body>
 
 </html>

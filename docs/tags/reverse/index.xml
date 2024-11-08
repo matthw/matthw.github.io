@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>reverse on # matth.dmz42.org</title>
+    <title>Reverse on # matth.dmz42.org</title>
     <link>https://matth.dmz42.org/tags/reverse/</link>
-    <description>Recent content in reverse on # matth.dmz42.org</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Reverse on # matth.dmz42.org</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Fri, 16 Feb 2024 08:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 09 Nov 2024 06:00:00 +0200</lastBuildDate>
     <atom:link href="https://matth.dmz42.org/tags/reverse/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Flare-On 11 - #9 serpentine</title>
+      <link>https://matth.dmz42.org/posts/2024/flare-on_11_9_serpentine/</link>
+      <pubDate>Sat, 09 Nov 2024 06:00:00 +0200</pubDate>
+      <guid>https://matth.dmz42.org/posts/2024/flare-on_11_9_serpentine/</guid>
+      <description>&amp;ldquo;serpentine&amp;rdquo; was the 9th and penultimate challenge from Google/FLARE&amp;rsquo;s Flare-On 2024 - and arguably the hardest challenge of these past couple of years (at least in my opinion).&#xA;Some information may be presented in a simplistic or incomplete way, as I tried to stay focused on the main points for this challenge. However, it’s very possible I got something slightly wrong or made a mistake, so feel free to point it out.</description>
+    </item>
     <item>
       <title>ptrace based self-debugging binaries</title>
       <link>https://matth.dmz42.org/posts/2024/ptrace_based_self_debugging_binaries/</link>

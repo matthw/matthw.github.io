@@ -3,21 +3,24 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://matth.dmz42.org/</loc>
-    <lastmod>2024-02-16T08:00:00+02:00</lastmod>
+    <lastmod>2024-11-09T06:00:00+02:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/tags/ctf/</loc>
-    <lastmod>2024-02-16T08:00:00+02:00</lastmod>
+    <lastmod>2024-11-09T06:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://matth.dmz42.org/posts/2024/flare-on_11_9_serpentine/</loc>
+    <lastmod>2024-11-09T06:00:00+02:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/posts/</loc>
-    <lastmod>2024-02-16T08:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://matth.dmz42.org/posts/2024/ptrace_based_self_debugging_binaries/</loc>
-    <lastmod>2024-02-16T08:00:00+02:00</lastmod>
+    <lastmod>2024-11-09T06:00:00+02:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/tags/reverse/</loc>
-    <lastmod>2024-02-16T08:00:00+02:00</lastmod>
+    <lastmod>2024-11-09T06:00:00+02:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/tags/</loc>
+    <lastmod>2024-11-09T06:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://matth.dmz42.org/posts/2024/ptrace_based_self_debugging_binaries/</loc>
     <lastmod>2024-02-16T08:00:00+02:00</lastmod>
   </url><url>
     <loc>https://matth.dmz42.org/posts/2023/barbhack-2023-illusion/</loc>

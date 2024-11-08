@@ -7,22 +7,29 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<meta name="theme-color" content="#494f5c">
 	<meta name="msapplication-TileColor" content="#494f5c">
-<meta itemprop="name" content="Reversing Firmwares from FS and BDCOM Switches">
-<meta itemprop="description" content="I recently had to buy a new 24x1G fanless switch for my home network. I had a mikrotik switch for years (which i was happy with but suffered a power surge) and wanted to try something new so I ended up with a FS S3700-24T4F.
-Their CLI is close to Cisco&rsquo;s IOS, it&rsquo;s overall a fun device for home network and not too expensive. Found few small bugs here and there without really looking for them but in the end nothing too annoying in my context."><meta itemprop="datePublished" content="2022-01-11T15:24:31+01:00" />
-<meta itemprop="dateModified" content="2022-01-11T15:24:31+01:00" />
-<meta itemprop="wordCount" content="1819">
-<meta itemprop="keywords" content="reverse," /><meta property="og:title" content="Reversing Firmwares from FS and BDCOM Switches" />
-<meta property="og:description" content="I recently had to buy a new 24x1G fanless switch for my home network. I had a mikrotik switch for years (which i was happy with but suffered a power surge) and wanted to try something new so I ended up with a FS S3700-24T4F.
-Their CLI is close to Cisco&rsquo;s IOS, it&rsquo;s overall a fun device for home network and not too expensive. Found few small bugs here and there without really looking for them but in the end nothing too annoying in my context." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://matth.dmz42.org/posts/2022/reversing-firmwares-from-fs-and-bdcom-switches/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-01-11T15:24:31+01:00" />
-<meta property="article:modified_time" content="2022-01-11T15:24:31+01:00" />
 
-<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Reversing Firmwares from FS and BDCOM Switches"/>
-<meta name="twitter:description" content="I recently had to buy a new 24x1G fanless switch for my home network. I had a mikrotik switch for years (which i was happy with but suffered a power surge) and wanted to try something new so I ended up with a FS S3700-24T4F.
-Their CLI is close to Cisco&rsquo;s IOS, it&rsquo;s overall a fun device for home network and not too expensive. Found few small bugs here and there without really looking for them but in the end nothing too annoying in my context."/>
+  <meta itemprop="name" content="Reversing Firmwares from FS and BDCOM Switches">
+  <meta itemprop="description" content="I recently had to buy a new 24x1G fanless switch for my home network. I had a mikrotik switch for years (which i was happy with but suffered a power surge) and wanted to try something new so I ended up with a FS S3700-24T4F.
+Their CLI is close to Cisco’s IOS, it’s overall a fun device for home network and not too expensive. Found few small bugs here and there without really looking for them but in the end nothing too annoying in my context.">
+  <meta itemprop="datePublished" content="2022-01-11T15:24:31+01:00">
+  <meta itemprop="dateModified" content="2022-01-11T15:24:31+01:00">
+  <meta itemprop="wordCount" content="1819">
+  <meta itemprop="keywords" content="Reverse"><meta property="og:url" content="https://matth.dmz42.org/posts/2022/reversing-firmwares-from-fs-and-bdcom-switches/">
+  <meta property="og:site_name" content="# matth.dmz42.org">
+  <meta property="og:title" content="Reversing Firmwares from FS and BDCOM Switches">
+  <meta property="og:description" content="I recently had to buy a new 24x1G fanless switch for my home network. I had a mikrotik switch for years (which i was happy with but suffered a power surge) and wanted to try something new so I ended up with a FS S3700-24T4F.
+Their CLI is close to Cisco’s IOS, it’s overall a fun device for home network and not too expensive. Found few small bugs here and there without really looking for them but in the end nothing too annoying in my context.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2022-01-11T15:24:31+01:00">
+    <meta property="article:modified_time" content="2022-01-11T15:24:31+01:00">
+    <meta property="article:tag" content="Reverse">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Reversing Firmwares from FS and BDCOM Switches">
+  <meta name="twitter:description" content="I recently had to buy a new 24x1G fanless switch for my home network. I had a mikrotik switch for years (which i was happy with but suffered a power surge) and wanted to try something new so I ended up with a FS S3700-24T4F.
+Their CLI is close to Cisco’s IOS, it’s overall a fun device for home network and not too expensive. Found few small bugs here and there without really looking for them but in the end nothing too annoying in my context.">
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -42,7 +49,7 @@ Their CLI is close to Cisco&rsquo;s IOS, it&rsquo;s overall a fun device for hom
 		<div class="hdr-wrapper section-inner">
 			<div class="hdr-left">
 				<div class="site-branding">
-					<a href="https://matth.dmz42.org"># matth.dmz42.org</a>
+					<a href="https://matth.dmz42.org/"># matth.dmz42.org</a>
 				</div>
 				<nav class="site-nav hide-in-mobile">
 					
@@ -433,7 +440,7 @@ Stack:
 	</main>
 
 	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
-		<p>&copy; 2024 <a href="https://matth.dmz42.org">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>&copy; 2024 <a href="https://matth.dmz42.org/">Matthieu Walter</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
 		<p>
 			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a>
 		    &#183; <a href="https://matth.dmz42.org/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
@@ -444,7 +451,6 @@ Stack:
 
 	<script src="https://matth.dmz42.org/js/bundle.min.580988ed2982bcbb74a1773c7abea97b43e4c43b9324e10cda0813ec6ec4bb67.js" integrity="sha256-WAmI7SmCvLt0oXc8er6pe0PkxDuTJOEM2ggT7G7Eu2c=" crossorigin="anonymous"></script>
 	
-
 </body>
 
 </html>
