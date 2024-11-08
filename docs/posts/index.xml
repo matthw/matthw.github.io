@@ -174,7 +174,7 @@ program terminates.</em> (thank you ChatGPT).</p>
 <p>For example, <code>UWOP_PUSH_NONVOL</code>:</p>
 <pre tabindex="0"><code>Push a nonvolatile integer register, decrementing RSP by 8. The operation info is the number of the register.
 </code></pre><p>In order to reverse that we have to pop that register off the stack and increment RSP by 8, easy, but what wasn&rsquo;t clear to me is that these operations are <strong>not done on actual registers, but within a <code>CONTEXT</code> struct that is created when the exception occured</strong> in order to save the CPU context (makes sense).</p>
-<p>After reading <a href="https://doxygen.reactos.org/d8/d2f/unwind_8c_source.html">reactos source code</a>, <a href="https://github.com/google/orbit/blob/02f72c7311ed08e6418ecbfab4a457db67aa38d9/third_party/libunwindstack/PeCoffUnwindInfoUnwinderX86_64.cpp">libunwindstack</a> and crawling the <a href="https://github.com/azakharchenko-msol/wine/commit/400520192284c34e5b34b52b657cd3dda084403f">depth of github</a>, each opcode can be implemented as follow (in the more or less pythonic pseudocode):</p>
+<p>After reading <a href="https://doxygen.reactos.org/d8/d2f/unwind_8c_source.html">reactos source code</a>, <a href="https://github.com/google/orbit/blob/02f72c7311ed08e6418ecbfab4a457db67aa38d9/third_party/libunwindstack/PeCoffUnwindInfoUnwinderX86_64.cpp">libunwindstack</a> and crawling the <a href="https://github.com/wine-mirror/wine/commit/400520192284c34e5b34b52b657cd3dda084403f">depths of github</a>, each opcode can be implemented as follow (in the more or less pythonic pseudocode):</p>
 <h3 id="151-uwop_push_machframe">1.5.1 UWOP_PUSH_MACHFRAME</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">offset</span> <span class="o">=</span> <span class="mh">0x20</span> <span class="k">if</span> <span class="n">unwind_op_info</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="mh">0x18</span>
 </span></span><span class="line"><span class="cl"><span class="n">context</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">RSP</span><span class="p">]</span> <span class="o">=</span> <span class="n">mem_read_qword</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">regs</span><span class="p">[</span><span class="n">RSP</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span>
@@ -955,13 +955,13 @@ flag: $$_4lway5_k3ep_mov1ng_and_m0ving@flare-on.com
 <li><strong>MSDN:</strong> <a href="https://learn.microsoft.com/en-us/cpp/build/exception-handling-x64?view=msvc-170">https://learn.microsoft.com/en-us/cpp/build/exception-handling-x64?view=msvc-170</a></li>
 <li><strong>MSDN:</strong> <a href="https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-context">https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-context</a></li>
 <li><strong>Android&rsquo;s libunwindstack:</strong> <a href="https://github.com/google/orbit/blob/02f72c7311ed08e6418ecbfab4a457db67aa38d9/third_party/libunwindstack/PeCoffUnwindInfoUnwinderX86_64.cpp">https://github.com/google/orbit/blob/02f72c7311ed08e6418ecbfab4a457db67aa38d9/third_party/libunwindstack/PeCoffUnwindInfoUnwinderX86_64.cpp</a></li>
-<li><strong>Wine&rsquo;s dbghelp:</strong> <a href="https://github.com/azakharchenko-msol/wine/blob/master/dlls/dbghelp/cpu_x86_64.c#L530">https://github.com/azakharchenko-msol/wine/blob/master/dlls/dbghelp/cpu_x86_64.c#L530</a></li>
+<li><strong>Wine&rsquo;s dbghelp:</strong> <a href="https://github.com/wine-mirror/wine/blob/master/dlls/dbghelp/cpu_x86_64.c#L530">https://github.com/wine-mirror/wine/blob/master/dlls/dbghelp/cpu_x86_64.c#L530</a></li>
 <li><strong><a href="https://x.com/momo5502">Maurice Heumann</a>&rsquo;s blog:</strong> <a href="https://momo5502.com/posts/2024-09-07-a-journey-through-kiuserexceptiondispatcher/">https://momo5502.com/posts/2024-09-07-a-journey-through-kiuserexceptiondispatcher/</a></li>
-<li><strong>ReactOS:</strong>: <a href="https://doxygen.reactos.org/d8/d2f/unwind_8c_source.html">https://doxygen.reactos.org/d8/d2f/unwind_8c_source.html</a></li>
+<li><strong>ReactOS:</strong> <a href="https://doxygen.reactos.org/d8/d2f/unwind_8c_source.html">https://doxygen.reactos.org/d8/d2f/unwind_8c_source.html</a></li>
 </ul>
 <h1 id="6-files">6. Files</h1>
 <ul>
-<li><strong>Challege file:</strong>: <a href="data/serpentine.7z">serpentine.7z</a> (password: <code>flare</code>)</li>
+<li><strong>Challenge file:</strong> <a href="data/serpentine.7z">serpentine.7z</a> (password: <code>flare</code>)</li>
 <li><strong>Simple emulator:</strong> <a href="src/emu_v4.py">emu_v4.py</a></li>
 <li><strong>Trace for the first conditionnal block:</strong> <a href="data/emu_v4_trace.txt">emu_v4_trace.txt</a></li>
 <li><strong>Full blown emulator/deobfuscator:</strong> <a href="src/emu_v7.py">emu_v7.py</a> + <a href="src/tables.py">tables.py</a></li>

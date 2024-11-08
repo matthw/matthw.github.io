@@ -254,7 +254,7 @@ Push a nonvolatile integer register, decrementing RSP by 8. The operation info i
 
 In order to reverse that we have to pop that register off the stack and increment RSP by 8, easy, but what wasn't clear to me is that these operations are __not done on actual registers, but within a `CONTEXT` struct that is created when the exception occured__ in order to save the CPU context (makes sense).
 
-After reading [reactos source code](https://doxygen.reactos.org/d8/d2f/unwind_8c_source.html), [libunwindstack](https://github.com/google/orbit/blob/02f72c7311ed08e6418ecbfab4a457db67aa38d9/third_party/libunwindstack/PeCoffUnwindInfoUnwinderX86_64.cpp) and crawling the [depth of github](https://github.com/azakharchenko-msol/wine/commit/400520192284c34e5b34b52b657cd3dda084403f), each opcode can be implemented as follow (in the more or less pythonic pseudocode):
+After reading [reactos source code](https://doxygen.reactos.org/d8/d2f/unwind_8c_source.html), [libunwindstack](https://github.com/google/orbit/blob/02f72c7311ed08e6418ecbfab4a457db67aa38d9/third_party/libunwindstack/PeCoffUnwindInfoUnwinderX86_64.cpp) and crawling the [depths of github](https://github.com/wine-mirror/wine/commit/400520192284c34e5b34b52b657cd3dda084403f), each opcode can be implemented as follow (in the more or less pythonic pseudocode):
 
 
 ### 1.5.1 UWOP_PUSH_MACHFRAME
@@ -1215,13 +1215,13 @@ But in the end... after sweating, swearing and tweaking... it finally worked.
 - __MSDN:__ https://learn.microsoft.com/en-us/cpp/build/exception-handling-x64?view=msvc-170
 - __MSDN:__ https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-context
 - __Android's libunwindstack:__ https://github.com/google/orbit/blob/02f72c7311ed08e6418ecbfab4a457db67aa38d9/third_party/libunwindstack/PeCoffUnwindInfoUnwinderX86_64.cpp
-- __Wine's dbghelp:__ https://github.com/azakharchenko-msol/wine/blob/master/dlls/dbghelp/cpu_x86_64.c#L530
+- __Wine's dbghelp:__ https://github.com/wine-mirror/wine/blob/master/dlls/dbghelp/cpu_x86_64.c#L530
 - __[Maurice Heumann](https://x.com/momo5502)'s blog:__ https://momo5502.com/posts/2024-09-07-a-journey-through-kiuserexceptiondispatcher/
-- __ReactOS:__: https://doxygen.reactos.org/d8/d2f/unwind_8c_source.html
+- __ReactOS:__ https://doxygen.reactos.org/d8/d2f/unwind_8c_source.html
 
 # 6. Files
 
-- __Challege file:__: [serpentine.7z](data/serpentine.7z) (password: `flare`)
+- __Challenge file:__ [serpentine.7z](data/serpentine.7z) (password: `flare`)
 - __Simple emulator:__ [emu_v4.py](src/emu_v4.py)
 - __Trace for the first conditionnal block:__ [emu_v4_trace.txt](data/emu_v4_trace.txt)
 - __Full blown emulator/deobfuscator:__ [emu_v7.py](src/emu_v7.py) + [tables.py](src/tables.py)
