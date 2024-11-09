@@ -1205,7 +1205,7 @@ flag: $$_4lway5_k3ep_mov1ng_and_m0ving@flare-on.com
 
 Learning more about exception handling, unwinding and crafting a working emulator was the highlight of this year's Flare-On.
 
-It was really an iterative process, requiring several version of the emulator as features were added, and a lot of testing to make sure it wouldn't introduce issues or semantic differences.
+It was really an iterative process, requiring several versions of the emulator as features were added, and a lot of testing to make sure it wouldn't introduce issues or semantic differences.
 
 But in the end... after sweating, swearing and tweaking... it finally worked.
 
