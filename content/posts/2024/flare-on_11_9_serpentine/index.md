@@ -345,7 +345,7 @@ Whenever we encounter a `HLT` instruction we need to:
 5. Save that `CONTEXT` struct to memory and make sure the `EXCEPTION_ROUTINE` handler can access it (we need R9 = DISPATCHER_CONTEXT address and R9+0x28 = CONTEXT address)
 
 
-When running the [emulator](src/emu_v4.py) with the input key `AAAABBBBCCCCDDDDaaaabbbbccccdddd` we can see something like ([full trace here](data/emu_v4_trace.txt)):
+When running the [emulator](https://github.com/matthw/ctf/tree/main/flare-on_11/ch09/emu_v4.py) with the input key `AAAABBBBCCCCDDDDaaaabbbbccccdddd` we can see something like ([full trace here](data/emu_v4_trace.txt)):
 
 ```
 mapping .text @ 0x140001000 (sz: 0x16000)
@@ -934,7 +934,7 @@ Based on the emulated code, we can track down the required functions to 5 operat
 
 We can start to manually identify the operations: once we know the operation it's easy to find the other tables for that operation (by bruteforcing).
 
-Eventually we end up with something like [tables.py](src/tables.py)...
+Eventually we end up with something like [tables.py](https://github.com/matthw/ctf/tree/main/flare-on_11/ch09/tables.py)...
 
 
 ### 2.2.2 Removing The Tables
@@ -1044,7 +1044,7 @@ self.emit("xor %s, 1"%(tmp_reg))
 self.emit("mov %s, %s"%(out_reg, tmp_reg))
 ```
 
-The full code can be seen in [emu_v7.py](src/emu_v7.py) - this is an abomination, I know... (and it requires [tables.py](src/tables.py))
+The full code can be seen in [emu_v7.py](https://github.com/matthw/ctf/tree/main/flare-on_11/ch09/emu_v7.py) - this is an abomination, I know... (and it requires [tables.py](https://github.com/matthw/ctf/tree/main/flare-on_11/ch09/tables.py))
 
 Running it will spit out 32 binary blobs in a "stages/" folder.
 
@@ -1060,7 +1060,7 @@ If you dont want to compile Triton, here's what you have to do (at the time of t
 The idea is to symbolize the user input and have Triton execute the reconstructed shellcode, while we push path constraints every time we hit a `test` instruction.
 
 
-[The script](src/triton_solver.py) is pretty simple but it took me some time to get things right (skill issue): I was trying to solve the conditionnal blocks one by one, getting a model after each one.
+[The script](https://github.com/matthw/ctf/tree/main/flare-on_11/ch09/triton_solver.py) is pretty simple but it took me some time to get things right (skill issue): I was trying to solve the conditionnal blocks one by one, getting a model after each one.
 The time required to solve them looked like exponential, requiring more than 20 minutes only to solve the first 4, and i had to restart from scratch everytime.
 
 In the end i figured out that sending everything, only pushing path constraints and getting a model at then end only was the way to go (takes ~30s to solve on my computer).
@@ -1222,7 +1222,7 @@ But in the end... after sweating, swearing and tweaking... it finally worked.
 # 6. Files
 
 - __Challenge file:__ [serpentine.7z](data/serpentine.7z) (password: `flare`)
-- __Simple emulator:__ [emu_v4.py](src/emu_v4.py)
+- __Simple emulator:__ [emu_v4.py](https://github.com/matthw/ctf/tree/main/flare-on_11/ch09/emu_v4.py)
 - __Trace for the first conditionnal block:__ [emu_v4_trace.txt](data/emu_v4_trace.txt)
-- __Full blown emulator/deobfuscator:__ [emu_v7.py](src/emu_v7.py) + [tables.py](src/tables.py)
-- __Triton solver:__ [triton_solver.py](src/triton_solver.py)
+- __Full blown emulator/deobfuscator:__ [emu_v7.py](https://github.com/matthw/ctf/tree/main/flare-on_11/ch09/emu_v7.py) + [tables.py](https://github.com/matthw/ctf/tree/main/flare-on_11/ch09/tables.py)
+- __Triton solver:__ [triton_solver.py](https://github.com/matthw/ctf/tree/main/flare-on_11/ch09/triton_solver.py)
