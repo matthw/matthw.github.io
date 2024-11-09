@@ -987,63 +987,85 @@ def find(addr):
 
 - emit assembly code in place of the table lookup:
 
-`add`:
+*// `v` is the value hardcoded in the table, `input` is the index*
+
+#### - add (input + v):
 ```python
-self.emit("mov %s,%s"%(tmp_reg, var))
-self.emit("add %s, %d"%(tmp_reg, v)) 
-self.emit("and %s, 0xff"%(tmp_reg))
-self.emit("mov %s, %s"%(out_reg, regs_32_to_64[tmp_reg]))
+dst = (input + v) & 0xff
+```
+```asm
+mov tmp, var
+add tmp, v
+and tmp, 0xff
+mov dst, tmp
 ```
 
-`and`:
+#### - and (input & v):
 ```python
-self.emit("mov %s,%s"%(tmp_reg, var))
-self.emit("and %s, %d"%(tmp_reg, v))
-self.emit("mov %s, %s"%(out_reg, regs_32_to_64[tmp_reg]))
+dst = input & v
+```
+```asm
+mov tmp, input
+and tmp, v
+mov dst, tmp
 ```
 
-`xor`:
+#### - xor (input ^ v):
 ```python
-self.emit("mov %s,%s"%(tmp_reg, var))
-self.emit("xor %s, %d"%(tmp_reg, v))
-self.emit("mov %s, %s"%(out_reg, regs_32_to_64[tmp_reg]))
+dst = input ^ v
+```
+```asm
+mov tmp, input
+xor tmp, v
+mov dst, tmp
 ```
 
-`rshift_x`:
+#### - rshift_x (input >> v):
 ```python
-self.emit("mov %s,%s"%(tmp_reg, var))
-self.emit("shr %s, %d"%(tmp_reg, v))
-self.emit("mov %s, %s"%(out_reg, regs_32_to_64[tmp_reg]))
+dst = var >> v
+```
+```asm
+mov tmp, input
+shr tmp, v
+mov dst, tmp
 ```
 
-`rshift_y`:
+#### - rshift_y (v >> input):
+*only works if v == 1 (which is the case)*
 ```python
-assert v == 1
-self.emit("mov %s, %s"%(tmp_reg, var))
-self.emit("or %s, %s"%(tmp_reg, tmp_reg))
-self.emit("setz %s"%(to_8bit_reg[tmp_reg]))
-self.emit("movzx %s, %s"%(out_reg, to_8bit_reg[tmp_reg]))
+dst = 1 if input == 0 else 0
+```
+```asm
+mov tmp, input
+or tmp, tmp
+setz tmp
+movzx dst, tmp
 ```
 
-`cmp_gt`:
+#### - cmp_gt (input > v):
 ```python
-self.emit("mov %s, %d"%(tmp_reg, v))
-self.emit("sub %s,%s"%(tmp_reg, var))
-self.emit("shr %s, 8"%(tmp_reg))
-self.emit("and %s, 1"%(tmp_reg))
-self.emit("mov %s, %s"%(out_reg, tmp_reg))
+dst = ((v - input) >> 8) & 1
+```
+```asm
+mov tmp, v
+sub tmp, input
+shr tmp, 8
+and tmp, 1
+mov dst, tmp
 ```
 
-`cmp_le`:
+#### - cmp_le (input <= v):
 ```python
-self.emit("mov %s, %d"%(tmp_reg, v))
-self.emit("sub %s,%s"%(tmp_reg, var))
-self.emit("shr %s, 8"%(tmp_reg))
-self.emit("and %s, 1"%(tmp_reg))
-self.emit("xor %s, 1"%(tmp_reg))
-self.emit("mov %s, %s"%(out_reg, tmp_reg))
+dst = (((v - input) >> 8) & 1) ^ 1
 ```
-
+```asm
+mov tmp, v
+sub tmp, input
+shr tmp, 8
+and tmp, 1
+xor tmp, 1
+mov dst, tmp
+```
 The full code can be seen in [emu_v7.py](https://github.com/matthw/ctf/tree/main/flare-on_11/ch09/emu_v7.py) - this is an abomination, I know... (and it requires [tables.py](https://github.com/matthw/ctf/tree/main/flare-on_11/ch09/tables.py))
 
 Running it will spit out 32 binary blobs in a "stages/" folder.
