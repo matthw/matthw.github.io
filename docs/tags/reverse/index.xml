@@ -2,81 +2,81 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Reverse on # matth.dmz42.org</title>
-    <link>https://matth.dmz42.org/tags/reverse/</link>
+    <link>http://localhost:1313/tags/reverse/</link>
     <description>Recent content in Reverse on # matth.dmz42.org</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
     <lastBuildDate>Sat, 09 Nov 2024 06:00:00 +0200</lastBuildDate>
-    <atom:link href="https://matth.dmz42.org/tags/reverse/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/reverse/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Flare-On 11 - #9 serpentine</title>
-      <link>https://matth.dmz42.org/posts/2024/flare-on_11_9_serpentine/</link>
+      <link>http://localhost:1313/posts/2024/flare-on_11_9_serpentine/</link>
       <pubDate>Sat, 09 Nov 2024 06:00:00 +0200</pubDate>
-      <guid>https://matth.dmz42.org/posts/2024/flare-on_11_9_serpentine/</guid>
+      <guid>http://localhost:1313/posts/2024/flare-on_11_9_serpentine/</guid>
       <description>&amp;ldquo;serpentine&amp;rdquo; was the 9th and penultimate challenge from Google/FLARE&amp;rsquo;s Flare-On 2024 - and arguably the hardest challenge of these past couple of years (at least in my opinion).&#xA;Some information may be presented in a simplistic or incomplete way, as I tried to stay focused on the main points for this challenge. However, it’s very possible I got something slightly wrong or made a mistake, so feel free to point it out.</description>
     </item>
     <item>
       <title>ptrace based self-debugging binaries</title>
-      <link>https://matth.dmz42.org/posts/2024/ptrace_based_self_debugging_binaries/</link>
+      <link>http://localhost:1313/posts/2024/ptrace_based_self_debugging_binaries/</link>
       <pubDate>Fri, 16 Feb 2024 08:00:00 +0200</pubDate>
-      <guid>https://matth.dmz42.org/posts/2024/ptrace_based_self_debugging_binaries/</guid>
+      <guid>http://localhost:1313/posts/2024/ptrace_based_self_debugging_binaries/</guid>
       <description>These are two self-debugging ptrace (or nanomite, as you prefer) based challenges I made for 0xl4augh CTF.&#xA;ptrace is a system call that allows a process to trace/debug another process, it is used by debuggers and tracing tools like strace.&#xA;Since it can be used to read/write the memory and the CPU context of another process, it can also be used for all kind of fun stuff like hot patching.</description>
     </item>
     <item>
       <title>BarbHack CTF 2023 - illusion</title>
-      <link>https://matth.dmz42.org/posts/2023/barbhack-2023-illusion/</link>
+      <link>http://localhost:1313/posts/2023/barbhack-2023-illusion/</link>
       <pubDate>Mon, 04 Sep 2023 08:54:33 +0200</pubDate>
-      <guid>https://matth.dmz42.org/posts/2023/barbhack-2023-illusion/</guid>
+      <guid>http://localhost:1313/posts/2023/barbhack-2023-illusion/</guid>
       <description>BarbHack 2023 had some pretty cool reversing challenges. I could not attend the conf, so i solved them afterwards (not sure i would have time to solve this one during the CTF anyway).&#xA;This writeup is about illusion.exe, a fun binary by sar - thanks to him for providing it to me afterwards and allowing me to host it here :)&#xA;1. Clicky click if we run the binary it just produces this output and exits:</description>
     </item>
     <item>
       <title>Grey Cat the Flag CTF 2023 - Crackme2</title>
-      <link>https://matth.dmz42.org/posts/2023/grey-cat-the-flag-2023-crackme2/</link>
+      <link>http://localhost:1313/posts/2023/grey-cat-the-flag-2023-crackme2/</link>
       <pubDate>Wed, 24 May 2023 08:54:33 +0200</pubDate>
-      <guid>https://matth.dmz42.org/posts/2023/grey-cat-the-flag-2023-crackme2/</guid>
+      <guid>http://localhost:1313/posts/2023/grey-cat-the-flag-2023-crackme2/</guid>
       <description>Grey Cat The Flag CTF 2023 had some nice reversing challenges, this one was very nice and i think deserves a small writeup.&#xA;You can grab the original file here. A fixed version was later released fixed, but i used the original binary.&#xA;1. Quick Recon it&amp;rsquo;s a 64 bits ELF that takes the flag as input&#xA;% file crackme2 crackme2: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.</description>
     </item>
     <item>
       <title>HITCON CTF 2022: Meow Way</title>
-      <link>https://matth.dmz42.org/posts/2022/hitcon-ctf-2022-meow-way/</link>
+      <link>http://localhost:1313/posts/2022/hitcon-ctf-2022-meow-way/</link>
       <pubDate>Fri, 09 Dec 2022 08:00:00 +0100</pubDate>
-      <guid>https://matth.dmz42.org/posts/2022/hitcon-ctf-2022-meow-way/</guid>
+      <guid>http://localhost:1313/posts/2022/hitcon-ctf-2022-meow-way/</guid>
       <description>This is a 32 bit PE file using an interesting trick.&#xA;You can grab the file here.&#xA;1. Quick Recon Opening the file in ghidra and navigating from the entry point to the main function we find something like:&#xA;if (argc &amp;lt; 2) { printf(&amp;#34;Usage: %s &amp;lt;flag&amp;gt;\n&amp;#34;,(char)*argv); /* WARNING: Subroutine does not return */ exit(1); } f = argv[1]; argv1 = f + 1; do { cVar1 = *f; f = f + 1; } while (cVar1 !</description>
     </item>
     <item>
       <title>Square CTF 2022: Yet Another Reversing Activity</title>
-      <link>https://matth.dmz42.org/posts/2022/squarectf-2022-yet-another-reversing-activity/</link>
+      <link>http://localhost:1313/posts/2022/squarectf-2022-yet-another-reversing-activity/</link>
       <pubDate>Mon, 21 Nov 2022 14:00:00 +0100</pubDate>
-      <guid>https://matth.dmz42.org/posts/2022/squarectf-2022-yet-another-reversing-activity/</guid>
+      <guid>http://localhost:1313/posts/2022/squarectf-2022-yet-another-reversing-activity/</guid>
       <description>This was one of the reversing challenge during Square CTF, i found it interesting and unusual as it involves YARA.&#xA;1. Description Supposedly this file can recognize a flag. But what could it be?&#xA;2. Introduction The file given is a compiled YARA rule.&#xA;From their website:&#xA;YARA is a tool aimed at (but not limited to) helping malware researchers to identify and classify malware samples. With YARA you can create descriptions of malware families (or whatever you want to describe) based on textual or binary patterns.</description>
     </item>
     <item>
       <title>Flare-On 9 Writeups</title>
-      <link>https://matth.dmz42.org/posts/2022/flare-on-9-writeups/</link>
+      <link>http://localhost:1313/posts/2022/flare-on-9-writeups/</link>
       <pubDate>Mon, 14 Nov 2022 13:15:00 +0100</pubDate>
-      <guid>https://matth.dmz42.org/posts/2022/flare-on-9-writeups/</guid>
+      <guid>http://localhost:1313/posts/2022/flare-on-9-writeups/</guid>
       <description>Here are (some ?) writeups for this year Flare-On challenge. I&amp;rsquo;ll add more in the coming days.&#xA;For reference here is my timing:&#xA;0. TOC Flaredle&#xA;PixelPoker&#xA;Magic 8 Ball&#xA;darn_mice&#xA;T8&#xA;a la mode&#xA;anode&#xA;backdoor&#xA;encryptor&#xA;Nur getraumt&#xA;The challenge that shall not be named&#xA;1. Flaredle 1.1 Challenge Prompt Welcome to Flare-On 9!&#xA;You probably won&amp;rsquo;t win. Maybe you&amp;rsquo;re like us and spent the year playing Wordle. We made our own version that is too hard to beat without cheating.</description>
     </item>
     <item>
       <title>Automatically Unpacking IcedID Stage 1 with angr</title>
-      <link>https://matth.dmz42.org/posts/2022/automatically-unpacking-icedid-stage1-with-angr/</link>
+      <link>http://localhost:1313/posts/2022/automatically-unpacking-icedid-stage1-with-angr/</link>
       <pubDate>Mon, 30 May 2022 09:15:00 +0200</pubDate>
-      <guid>https://matth.dmz42.org/posts/2022/automatically-unpacking-icedid-stage1-with-angr/</guid>
+      <guid>http://localhost:1313/posts/2022/automatically-unpacking-icedid-stage1-with-angr/</guid>
       <description>It started with 0verfl0w posting a small challenge on the Zero 2 Automated discord server asking to automatically extract the configuration of an unpacked IcedID sample (0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7).&#xA;Unpacking the sample was part of the exercise but could be done manually as a one shot, however the more I looked into the stager, the more i thought an automated unpacker would be a fun thing to do.&#xA;I&amp;rsquo;ll skip over some details of the stager (like API hashing and injection) to focus only on the unpacking part.</description>
     </item>
     <item>
       <title>Reversing Firmwares from FS and BDCOM Switches</title>
-      <link>https://matth.dmz42.org/posts/2022/reversing-firmwares-from-fs-and-bdcom-switches/</link>
+      <link>http://localhost:1313/posts/2022/reversing-firmwares-from-fs-and-bdcom-switches/</link>
       <pubDate>Tue, 11 Jan 2022 15:24:31 +0100</pubDate>
-      <guid>https://matth.dmz42.org/posts/2022/reversing-firmwares-from-fs-and-bdcom-switches/</guid>
+      <guid>http://localhost:1313/posts/2022/reversing-firmwares-from-fs-and-bdcom-switches/</guid>
       <description>I recently had to buy a new 24x1G fanless switch for my home network. I had a mikrotik switch for years (which i was happy with but suffered a power surge) and wanted to try something new so I ended up with a FS S3700-24T4F.&#xA;Their CLI is close to Cisco&amp;rsquo;s IOS, it&amp;rsquo;s overall a fun device for home network and not too expensive. Found few small bugs here and there without really looking for them but in the end nothing too annoying in my context.</description>
     </item>
     <item>
       <title>The Return of the Malwarebytes Crackme</title>
-      <link>https://matth.dmz42.org/posts/2021/the-return-of-the-malwarebytes-crackme/</link>
+      <link>http://localhost:1313/posts/2021/the-return-of-the-malwarebytes-crackme/</link>
       <pubDate>Mon, 08 Nov 2021 14:20:47 +0100</pubDate>
-      <guid>https://matth.dmz42.org/posts/2021/the-return-of-the-malwarebytes-crackme/</guid>
+      <guid>http://localhost:1313/posts/2021/the-return-of-the-malwarebytes-crackme/</guid>
       <description>Malwarebytes released their 3rd crackme, here&amp;rsquo;s my entry for the writeup contest.&#xA;You can find the original announcement here and the contest summary here.&#xA;0. First Look Running the crackme, we understand we&amp;rsquo;ll be asked to find 3 passwords. Only the first button is enabled, so they will most likely need to be found in order&#xA;Loading the binary into PE-bear reveals it&amp;rsquo;s a Dot Net binary&#xA;so let&amp;rsquo;s open it in dnSpy</description>
     </item>
   </channel>

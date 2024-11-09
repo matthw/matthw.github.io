@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Icedid on # matth.dmz42.org</title>
-    <link>https://matth.dmz42.org/tags/icedid/</link>
+    <link>http://localhost:1313/tags/icedid/</link>
     <description>Recent content in Icedid on # matth.dmz42.org</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
     <lastBuildDate>Mon, 30 May 2022 09:15:00 +0200</lastBuildDate>
-    <atom:link href="https://matth.dmz42.org/tags/icedid/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/icedid/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Automatically Unpacking IcedID Stage 1 with angr</title>
-      <link>https://matth.dmz42.org/posts/2022/automatically-unpacking-icedid-stage1-with-angr/</link>
+      <link>http://localhost:1313/posts/2022/automatically-unpacking-icedid-stage1-with-angr/</link>
       <pubDate>Mon, 30 May 2022 09:15:00 +0200</pubDate>
-      <guid>https://matth.dmz42.org/posts/2022/automatically-unpacking-icedid-stage1-with-angr/</guid>
+      <guid>http://localhost:1313/posts/2022/automatically-unpacking-icedid-stage1-with-angr/</guid>
       <description>It started with 0verfl0w posting a small challenge on the Zero 2 Automated discord server asking to automatically extract the configuration of an unpacked IcedID sample (0581f0bf260a11a5662d58b99a82ec756c9365613833bce8f102ec1235a7d4f7).&#xA;Unpacking the sample was part of the exercise but could be done manually as a one shot, however the more I looked into the stager, the more i thought an automated unpacker would be a fun thing to do.&#xA;I&amp;rsquo;ll skip over some details of the stager (like API hashing and injection) to focus only on the unpacking part.</description>
     </item>
   </channel>

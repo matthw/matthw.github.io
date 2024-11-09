@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Crackme on # matth.dmz42.org</title>
-    <link>https://matth.dmz42.org/tags/crackme/</link>
+    <link>http://localhost:1313/tags/crackme/</link>
     <description>Recent content in Crackme on # matth.dmz42.org</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
     <lastBuildDate>Mon, 08 Nov 2021 14:20:47 +0100</lastBuildDate>
-    <atom:link href="https://matth.dmz42.org/tags/crackme/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/crackme/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>The Return of the Malwarebytes Crackme</title>
-      <link>https://matth.dmz42.org/posts/2021/the-return-of-the-malwarebytes-crackme/</link>
+      <link>http://localhost:1313/posts/2021/the-return-of-the-malwarebytes-crackme/</link>
       <pubDate>Mon, 08 Nov 2021 14:20:47 +0100</pubDate>
-      <guid>https://matth.dmz42.org/posts/2021/the-return-of-the-malwarebytes-crackme/</guid>
+      <guid>http://localhost:1313/posts/2021/the-return-of-the-malwarebytes-crackme/</guid>
       <description>Malwarebytes released their 3rd crackme, here&amp;rsquo;s my entry for the writeup contest.&#xA;You can find the original announcement here and the contest summary here.&#xA;0. First Look Running the crackme, we understand we&amp;rsquo;ll be asked to find 3 passwords. Only the first button is enabled, so they will most likely need to be found in order&#xA;Loading the binary into PE-bear reveals it&amp;rsquo;s a Dot Net binary&#xA;so let&amp;rsquo;s open it in dnSpy</description>
     </item>
   </channel>
