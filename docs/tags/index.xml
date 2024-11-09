@@ -2,53 +2,53 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on # matth.dmz42.org</title>
-    <link>http://localhost:1313/tags/</link>
+    <link>https://matth.dmz42.org/tags/</link>
     <description>Recent content in Tags on # matth.dmz42.org</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
     <lastBuildDate>Sat, 09 Nov 2024 06:00:00 +0200</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://matth.dmz42.org/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ctf</title>
-      <link>http://localhost:1313/tags/ctf/</link>
+      <link>https://matth.dmz42.org/tags/ctf/</link>
       <pubDate>Sat, 09 Nov 2024 06:00:00 +0200</pubDate>
-      <guid>http://localhost:1313/tags/ctf/</guid>
+      <guid>https://matth.dmz42.org/tags/ctf/</guid>
       <description></description>
     </item>
     <item>
       <title>Reverse</title>
-      <link>http://localhost:1313/tags/reverse/</link>
+      <link>https://matth.dmz42.org/tags/reverse/</link>
       <pubDate>Sat, 09 Nov 2024 06:00:00 +0200</pubDate>
-      <guid>http://localhost:1313/tags/reverse/</guid>
+      <guid>https://matth.dmz42.org/tags/reverse/</guid>
       <description></description>
     </item>
     <item>
       <title>Icedid</title>
-      <link>http://localhost:1313/tags/icedid/</link>
+      <link>https://matth.dmz42.org/tags/icedid/</link>
       <pubDate>Mon, 30 May 2022 09:15:00 +0200</pubDate>
-      <guid>http://localhost:1313/tags/icedid/</guid>
+      <guid>https://matth.dmz42.org/tags/icedid/</guid>
       <description></description>
     </item>
     <item>
       <title>Malware</title>
-      <link>http://localhost:1313/tags/malware/</link>
+      <link>https://matth.dmz42.org/tags/malware/</link>
       <pubDate>Mon, 30 May 2022 09:15:00 +0200</pubDate>
-      <guid>http://localhost:1313/tags/malware/</guid>
+      <guid>https://matth.dmz42.org/tags/malware/</guid>
       <description></description>
     </item>
     <item>
       <title>Crackme</title>
-      <link>http://localhost:1313/tags/crackme/</link>
+      <link>https://matth.dmz42.org/tags/crackme/</link>
       <pubDate>Mon, 08 Nov 2021 14:20:47 +0100</pubDate>
-      <guid>http://localhost:1313/tags/crackme/</guid>
+      <guid>https://matth.dmz42.org/tags/crackme/</guid>
       <description></description>
     </item>
     <item>
       <title>Writeup</title>
-      <link>http://localhost:1313/tags/writeup/</link>
+      <link>https://matth.dmz42.org/tags/writeup/</link>
       <pubDate>Mon, 08 Nov 2021 14:20:47 +0100</pubDate>
-      <guid>http://localhost:1313/tags/writeup/</guid>
+      <guid>https://matth.dmz42.org/tags/writeup/</guid>
       <description></description>
     </item>
   </channel>
