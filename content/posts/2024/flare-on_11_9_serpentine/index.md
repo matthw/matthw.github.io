@@ -257,13 +257,13 @@ In order to reverse that we have to pop that register off the stack and incremen
 After reading [reactos source code](https://doxygen.reactos.org/d8/d2f/unwind_8c_source.html), [libunwindstack](https://github.com/google/orbit/blob/02f72c7311ed08e6418ecbfab4a457db67aa38d9/third_party/libunwindstack/PeCoffUnwindInfoUnwinderX86_64.cpp) and crawling the [depths of github](https://github.com/wine-mirror/wine/commit/400520192284c34e5b34b52b657cd3dda084403f), each opcode can be implemented as follow (in the more or less pythonic pseudocode):
 
 
-### 1.5.1 UWOP_PUSH_MACHFRAME
+### # UWOP_PUSH_MACHFRAME
 ```python
 offset = 0x20 if unwind_op_info == 1 else 0x18
 context.regs[RSP] = mem_read_qword(context.regs[RSP] + offset)
 ```
 
-### 1.5.2 UWOP_PUSH_NONVOL
+### # UWOP_PUSH_NONVOL
 
 ```python
 reg = REGS(unwind_op_info)
@@ -273,7 +273,7 @@ context.regs[RSP] += 8                  # rsp += 8
 ```
 
 
-### 1.5.3 UWOP_ALLOC_LARGE
+### # UWOP_ALLOC_LARGE
 
 This one requires 2 or 3 slots depending on the OpInfo field
 
@@ -290,13 +290,13 @@ context.regs[RSP] += size
 
 ```
 
-### 1.5.4 UWOP_ALLOC_SMALL
+### # UWOP_ALLOC_SMALL
 ```python
 size = unwind_op_info * 8 + 8
 context.regs[RSP] += size
 ```
 
-### 1.5.5 UWOP_SET_FPREG
+### # UWOP_SET_FPREG
 ```python
 context.regs[RSP] = context.regs[REGS(frame_reg)]
 context.regs[RSP] -= frame_offset * 16
@@ -650,7 +650,7 @@ that's already one problem solved.
 The 2nd thing we need to solve to have an accurate data flow between the exception handlers, is to convert the unwind operations to code.
 We have pythonic code already for each opcode, the operations are pretty simple.
 
-#### 2.1.2.1 UWOP_PUSH_MACHFRAME
+#### # UWOP_PUSH_MACHFRAME
 ```python
 #
 # python
@@ -670,7 +670,7 @@ ANAL.emit("mov [0x%x], rax"%rsp)
 ANAL.emit("pop rax")
 ```
 
-#### 2.1.2.2 UWOP_PUSH_NONVOL
+#### # UWOP_PUSH_NONVOL
 ```python
 #
 # python
@@ -698,7 +698,7 @@ ANAL.emit("mov [0x%x], rax"%rsp)
 ANAL.emit("pop rax")
 ```
 
-#### 2.1.2.3 UWOP_ALLOC_LARGE
+#### # UWOP_ALLOC_LARGE
 ```python
 #
 # python
@@ -724,7 +724,7 @@ ANAL.emit("mov [0x%x], rax"%rsp)
 ANAL.emit("pop rax")
 ```
 
-#### 2.1.2.4 UWOP_ALLOC_SMALL
+#### # UWOP_ALLOC_SMALL
 ```python
 #
 # python
@@ -743,7 +743,7 @@ ANAL.emit("mov [0x%x], rax"%rsp)
 ANAL.emit("pop rax")
 ```
 
-#### 2.1.2.5 UWOP_SET_FPREG
+#### # UWOP_SET_FPREG
 ```python
 #
 # python
@@ -989,7 +989,7 @@ def find(addr):
 
 *// `v` is the value hardcoded in the table, `input` is the index*
 
-#### - add (input + v):
+#### # `add` _(input + v)_:
 ```python
 dst = (input + v) & 0xff
 ```
@@ -1000,7 +1000,7 @@ and tmp, 0xff
 mov dst, tmp
 ```
 
-#### - and (input & v):
+#### # `and` _(input & v)_:
 ```python
 dst = input & v
 ```
@@ -1010,7 +1010,7 @@ and tmp, v
 mov dst, tmp
 ```
 
-#### - xor (input ^ v):
+#### # `xor` _(input ^ v)_:
 ```python
 dst = input ^ v
 ```
@@ -1020,7 +1020,7 @@ xor tmp, v
 mov dst, tmp
 ```
 
-#### - rshift_x (input >> v):
+#### # `rshift_x` _(input >> v)_:
 ```python
 dst = var >> v
 ```
@@ -1030,7 +1030,7 @@ shr tmp, v
 mov dst, tmp
 ```
 
-#### - rshift_y (v >> input):
+#### # `rshift_y` _(v >> input)_:
 *only works if v == 1 (which is the case)*
 ```python
 dst = 1 if input == 0 else 0
@@ -1042,7 +1042,7 @@ setz tmp
 movzx dst, tmp
 ```
 
-#### - cmp_gt (input > v):
+#### # `cmp_gt` _(input > v)_:
 ```python
 dst = ((v - input) >> 8) & 1
 ```
@@ -1054,7 +1054,7 @@ and tmp, 1
 mov dst, tmp
 ```
 
-#### - cmp_le (input <= v):
+#### # `cmp_le` _(input <= v)_:
 ```python
 dst = (((v - input) >> 8) & 1) ^ 1
 ```
