@@ -17,11 +17,11 @@ Some information may be presented in a simplistic or incomplete way, as I tried 
 
 ## 1.1 Quick Peek
 
-The program expects a 32 bytes key as parameter, it is copied at address `0x14089b8e8` (that i labelled `INPUT_KEY`), execution is then transfered it some code region.
+The program expects a 32 bytes key as parameter, it is copied at address `0x14089b8e8` (that i labelled `INPUT_KEY`), execution is then transfered to some code region.
 
 ![main](img/000-main.png)
 
-Providing the wrong key prints the message `Wrong Key`, we can follow string references up to that function, next to which we find the `show_flag` function:
+Providing the wrong key prints the message `"Wrong Key"`, we can follow string references up to that function, next to which we find the `show_flag` function:
 
 ![wrong and win functions](img/001-win.png)
 

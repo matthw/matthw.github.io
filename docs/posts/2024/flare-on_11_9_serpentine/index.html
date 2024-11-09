@@ -83,9 +83,9 @@ Some information may be presented in a simplistic or incomplete way, as I tried 
 <p>Some information may be presented in a simplistic or incomplete way, as I tried to stay focused on the main points for this challenge. However, it’s very possible I got something slightly wrong or made a mistake, so feel free to point it out.</p>
 <h1 id="1-untangling-the-spaghetti">1. Untangling The Spaghetti<a href="#1-untangling-the-spaghetti" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
 <h2 id="11-quick-peek">1.1 Quick Peek<a href="#11-quick-peek" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
-<p>The program expects a 32 bytes key as parameter, it is copied at address <code>0x14089b8e8</code> (that i labelled <code>INPUT_KEY</code>), execution is then transfered it some code region.</p>
+<p>The program expects a 32 bytes key as parameter, it is copied at address <code>0x14089b8e8</code> (that i labelled <code>INPUT_KEY</code>), execution is then transfered to some code region.</p>
 <p><img src="img/000-main.png" alt="main"></p>
-<p>Providing the wrong key prints the message <code>Wrong Key</code>, we can follow string references up to that function, next to which we find the <code>show_flag</code> function:</p>
+<p>Providing the wrong key prints the message <code>&quot;Wrong Key&quot;</code>, we can follow string references up to that function, next to which we find the <code>show_flag</code> function:</p>
 <p><img src="img/001-win.png" alt="wrong and win functions"></p>
 <p>The <code>EXEC_CODE</code> pointer is initialized within the first TLS callback:</p>
 <p><img src="img/005-tls0.png" alt="tls callback 0"></p>
