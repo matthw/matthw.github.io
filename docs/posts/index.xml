@@ -19,7 +19,13 @@
 Some information may be presented in a simplistic or incomplete way, as I tried to stay focused on the main points for this challenge. However, it’s very possible I got something slightly wrong or made a mistake, so feel free to point it out.</description>
 			<content type="html"><![CDATA[<p>&ldquo;serpentine&rdquo; was the 9th and penultimate challenge from Google/FLARE&rsquo;s <a href="https://flare-on.com/">Flare-On</a> 2024 - and arguably the hardest challenge of these past couple of years (at least in my opinion).</p>
 <p>Some information may be presented in a simplistic or incomplete way, as I tried to stay focused on the main points for this challenge. However, it’s very possible I got something slightly wrong or made a mistake, so feel free to point it out.</p>
-<h1 id="1-untangling-the-spaghetti">1. Untangling The Spaghetti</h1>
+<p><strong>NOTE</strong>:</p>
+<p>The whole thing needs unicorn 2.0.1 (i have some instruction caching issue with 2.1+) and Triton needs python 3.11 at the time of writing.</p>
+<p>If you want to quickly get started and follow along, install <a href="https://www.anaconda.com/">anaconda</a>, download the <a href="https://github.com/matthw/ctf/blob/main/flare-on_11/ch09/requirements.txt">requirements.txt</a> from my <a href="https://github.com/matthw/ctf/tree/main/flare-on_11/ch09">repository</a> and run the following commands:</p>
+<pre tabindex="0"><code>conda create -n &#34;fl311&#34; python=3.11.10
+conda activate fl311
+pip install -r requirements.txt
+</code></pre><h1 id="1-untangling-the-spaghetti">1. Untangling The Spaghetti</h1>
 <h2 id="11-quick-peek">1.1 Quick Peek</h2>
 <p>The program expects a 32 bytes key as parameter, it is copied at address <code>0x14089b8e8</code> (that i labelled <code>INPUT_KEY</code>), execution is then transfered to some code region.</p>
 <p><img src="img/000-main.png" alt="main"></p>

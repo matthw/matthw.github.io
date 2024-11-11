@@ -13,6 +13,18 @@ tags:
 
 Some information may be presented in a simplistic or incomplete way, as I tried to stay focused on the main points for this challenge. However, it’s very possible I got something slightly wrong or made a mistake, so feel free to point it out.
 
+**NOTE**:
+
+The whole thing needs unicorn 2.0.1 (i have some instruction caching issue with 2.1+) and Triton needs python 3.11 at the time of writing.
+
+If you want to quickly get started and follow along, install [anaconda](https://www.anaconda.com/), download the [requirements.txt](https://github.com/matthw/ctf/blob/main/flare-on_11/ch09/requirements.txt) from my [repository](https://github.com/matthw/ctf/tree/main/flare-on_11/ch09) and run the following commands:
+```
+conda create -n "fl311" python=3.11.10
+conda activate fl311
+pip install -r requirements.txt
+```
+
+
 # 1. Untangling The Spaghetti
 
 ## 1.1 Quick Peek
