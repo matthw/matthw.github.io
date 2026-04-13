@@ -233,7 +233,7 @@ sat
 192
 </code></pre><p>So now, let&rsquo;s recover all bytes from self modifying ops and jmp rax instructions&hellip;</p>
 <h2 id="41-self-modifying-code">4.1 Self Modifying Code</h2>
-<p>I extracted only the relevant part from the full trace into <a href="data/interesting.trace">interesting.trace</a> (ie: the code of <code>ctf::check_board_name()</code>) to avoid pollution.</p>
+<p>I extracted only the relevant part from the full trace into <a href="https://github.com/matthw/matthw.github.io/blob/master/content/posts/2026/fcsc2026_computing_software/data/interesting.trace">interesting.trace</a> (ie: the code of <code>ctf::check_board_name()</code>) to avoid pollution.</p>
 <p>We can use pattern matching (grep :)) to identify the self modifying ops:</p>
 <pre tabindex="0"><code>% grep -A1 &#39;mov  al, byte ptr \[rip + 0x&#39; interesting.trace
 0x004038BE: mov  al, byte ptr [rip + 0xad898] : 8A 05 98 D8 0A 00
@@ -246,7 +246,7 @@ sat
 0x00403D1F: xor  byte ptr [rip + 2], al : 30 05 02 00 00 00
 --
 etc...
-</code></pre><p>Then squeeze that into an ugly script <a href="data/01_fix_self_modifying_code.py">01_fix_self_modifying_code.py</a> that will get the original bytes from the trace and nop the self modifying parts so we can actually execute a clean function:</p>
+</code></pre><p>Then squeeze that into an ugly script <a href="https://github.com/matthw/matthw.github.io/blob/master/content/posts/2026/fcsc2026_computing_software/data/01_fix_self_modifying_code.py">01_fix_self_modifying_code.py</a> that will get the original bytes from the trace and nop the self modifying parts so we can actually execute a clean function:</p>
 <p>It creates a <code>fixed_function.bin</code> file with the cleaned opcodes and output the recovered values from the <code>BOARD_NAME</code>:</p>
 <pre tabindex="0"><code>% python 01_fix_self_modifying_code.py
 [None, None, None, None, None, None, 245, 160, 165, None, None, 243, None, 166, None, 163, 169, None, None, None, 247, None, 161, 247, 160, None, None, None, 167, 163, None, 240, 163, 245, None, 165, None, None, 168, 164, None, None, None, None, None, 243, None, None, 165, None, None, None, None, 165, 245, None, None, None, None, 162, None, 242, None, None, None, None, 167, None, 168, 167, None, 215, None, None, None, None, 165, 245, 160, None, 160, None, None, 240, 166, 165, None, None, 169, 247, 166, None, None, None, 247, None, 166, None, 162, None, None, None, None, 163, 245, 169, 165, 240, None, None, 164, 165, None, None, None, None, None, None, 247, None, None, 169, 242, 242, 165, 245, 169, 240]
@@ -262,7 +262,7 @@ etc...
 0x00403C44:0x00403C5E,
 0x00403D67:0x00403D78,
 ...
-</code></pre><p>and forcefeed that to <a href="data/02_symbolic_block_solver.py">02_symbolic_block_solver.py</a>.</p>
+</code></pre><p>and forcefeed that to <a href="https://github.com/matthw/matthw.github.io/blob/master/content/posts/2026/fcsc2026_computing_software/data/02_symbolic_block_solver.py">02_symbolic_block_solver.py</a>.</p>
 <p>This script uses Triton to symbolically execute the previously generated <code>fixed_function.bin</code> and whenever it reaches a <code>jmp rax</code> address, it solves for the correct target address from the trace:</p>
 <pre tabindex="0"><code>% python 02_symbolic_block_solver.py
 TABLE[4] = 0xea
@@ -458,7 +458,7 @@ TABLE[23] = 0xf7
 TABLE[108] = 0xf0
 TABLE[46] = 0xf2
 </code></pre><h1 id="5-the-flag">5. The Flag</h1>
-<p>We combine the output from the 2 previous scripts to build a more complete TABLE <a href="data/03_build_table.py">03_build_table.py</a> then xor 0x91 to get the following:</p>
+<p>We combine the output from the 2 previous scripts to build a more complete TABLE <a href="https://github.com/matthw/matthw.github.io/blob/master/content/posts/2026/fcsc2026_computing_software/data/03_build_table.py">03_build_table.py</a> then xor 0x91 to get the following:</p>
 <pre tabindex="0"><code>% python 03_build_table.py
 b&#39;_CS_{4d141_ba7_288f7f50f171362da2d84aa9541639bcf4__cc4d8a4639ce72a6_96}F_SC{4d1413ba74288f7f__f_7_3_2da2d84aa9541_39bcf4c8cc4d8a&#39;
 </code></pre><p>since we know from step 3 the variable repeats, we can recover most the missing bytes:</p>

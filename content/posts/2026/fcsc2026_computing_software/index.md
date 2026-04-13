@@ -300,7 +300,7 @@ So now, let's recover all bytes from self modifying ops and jmp rax instructions
 
 ## 4.1 Self Modifying Code
 
-I extracted only the relevant part from the full trace into [interesting.trace](data/interesting.trace) (ie: the code of `ctf::check_board_name()`) to avoid pollution.
+I extracted only the relevant part from the full trace into [interesting.trace](https://github.com/matthw/matthw.github.io/blob/master/content/posts/2026/fcsc2026_computing_software/data/interesting.trace) (ie: the code of `ctf::check_board_name()`) to avoid pollution.
 
 We can use pattern matching (grep :)) to identify the self modifying ops:
 
@@ -318,7 +318,7 @@ We can use pattern matching (grep :)) to identify the self modifying ops:
 etc...
 ```
 
-Then squeeze that into an ugly script [01_fix_self_modifying_code.py](data/01_fix_self_modifying_code.py) that will get the original bytes from the trace and nop the self modifying parts so we can actually execute a clean function:
+Then squeeze that into an ugly script [01_fix_self_modifying_code.py](https://github.com/matthw/matthw.github.io/blob/master/content/posts/2026/fcsc2026_computing_software/data/01_fix_self_modifying_code.py) that will get the original bytes from the trace and nop the self modifying parts so we can actually execute a clean function:
 
 It creates a `fixed_function.bin` file with the cleaned opcodes and output the recovered values from the `BOARD_NAME`:
 
@@ -345,7 +345,7 @@ we can recover all jump addresses and targets using a professional trace2python 
 ...
 ```
 
-and forcefeed that to [02_symbolic_block_solver.py](data/02_symbolic_block_solver.py).
+and forcefeed that to [02_symbolic_block_solver.py](https://github.com/matthw/matthw.github.io/blob/master/content/posts/2026/fcsc2026_computing_software/data/02_symbolic_block_solver.py).
 
 This script uses Triton to symbolically execute the previously generated `fixed_function.bin` and whenever it reaches a `jmp rax` address, it solves for the correct target address from the trace:
 
@@ -548,7 +548,7 @@ TABLE[46] = 0xf2
 
 # 5. The Flag
 
-We combine the output from the 2 previous scripts to build a more complete TABLE [03_build_table.py](data/03_build_table.py) then xor 0x91 to get the following:
+We combine the output from the 2 previous scripts to build a more complete TABLE [03_build_table.py](https://github.com/matthw/matthw.github.io/blob/master/content/posts/2026/fcsc2026_computing_software/data/03_build_table.py) then xor 0x91 to get the following:
 
 ```
 % python 03_build_table.py
