@@ -133,9 +133,9 @@ undefined4 main(void)
 
 # 3. FCSC_MOTHERBOARD_NAME Processing
 
-Quick reversing of `ctf::load_input_into_128_array_and_xor_0x91` shows that the value of FCSC_MOTHERBOARD_NAME is loaded as repeating string into a 128 byte array and xored with bye value 0x91.
+Quick reversing of `ctf::load_input_into_128_array_and_xor_0x91` shows that the value of FCSC_MOTHERBOARD_NAME is loaded as a repeating string into a 128 bytes array and xored with byte value 0x91.
 
-We'll call that array `BOARD_NAME`.
+We'll call this array `BOARD_NAME`.
 
 That can quickly be checked dynamically:
 
@@ -206,7 +206,7 @@ the correct byte value at address `004038cc` can be recovered from the trace:
 ```
 
 
-if we patch the byte to it's correct value (0x48) and follow along, we endup in an obfuscated `jmp rax`:
+if we patch the byte to its correct value (0x48) and follow along, we endup in an obfuscated `jmp rax`:
 
 ```asm
 4a8        004038d9 48 05 79 13 ff ff            ADD                     RAX,-0xec87

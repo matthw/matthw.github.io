@@ -16,7 +16,7 @@ TL;DR: use trace and binary to get the flag (who would have guessed).
 undefined4 main(void) { char *board_name; ulong uVar1; undefined4 local_c; FUN_0040af70(); memset(MEM,0,0x80); FUN_00401ac0(); printf(&#34;[.] Welcome to computing-software-2\n&#34;); printf(&#34;[.">
   <meta itemprop="datePublished" content="2026-04-13T06:00:00+02:00">
   <meta itemprop="dateModified" content="2026-04-13T06:00:00+02:00">
-  <meta itemprop="wordCount" content="2120">
+  <meta itemprop="wordCount" content="2121">
   <meta itemprop="keywords" content="Reverse,Ctf"><meta property="og:url" content="https://matth.dmz42.org/posts/2026/fcsc2026_computing_software/">
   <meta property="og:site_name" content="# matth.dmz42.org">
   <meta property="og:title" content="FCSC 2026 - Computing Software">
@@ -189,8 +189,8 @@ undefined4 main(void) { char *board_name; ulong uVar1; undefined4 local_c; FUN_0
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">local_c</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><h1 id="3-fcsc_motherboard_name-processing">3. FCSC_MOTHERBOARD_NAME Processing<a href="#3-fcsc_motherboard_name-processing" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
-<p>Quick reversing of <code>ctf::load_input_into_128_array_and_xor_0x91</code> shows that the value of FCSC_MOTHERBOARD_NAME is loaded as repeating string into a 128 byte array and xored with bye value 0x91.</p>
-<p>We&rsquo;ll call that array <code>BOARD_NAME</code>.</p>
+<p>Quick reversing of <code>ctf::load_input_into_128_array_and_xor_0x91</code> shows that the value of FCSC_MOTHERBOARD_NAME is loaded as a repeating string into a 128 bytes array and xored with byte value 0x91.</p>
+<p>We&rsquo;ll call this array <code>BOARD_NAME</code>.</p>
 <p>That can quickly be checked dynamically:</p>
 <pre tabindex="0"><code>% FCSC_MOTHERBOARD_NAME=&#34;coucou&#34; gdb ./software.bin
 pwndbg&gt; run
@@ -236,7 +236,7 @@ b&#39;coucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucouco
 </span></span></code></pre></div><p>the correct byte value at address <code>004038cc</code> can be recovered from the trace:</p>
 <pre tabindex="0"><code>% grep -i 04038cc software.bin.trace.log
 0x004038CC: xor  rax, 0x9e23 : 48 35 23 9E 00 00
-</code></pre><p>if we patch the byte to it&rsquo;s correct value (0x48) and follow along, we endup in an obfuscated <code>jmp rax</code>:</p>
+</code></pre><p>if we patch the byte to its correct value (0x48) and follow along, we endup in an obfuscated <code>jmp rax</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="err">4</span><span class="nf">a8</span>        <span class="mi">004038</span><span class="no">d9</span> <span class="mi">48</span> <span class="mi">05</span> <span class="mi">79</span> <span class="mi">13</span> <span class="no">ff</span> <span class="no">ff</span>            <span class="no">ADD</span>                     <span class="no">RAX</span><span class="p">,-</span><span class="mi">0xec87</span>
 </span></span><span class="line"><span class="cl"><span class="err">4</span><span class="nf">a8</span>        <span class="mi">004038</span><span class="no">df</span> <span class="mi">48</span> <span class="no">b9</span> <span class="mi">0</span><span class="no">b</span> <span class="mi">47</span> <span class="mi">30</span> <span class="mi">0</span><span class="no">b</span> <span class="mi">80</span> <span class="mi">10</span>      <span class="no">MOV</span>                     <span class="no">RCX</span><span class="p">,</span><span class="mi">0x41d110800b30470b</span>
 </span></span><span class="line"><span class="cl">                    <span class="nf">d1</span> <span class="mi">41</span>
@@ -544,7 +544,7 @@ FCSC{4d1413ba74288f7f50f171362da2d84aa9541639bcf4c8cc4d8a4639ce72a6_96}
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://matth.dmz42.org/tags/reverse">reverse</a></span><span class="tag"><a href="https://matth.dmz42.org/tags/ctf">ctf</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2120 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2121 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2026-04-13 06:00 &#43;0200</p>
 			</footer>
 		</article>

@@ -121,8 +121,8 @@ undefined4 main(void) { char *board_name; ulong uVar1; undefined4 local_c; FUN_0
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">local_c</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><h1 id="3-fcsc_motherboard_name-processing">3. FCSC_MOTHERBOARD_NAME Processing</h1>
-<p>Quick reversing of <code>ctf::load_input_into_128_array_and_xor_0x91</code> shows that the value of FCSC_MOTHERBOARD_NAME is loaded as repeating string into a 128 byte array and xored with bye value 0x91.</p>
-<p>We&rsquo;ll call that array <code>BOARD_NAME</code>.</p>
+<p>Quick reversing of <code>ctf::load_input_into_128_array_and_xor_0x91</code> shows that the value of FCSC_MOTHERBOARD_NAME is loaded as a repeating string into a 128 bytes array and xored with byte value 0x91.</p>
+<p>We&rsquo;ll call this array <code>BOARD_NAME</code>.</p>
 <p>That can quickly be checked dynamically:</p>
 <pre tabindex="0"><code>% FCSC_MOTHERBOARD_NAME=&#34;coucou&#34; gdb ./software.bin
 pwndbg&gt; run
@@ -168,7 +168,7 @@ b&#39;coucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucoucouco
 </span></span></code></pre></div><p>the correct byte value at address <code>004038cc</code> can be recovered from the trace:</p>
 <pre tabindex="0"><code>% grep -i 04038cc software.bin.trace.log
 0x004038CC: xor  rax, 0x9e23 : 48 35 23 9E 00 00
-</code></pre><p>if we patch the byte to it&rsquo;s correct value (0x48) and follow along, we endup in an obfuscated <code>jmp rax</code>:</p>
+</code></pre><p>if we patch the byte to its correct value (0x48) and follow along, we endup in an obfuscated <code>jmp rax</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="err">4</span><span class="nf">a8</span>        <span class="mi">004038</span><span class="no">d9</span> <span class="mi">48</span> <span class="mi">05</span> <span class="mi">79</span> <span class="mi">13</span> <span class="no">ff</span> <span class="no">ff</span>            <span class="no">ADD</span>                     <span class="no">RAX</span><span class="p">,-</span><span class="mi">0xec87</span>
 </span></span><span class="line"><span class="cl"><span class="err">4</span><span class="nf">a8</span>        <span class="mi">004038</span><span class="no">df</span> <span class="mi">48</span> <span class="no">b9</span> <span class="mi">0</span><span class="no">b</span> <span class="mi">47</span> <span class="mi">30</span> <span class="mi">0</span><span class="no">b</span> <span class="mi">80</span> <span class="mi">10</span>      <span class="no">MOV</span>                     <span class="no">RCX</span><span class="p">,</span><span class="mi">0x41d110800b30470b</span>
 </span></span><span class="line"><span class="cl">                    <span class="nf">d1</span> <span class="mi">41</span>
